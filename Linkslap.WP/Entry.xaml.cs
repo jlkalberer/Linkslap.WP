@@ -11,15 +11,15 @@ using Linkslap.WP.Resources;
 
 namespace Linkslap.WP
 {
+    using Linkslap.WP.Communication.Models;
+    using Linkslap.WP.Communication.Util;
+
     public partial class MainPage : PhoneApplicationPage
     {
         // Constructor
         public MainPage()
         {
             InitializeComponent();
-
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
         }
 
         // Sample code for building a localized ApplicationBar

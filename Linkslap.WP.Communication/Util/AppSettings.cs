@@ -1,4 +1,4 @@
-﻿namespace Linkslap.WP.Util
+﻿namespace Linkslap.WP.Communication.Util
 {
     using System;
     using System.Collections.Generic;
@@ -24,14 +24,20 @@
 
             var settings = xml.Root.Elements("add").ToList();
 
+            BaseUrl = GetValue("baseUrl", settings);
             HubConnectionString = GetValue("hubConnectionString", settings);
             NotificationHubPath = GetValue("notificationHubPath", settings);
         }
 
         /// <summary>
-        /// Gets or sets the hub connection string.
+        /// Gets the base url.
         /// </summary>
-        public static string HubConnectionString { get; set; }
+        public static string BaseUrl { get; private set; }
+
+        /// <summary>
+        /// Gets the hub connection string.
+        /// </summary>
+        public static string HubConnectionString { get; private set; }
 
         /// <summary>
         /// Gets the notification channel.

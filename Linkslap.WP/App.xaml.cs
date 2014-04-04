@@ -1,20 +1,17 @@
-﻿using System;
-using System.Diagnostics;
-using System.Resources;
-using System.Windows;
-using System.Windows.Markup;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Linkslap.WP.Resources;
-
-namespace Linkslap.WP
+﻿namespace Linkslap.WP
 {
-    using System.Xml.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Windows;
+    using System.Windows.Markup;
+    using System.Windows.Navigation;
 
-    using Linkslap.WP.Util;
+    using Linkslap.WP.Resources;
+    using Linkslap.WP.Utils;
 
+    using Microsoft.Phone.Controls;
     using Microsoft.Phone.Notification;
+    using Microsoft.Phone.Shell;
     using Microsoft.WindowsAzure.Messaging;
 
     public partial class App : Application
@@ -68,45 +65,18 @@ namespace Linkslap.WP
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            var channel = HttpNotificationChannel.Find("Linkslap");
-            if (channel == null)
-            {
-                channel = new HttpNotificationChannel("Linkslap");
-                channel.Open();
-                channel.BindToShellToast();
-            }
-
-            channel.ChannelUriUpdated += async (o, args) =>
-                {
-                    var hub = new NotificationHub(AppSettings.NotificationHubPath, AppSettings.HubConnectionString);
-                    await hub.RegisterNativeAsync(args.ChannelUri.ToString());
-                };
-
-            channel.HttpNotificationReceived += (o, args) =>
-                {
-                    var v = 0;  
-                };
-
-            channel.ShellToastNotificationReceived += (o, args) =>
-                {
-                    var v = 0;
-                };
-
-            channel.ConnectionStatusChanged += (o, args) =>
-                {
-                    var v = 0;
-                };
-
-            channel.ErrorOccurred += (o, args) =>
-                {
-                    var v = 0;
-                };
+            RootFrame.UriMapper = new StartUriMapper();
         }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            if (e.IsApplicationInstancePreserved == false)
+            {
+                // tombstoned! Need to restore state
+                RootFrame.UriMapper = new StartUriMapper();
+            }
         }
 
         // Code to execute when the application is deactivated (sent to background)
