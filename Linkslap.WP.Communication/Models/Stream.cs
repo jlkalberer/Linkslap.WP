@@ -3,7 +3,7 @@
     /// <summary>
     /// The feed.
     /// </summary>
-    public class Feed
+    public class Stream
     {
         /// <summary>
         /// Gets or sets the id.
@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets or sets the feed name.
         /// </summary>
-        public string FeedName { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

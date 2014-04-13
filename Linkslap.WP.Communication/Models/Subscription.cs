@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets or sets the feed.
         /// </summary>
-        public virtual Feed Feed { get; set; }
+        public virtual Stream Stream { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether administer.

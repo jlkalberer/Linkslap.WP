@@ -87,13 +87,15 @@
   <ItemGroup>
     <Compile Include="AccountRepository.cs" />
     <Compile Include="Interfaces\ISubscriptionRepository.cs" />
+    <Compile Include="Interfaces\IStreamRepository.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="StreamRepository.cs" />
     <Compile Include="SubscriptionRepository.cs" />
     <Compile Include="Interfaces\IAccountRepository.cs" />
     <Compile Include="LinkRepository.cs" />
     <Compile Include="Models\Account.cs" />
-    <Compile Include="Models\Feed.cs" />
+    <Compile Include="Models\Stream.cs" />
     <Compile Include="Models\Link.cs" />
     <Compile Include="Notifications\Setup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

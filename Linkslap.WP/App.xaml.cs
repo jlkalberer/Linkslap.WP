@@ -59,6 +59,7 @@
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
 
+            RootFrame.UriMapper = new LinkslapUriMapper();
             MappingSetup.Map();
         }
 

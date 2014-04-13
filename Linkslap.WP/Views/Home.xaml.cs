@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Windows.Controls;
 
     using AutoMapper;
 
@@ -13,6 +15,7 @@
     using Linkslap.WP.ViewModels;
 
     using Microsoft.Phone.Controls;
+    using Microsoft.Phone.Shell;
     using Microsoft.Phone.Tasks;
 
     /// <summary>
@@ -45,8 +48,8 @@
 
             this.InitializeComponent();
 
-            this.Recent = new SubscriptionViewModel { Name = "New Slaps" };
-            this.Subscriptions = new ObservableCollection<SubscriptionViewModel> { this.Recent };
+            this.NewSlaps = new SubscriptionViewModel { Name = "New Slaps" };
+            this.Subscriptions = new ObservableCollection<SubscriptionViewModel> { this.NewSlaps };
 
             var subscriptions = this.subscriptionRepository.GetSubsriptions();
 
@@ -67,17 +70,51 @@
                 };
 
             this.DataContext = this.Subscriptions;
+
+            this.Pivot.SelectionChanged += this.PivotOnSelectionChanged;
         }
 
         /// <summary>
-        /// Gets or sets the recent.
+        /// Gets or sets the new slaps.
         /// </summary>
-        public SubscriptionViewModel Recent { get; set; }
+        public SubscriptionViewModel NewSlaps { get; set; }
 
         /// <summary>
         /// Gets or sets the subscriptions.
         /// </summary>
         public ObservableCollection<SubscriptionViewModel> Subscriptions { get; set; }
+
+        /// <summary>
+        /// The pivot on selection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="selectionChangedEventArgs">
+        /// The selection changed event args.
+        /// </param>
+        private void PivotOnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+        {
+            var subscription = selectionChangedEventArgs.AddedItems[0] as SubscriptionViewModel;
+
+            if (subscription == null)
+            {
+                return;
+            }
+
+            var buttons = ApplicationBar.Buttons.Cast<ApplicationBarIconButton>().ToList();
+
+            if (subscription.Id == 0)
+            {
+                buttons[1].IsEnabled = false;
+                //buttons[2].IsEnabled = false;
+            }
+            else
+            {
+                buttons[1].IsEnabled = true;
+                //buttons[2].IsEnabled = true;
+            }
+        }
 
         /// <summary>
         /// Navigates to a view for creating or adding new streams.
@@ -94,19 +131,6 @@
         }
 
         /// <summary>
-        /// Refreshes the current stream.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="eventArgs">
-        /// The event arguments.
-        /// </param>
-        private void Refresh_Click(object sender, EventArgs eventArgs)
-        {
-        }
-
-        /// <summary>
         /// Navigates to a view for sharing a stream.
         /// </summary>
         /// <param name="sender">
@@ -115,7 +139,7 @@
         /// <param name="eventArgs">
         /// The event arguments.
         /// </param>
-        private void Share_Click(object sender, EventArgs eventArgs)
+        private void ShareStream_Click(object sender, EventArgs eventArgs)
         {
             ShareLinkTask shareLinkTask = new ShareLinkTask();
 
@@ -140,6 +164,11 @@
         private void Settings_Click(object sender, EventArgs eventArgs)
         {
             // this.Navigate("/Views/NewStream.xaml");
+        }
+
+        private void DeleteSubscription_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

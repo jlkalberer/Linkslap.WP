@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
@@ -52,7 +53,7 @@
         /// The get subscriptions.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable{Feed}"/>.
+        /// The <see cref="IEnumerable{Stream}"/>.
         /// </returns>
         public ObservableCollection<Subscription> GetSubsriptions()
         {
@@ -84,10 +85,39 @@
                 }
 
                 subs.Remove(s => values.All(v => v.Id != s.Id));
-                subs.AddRange(values.Where(v => subs.Any(s => s.Id == v.Id)));
+                subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
             });
 
             return this.subscriptions;
+        }
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="streamId">
+        /// The stream id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        public Task<Subscription> Add(string streamId)
+        {
+            var task = new TaskCompletionSource<Subscription>();
+
+            this.rest.Post(new { id = streamId }, (Subscription sub) => task.SetResult(sub));
+
+            return task.Task;
+        }
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        public void Delete(int subscriptionId)
+        {
+            this.rest.Delete(new { id = subscriptionId });
         }
     }
 }

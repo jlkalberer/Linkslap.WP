@@ -63,7 +63,7 @@
         public void Get<TModel>(Action<TModel> callback = null)
             where TModel : new()
         {
-            this.Execute(Method.GET, (object)null, callback);
+            this.Execute(Method.GET, null, callback);
         }
 
         /// <summary>
@@ -103,9 +103,8 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Post<TParams, TModel>(TParams parameters = null, Action<TModel> callback = null)
+        public void Post<TModel>(object parameters = null, Action<TModel> callback = null)
             where TModel : new()
-            where TParams : class, new()
         {
             this.Execute(Method.POST, parameters, callback);
         }
@@ -141,17 +140,24 @@
         /// <param name="callback">
         /// The callback.
         /// </param>
-        /// <typeparam name="TParams">
-        /// The parameters passed to the request.
-        /// </typeparam>
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Delete<TParams, TModel>(TParams parameters = null, Action<TModel> callback = null)
+        public void Delete<TModel>(object parameters, Action<TModel> callback)
             where TModel : new()
-            where TParams : class, new()
         {
             this.Execute(Method.DELETE, parameters, callback);
+        }
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="parameters">
+        /// The parameters.
+        /// </param>
+        public void Delete(object parameters)
+        {
+            this.Execute(Method.DELETE, parameters, (Action<object>)null);
         }
 
         /// <summary>
@@ -172,8 +178,8 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Execute<TParams, TModel>(Method method, TParams parameters = null, Action<TModel> callback = null)
-            where TModel : new() where TParams : class, new()
+        public void Execute<TModel>(Method method, object parameters = null, Action<TModel> callback = null)
+            where TModel : new()
         {
             var request = new RestRequest(this.resource);
             if (parameters != null)

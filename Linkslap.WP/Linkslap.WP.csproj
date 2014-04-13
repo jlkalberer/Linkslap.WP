@@ -102,16 +102,22 @@
     <Compile Include="Entry.xaml.cs">
       <DependentUpon>Entry.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\LinkslapUriMapper.cs" />
     <Compile Include="Utils\MappingSetup.cs" />
     <Compile Include="Utils\PhoneApplicationPageHelper.cs" />
+    <Compile Include="ViewModels\NewStreamViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
+    <Compile Include="Views\AddStream.xaml.cs">
+      <DependentUpon>AddStream.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
@@ -135,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Entry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddStream.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,10 +196,10 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Icons\feature.settings.png" />
-    <Content Include="Content\Images\Icons\new.png" />
-    <Content Include="Content\Images\Icons\refresh.png" />
-    <Content Include="Content\Images\Icons\share.png" />
+    <Content Include="Assets\Images\Icons\feature.settings.png" />
+    <Content Include="Assets\Images\Icons\new.png" />
+    <Content Include="Assets\Images\Icons\refresh.png" />
+    <Content Include="Assets\Images\Icons\share.png" />
     <Content Include="settings.xml" />
   </ItemGroup>
   <ItemGroup>
