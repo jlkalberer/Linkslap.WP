@@ -11,17 +11,15 @@ namespace Linkslap.WP.ViewModels
 
     using Linkslap.WP.Annotations;
 
-    public class NewStreamViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// The new stream view model.
+    /// </summary>
+    public class NewStreamViewModel : ViewModelBase
     {
         /// <summary>
         /// The busy.
         /// </summary>
         private bool busy;
-
-        /// <summary>
-        /// The property changed.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets or sets a value indicating whether busy.
@@ -32,6 +30,7 @@ namespace Linkslap.WP.ViewModels
             {
                 return this.busy;
             }
+
             set
             {
                 if (value.Equals(this.busy))
@@ -48,15 +47,5 @@ namespace Linkslap.WP.ViewModels
         /// Gets or sets the stream name.
         /// </summary>
         public string StreamName { get; set; }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

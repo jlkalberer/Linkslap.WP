@@ -8,11 +8,11 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace Linkslap.WP.Controls
+namespace Linkslap.WP.Views
 {
-    public partial class Toolbar : UserControl
+    public partial class ViewStream : PhoneApplicationPage
     {
-        public Toolbar()
+        public ViewStream()
         {
             InitializeComponent();
         }

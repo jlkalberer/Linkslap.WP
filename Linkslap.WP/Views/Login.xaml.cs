@@ -40,12 +40,16 @@
                 return;
             }
 
-            var account = this.accountRepository.Authenticate(this.UserName.Text, this.Password.Password);
+            var task = this.accountRepository.Authenticate(this.UserName.Text, this.Password.Password);
 
-            if (account != null)
-            {
-                this.Navigate("/Views/Home.xaml");
-            }
+            task.ContinueWith(
+                account =>
+                    {
+                        if (account != null)
+                        {
+                            this.Navigate("/Views/Home.xaml");
+                        }
+                    });
         }
     }
 }

@@ -10,6 +10,7 @@
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
@@ -27,6 +28,8 @@
         /// The subscription repository.
         /// </summary>
         private readonly ISubscriptionRepository subscriptionRepository;
+
+        private readonly HomeViewModel viewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Home"/> class.
@@ -69,7 +72,10 @@
                     this.Subscriptions.RemoveRange(oldItems);
                 };
 
-            this.DataContext = this.Subscriptions;
+            this.viewModel = new HomeViewModel();
+            this.viewModel.NewLinks.Add(new LinkViewModel { Title = "foobar" });
+
+            this.DataContext = this.viewModel; // this.Subscriptions;
 
             this.Pivot.SelectionChanged += this.PivotOnSelectionChanged;
         }

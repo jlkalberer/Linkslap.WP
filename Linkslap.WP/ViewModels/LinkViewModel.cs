@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Linkslap.WP.ViewModels
+﻿namespace Linkslap.WP.ViewModels
 {
+    using System;
+
     /// <summary>
     /// The link view model.
     /// </summary>
@@ -25,6 +21,11 @@ namespace Linkslap.WP.ViewModels
         /// Gets or sets the user id.
         /// </summary>
         public int UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url.
+        /// </summary>
+        public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets the user name.

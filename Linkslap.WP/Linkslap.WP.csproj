@@ -95,8 +95,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Toolbar.xaml.cs">
-      <DependentUpon>Toolbar.xaml</DependentUpon>
+    <Compile Include="Controls\LinkLongList.xaml.cs">
+      <DependentUpon>LinkLongList.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Entry.xaml.cs">
@@ -112,9 +112,11 @@
     <Compile Include="Utils\LinkslapUriMapper.cs" />
     <Compile Include="Utils\MappingSetup.cs" />
     <Compile Include="Utils\PhoneApplicationPageHelper.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\NewStreamViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AddStream.xaml.cs">
       <DependentUpon>AddStream.xaml</DependentUpon>
     </Compile>
@@ -130,13 +132,16 @@
     <Compile Include="Views\View.xaml.cs">
       <DependentUpon>View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ViewStream.xaml.cs">
+      <DependentUpon>ViewStream.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="Controls\Toolbar.xaml">
+    <Page Include="Controls\LinkLongList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ViewStream.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
