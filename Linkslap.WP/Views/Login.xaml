@@ -33,7 +33,7 @@
             <TextBox Name="UserName"></TextBox>
             <TextBlock Text="Password" Style="{StaticResource PhoneTextNormalStyle}"/>
             <PasswordBox Name="Password"></PasswordBox>
-            <Button Name="LoginButton">Login</Button>
+            <Button Name="LoginButton" Click="LoginButton_OnClick">Login</Button>
         </StackPanel>
         <!--ContentPanel - place additional content here-->
         <!--<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">

@@ -11,15 +11,38 @@ using Linkslap.WP.Resources;
 
 namespace Linkslap.WP
 {
+    using Linkslap.WP.Communication;
+    using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
+    using Linkslap.WP.Utils;
 
-    public partial class MainPage : PhoneApplicationPage
+    public partial class Entry : PhoneApplicationPage
     {
-        // Constructor
-        public MainPage()
+        private readonly IAccountRepository accountRepository;
+
+        public Entry()
+            : this(new AccountRepository())
         {
-            InitializeComponent();
+        }
+
+        public Entry(IAccountRepository accountRepository)
+        {
+            this.accountRepository = accountRepository;
+            this.InitializeComponent();
+
+            var task = this.accountRepository.Get();
+            task.ContinueWith(
+                t =>
+                {
+                    if (t.Result == null)
+                    {
+                        this.Navigate("/Views/Login.xaml");
+                        return;
+                    }
+
+                    this.Navigate("/Views/Home.xaml");
+                });
         }
 
         // Sample code for building a localized ApplicationBar

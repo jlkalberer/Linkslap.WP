@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
 
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
@@ -10,17 +11,22 @@
     /// <summary>
     /// The subscription repository.
     /// </summary>
-    public class SubscriptionRepository
+    public class SubscriptionRepository : ISubscriptionRepository
     {
         /// <summary>
         /// The account repository.
         /// </summary>
-        private IAccountRepository accountRepository;
+        private readonly IAccountRepository accountRepository;
+
+        /// <summary>
+        /// The rest.
+        /// </summary>
+        private readonly Rest rest;
 
         /// <summary>
         /// The subscriptions.
         /// </summary>
-        private IEnumerable<Subscription> subscriptions;
+        private ObservableCollection<Subscription> subscriptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionRepository"/> class.
@@ -39,6 +45,7 @@
         public SubscriptionRepository(IAccountRepository accountRepository)
         {
             this.accountRepository = accountRepository;
+            this.rest = new Rest("api/subscription");
         }
 
         /// <summary>
@@ -47,7 +54,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{Feed}"/>.
         /// </returns>
-        public IEnumerable<Subscription> GetFeeds()
+        public ObservableCollection<Subscription> GetSubsriptions()
         {
             if (this.subscriptions != null)
             {
@@ -61,6 +68,24 @@
                 this.subscriptions = new ObservableCollection<Subscription>();
                 Storage.Save("subscriptions", this.subscriptions);
             }
+
+            this.rest.Get<List<Subscription>>(values =>
+            {
+                if (values == null || !values.Any())
+                {
+                    return;
+                }
+
+                var subs = this.subscriptions;
+
+                if (subs == null)
+                {
+                    return;
+                }
+
+                subs.Remove(s => values.All(v => v.Id != s.Id));
+                subs.AddRange(values.Where(v => subs.Any(s => s.Id == v.Id)));
+            });
 
             return this.subscriptions;
         }

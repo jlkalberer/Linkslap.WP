@@ -6,7 +6,11 @@
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
 
+    using Newtonsoft.Json;
+
     using RestSharp;
+
+    using JsonSerializer = RestSharp.Serializers.JsonSerializer;
 
     /// <summary>
     /// The rest.
@@ -45,6 +49,21 @@
             {
                 this.bearerToken = account.BearerToken;
             }
+        }
+
+        /// <summary>
+        /// The get.
+        /// </summary>
+        /// <param name="callback">
+        /// The callback.
+        /// </param>
+        /// <typeparam name="TModel">
+        /// The type of model returned from the request.
+        /// </typeparam>
+        public void Get<TModel>(Action<TModel> callback = null)
+            where TModel : new()
+        {
+            this.Execute(Method.GET, (object)null, callback);
         }
 
         /// <summary>
@@ -157,7 +176,11 @@
             where TModel : new() where TParams : class, new()
         {
             var request = new RestRequest(this.resource);
-            request.AddObject(parameters);
+            if (parameters != null)
+            {
+                request.AddObject(parameters);
+            }
+
             request.Method = method;
 
             this.Execute(request, callback);
@@ -182,7 +205,7 @@
             where TModel : new()
         {
             var client = new RestClient { BaseUrl = this.baseUrl };
-
+            request.JsonSerializer = new JsonSerializer();
             if (!string.IsNullOrEmpty(this.bearerToken))
             {
                 request.AddHeader("Authorization", string.Format("Bearer {0}", this.bearerToken));
@@ -190,7 +213,7 @@
 
             client.ExecuteAsync(
                 request,
-                (IRestResponse<TModel> response) =>
+                response =>
                     {
                         if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
@@ -201,7 +224,8 @@
                         }
                         else if (callback != null)
                         {
-                            callback(response.Data);
+                            var model = JsonConvert.DeserializeObject<TModel>(response.Content);
+                            callback(model);
                         }
                     });
         }

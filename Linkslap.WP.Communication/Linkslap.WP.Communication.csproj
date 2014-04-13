@@ -86,7 +86,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AccountRepository.cs" />
+    <Compile Include="Interfaces\ISubscriptionRepository.cs" />
     <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="SubscriptionRepository.cs" />
     <Compile Include="Interfaces\IAccountRepository.cs" />
     <Compile Include="LinkRepository.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest.cs" />
     <Compile Include="Util\AppSettings.cs" />
+    <Compile Include="Util\CollectionExtensions.cs" />
     <Compile Include="Util\Storage.cs" />
   </ItemGroup>
   <ItemGroup>

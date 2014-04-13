@@ -55,9 +55,41 @@
             return account;
         }
 
+        /// <summary>
+        /// The get.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<Account> Get()
         {
-            throw new System.NotImplementedException();
+            var account = Storage.Load<Account>("account");
+
+            if (account == null || string.IsNullOrEmpty(account.BearerToken))
+            {
+                return null;
+            }
+
+            var request = new RestRequest("/api/account/userinfo");
+            var task = new TaskCompletionSource<UserInfo>();
+            this.rest.Execute<UserInfo>(request, task.SetResult, task.SetCanceled);
+            //Task.WaitAll(task.Task);
+
+            var userInfo = await task.Task;
+
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            if (string.CompareOrdinal(account.UserName, userInfo.UserName) != 0)
+            {
+                account.UserName = userInfo.UserName;
+                Storage.Save("account", account);
+            }
+
+            return account;
         }
     }
 }

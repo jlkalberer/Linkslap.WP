@@ -1,20 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-
-namespace Linkslap.WP.Views
+﻿namespace Linkslap.WP.Views
 {
+    using System;
+    using System.Threading.Tasks;
+    using System.Windows;
+
+    using Linkslap.WP.Communication;
+    using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Utils;
+
+    using Microsoft.Phone.Controls;
+
+    /// <summary>
+    /// The login view.
+    /// </summary>
     public partial class Login : PhoneApplicationPage
     {
+        private readonly IAccountRepository accountRepository;
+
         public Login()
+            : this(new AccountRepository())
         {
+        }
+
+        public Login(IAccountRepository accountRepository)
+        {
+            this.accountRepository = accountRepository;
             InitializeComponent();
+        }
+
+        private void LoginButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(this.UserName.Text))
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.Password.Password))
+            {
+                return;
+            }
+
+            var account = this.accountRepository.Authenticate(this.UserName.Text, this.Password.Password);
+
+            if (account != null)
+            {
+                this.Navigate("/Views/Home.xaml");
+            }
         }
     }
 }
