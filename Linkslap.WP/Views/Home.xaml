@@ -17,33 +17,21 @@
     d:DataContext="{d:DesignInstance viewModels:HomeViewModel}">
 
     <phone:PhoneApplicationPage.Resources>
-        <DataTemplate x:Key="Template">
-            <TextBlock Text="{Binding Title}"/>
+        <DataTemplate x:Key="StreamTemplate">
+            <TextBlock Text="{Binding Name}"/>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <!--Pivot Control-->
         <phone:Pivot Title="Linkslap" ItemsSource="{Binding}" x:Name="Pivot">
-            <!--<phone:Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <ContentControl Content="{Binding Name}" />
-                </DataTemplate>
-            </phone:Pivot.HeaderTemplate>
-            <phone:Pivot.ItemTemplate>
-                <DataTemplate>
-                    <ContentControl Content="{Binding Name}" />
-                </DataTemplate>
-            </phone:Pivot.ItemTemplate>
-
-            <phone:PivotItem Header="item2">
-                <Grid/>
-            </phone:PivotItem>-->
             <phone:PivotItem Header="New Slaps">
+                <controls:LinkLongList Links="{Binding NewLinks}"/>
+            </phone:PivotItem>
+            <phone:PivotItem Header="Streams">
                 <StackPanel>
-                    <controls:LinkLongList Links="{Binding NewLinks}"/>
-                    <phone:LongListSelector ItemTemplate="{StaticResource Template}" ItemsSource="{Binding NewLinks}" IsGroupingEnabled="False">
-                </phone:LongListSelector>
+                    <phone:LongListSelector ItemTemplate="{StaticResource StreamTemplate}" ItemsSource="{Binding Subscriptions}" SelectionChanged="LongListSelector_OnSelectionChanged">
+                    </phone:LongListSelector>
                 </StackPanel>
             </phone:PivotItem>
         </phone:Pivot>

@@ -2,15 +2,14 @@
 {
     using System.Collections.ObjectModel;
 
-    using Linkslap.WP.Communication.Models;
-
     /// <summary>
     /// The home view model.
     /// </summary>
     public class HomeViewModel : ViewModelBase
     {
-        private ObservableCollection<LinkViewModel> newLinks;
- 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeViewModel"/> class.
+        /// </summary>
         public HomeViewModel()
         {
             this.NewLinks = new ObservableCollection<LinkViewModel>();
@@ -20,27 +19,10 @@
         /// <summary>
         /// Gets the new links.
         /// </summary>
-        public ObservableCollection<LinkViewModel> NewLinks 
-        {
-            get
-            {
-                return this.newLinks;
-            }
-
-            private set
-            {
-                if (value.Equals(this.newLinks))
-                {
-                    return;
-                }
-
-                this.newLinks = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<LinkViewModel> NewLinks { get; private set; }
 
         /// <summary>
-        /// Gets or sets the subscriptions.
+        /// Gets the subscriptions.
         /// </summary>
         public ObservableCollection<SubscriptionViewModel> Subscriptions { get; private set; }
     }

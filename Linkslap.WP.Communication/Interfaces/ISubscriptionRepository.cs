@@ -37,5 +37,7 @@ namespace Linkslap.WP.Communication.Interfaces
         /// The subscription id.
         /// </param>
         void Delete(int subscriptionId);
+
+        Subscription GetSubscription(int id);
     }
 }

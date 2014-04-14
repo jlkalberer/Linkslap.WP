@@ -24,7 +24,8 @@
         private static void Subscriptions()
         {
             Mapper.CreateMap<Subscription, SubscriptionViewModel>()
-                .ForMember(d => d.Id, m => m.MapFrom(s => s.Stream.Id))
+                .ForMember(d => d.Id, m => m.MapFrom(s => s.Id))
+                .ForMember(d => d.StreamKey, m => m.MapFrom(s => s.Stream.Key))
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.Stream.Name))
                 .ForMember(d => d.Links, m => m.Ignore());
         }

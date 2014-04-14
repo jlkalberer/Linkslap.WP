@@ -22,13 +22,19 @@
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the stream key.
+        /// </summary>
+        public string StreamKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the links.
+        /// Gets the links.
         /// </summary>
-        public ICollection<LinkViewModel> Links { get; set; }
+        public ObservableCollection<LinkViewModel> Links { get; private set; }
+
     }
 }

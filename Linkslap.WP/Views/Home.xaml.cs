@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Controls;
+    using System.Windows.Navigation;
 
     using AutoMapper;
 
@@ -51,29 +52,24 @@
 
             this.InitializeComponent();
 
-            this.NewSlaps = new SubscriptionViewModel { Name = "New Slaps" };
-            this.Subscriptions = new ObservableCollection<SubscriptionViewModel> { this.NewSlaps };
-
             var subscriptions = this.subscriptionRepository.GetSubsriptions();
 
             var mappedSubscriptions = new List<SubscriptionViewModel>();
             mappedSubscriptions = Mapper.Map(subscriptions, mappedSubscriptions);
 
-            this.Subscriptions.AddRange(mappedSubscriptions);
+            this.viewModel = new HomeViewModel();
+            this.viewModel.Subscriptions.AddRange(mappedSubscriptions);
 
             subscriptions.CollectionChanged += (sender, args) =>
                 {
                     var newItems = new List<SubscriptionViewModel>();
                     newItems = Mapper.Map(args.NewItems, newItems);
-                    this.Subscriptions.AddRange(newItems);
+                    this.viewModel.Subscriptions.AddRange(newItems);
 
                     var oldItems = new List<SubscriptionViewModel>();
                     oldItems = Mapper.Map(args.NewItems, oldItems);
-                    this.Subscriptions.RemoveRange(oldItems);
+                    this.viewModel.Subscriptions.RemoveRange(oldItems);
                 };
-
-            this.viewModel = new HomeViewModel();
-            this.viewModel.NewLinks.Add(new LinkViewModel { Title = "foobar" });
 
             this.DataContext = this.viewModel; // this.Subscriptions;
 
@@ -81,14 +77,18 @@
         }
 
         /// <summary>
-        /// Gets or sets the new slaps.
+        /// Called when a page becomes the active page in a frame.
         /// </summary>
-        public SubscriptionViewModel NewSlaps { get; set; }
+        /// <param name="e">An object that contains the event data.</param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
 
-        /// <summary>
-        /// Gets or sets the subscriptions.
-        /// </summary>
-        public ObservableCollection<SubscriptionViewModel> Subscriptions { get; set; }
+            if (!this.viewModel.NewLinks.Any())
+            {
+                this.Pivot.SelectedIndex = 1;
+            }
+        }
 
         /// <summary>
         /// The pivot on selection changed.
@@ -172,9 +172,39 @@
             // this.Navigate("/Views/NewStream.xaml");
         }
 
-        private void DeleteSubscription_Click(object sender, EventArgs e)
+        /// <summary>
+        /// The delete subscription click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="eventArgs">
+        /// The event arguments.
+        /// </param>
+        private void DeleteSubscription_Click(object sender, EventArgs eventArgs)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The long list selector on selection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="eventArgs">
+        /// The event arguments.
+        /// </param>
+        private void LongListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs eventArgs)
+        {
+            var subscription = eventArgs.AddedItems[0] as SubscriptionViewModel;
+
+            if (subscription == null)
+            {
+                return;
+            }
+
+            this.Navigate("/Views/ViewStream.xaml?subScriptionId=" + subscription.Id);
         }
     }
 }

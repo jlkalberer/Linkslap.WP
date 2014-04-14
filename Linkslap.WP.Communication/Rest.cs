@@ -75,15 +75,11 @@
         /// <param name="callback">
         /// The callback.
         /// </param>
-        /// <typeparam name="TParams">
-        /// The parameters passed to the request.
-        /// </typeparam>
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Get<TParams, TModel>(TParams parameters = null, Action<TModel> callback = null)
+        public void Get<TModel>(object parameters = null, Action<TModel> callback = null)
             where TModel : new()
-            where TParams : class, new()
         {
             this.Execute(Method.GET, parameters, callback);
         }

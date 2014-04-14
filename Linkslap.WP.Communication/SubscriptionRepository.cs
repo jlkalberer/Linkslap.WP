@@ -119,5 +119,19 @@
         {
             this.rest.Delete(new { id = subscriptionId });
         }
+
+        /// <summary>
+        /// The get subscription.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Subscription"/>.
+        /// </returns>
+        public Subscription GetSubscription(int id)
+        {
+            return Storage.Load<ObservableCollection<Subscription>>("subscriptions").FirstOrDefault(s => s.Id == id);
+        }
     }
 }
