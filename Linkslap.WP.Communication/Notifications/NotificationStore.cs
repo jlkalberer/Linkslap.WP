@@ -12,6 +12,8 @@ namespace Linkslap.WP.Communication.Notifications
     using Windows.Networking.PushNotifications;
 
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Models;
+    using Linkslap.WP.Communication.Util;
 
     using Microsoft.WindowsAzure.Messaging;
 
@@ -25,32 +27,57 @@ namespace Linkslap.WP.Communication.Notifications
         private readonly ISubscriptionStore subscriptionStore;
 
         /// <summary>
-        /// The hub.
-        /// </summary>
-        private readonly NotificationHub hub;
-
-        /// <summary>
         /// The channel.
         /// </summary>
         private PushNotificationChannel channel;
 
+        /// <summary>
+        /// The subscriptions.
+        /// </summary>
         private ObservableCollection<Subscription> subscriptions;
+
+        public NotificationStore()
+            : this(new SubscriptionStore())
+        {
+            
+        }
 
         public NotificationStore(ISubscriptionStore subscriptionStore)
         {
             this.subscriptionStore = subscriptionStore;
-            this.hub = new NotificationHub("<hub name>", "<connection string with listen access>");
         }
 
         /// <summary>
         /// The register.
         /// </summary>
-        public void Register()
+        public async void Register()
         {
+            if (this.channel == null || this.channel.ExpirationTime < DateTime.Now)
+            {
+                this.channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                this.channel.PushNotificationReceived += (sender, args) =>
+                    {
+                        var v = 0;
+                    };
+            }
+
             this.subscriptions = this.subscriptionStore.GetSubsriptions();
             this.subscriptions.CollectionChanged += (sender, args) => this.RegisterChannels();
 
-            this.RegisterChannels();
+            var registration = new PushRegistration();
+            registration.InstallationId = Storage.GetInstallationId();
+            registration.ChannelUri = this.channel.Uri;
+
+            var rest = new Rest();
+            rest.Post<dynamic>(
+                "api/register", 
+                registration,
+                value =>
+                    {
+                        var v = 0;
+                    });
+
+            // this.RegisterChannels();
         }
 
         /// <summary>
@@ -58,12 +85,7 @@ namespace Linkslap.WP.Communication.Notifications
         /// </summary>
         private async void RegisterChannels()
         {
-            if (this.channel == null || this.channel.ExpirationTime < DateTime.Now)
-            {
-                this.channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            }
-
-            await this.hub.RegisterNativeAsync(this.channel.Uri, this.subscriptions.Select(s => s.Stream.Key).ToArray());
+            //await this.hub.RegisterNativeAsync(this.channel.Uri, new[] {"admin"});
         }
     }
 }

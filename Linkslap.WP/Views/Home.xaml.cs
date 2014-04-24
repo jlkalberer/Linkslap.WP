@@ -9,6 +9,7 @@
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
@@ -71,6 +72,9 @@
             this.DataContext = this.viewModel; // this.Subscriptions;
 
             this.Pivot.SelectionChanged += this.PivotOnSelectionChanged;
+
+            var notification = new NotificationStore();
+            notification.Register();
 
             base.OnNavigatedTo(e);
         }

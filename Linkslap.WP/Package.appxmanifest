@@ -29,6 +29,11 @@
             <DataFormat>uri</DataFormat>
           </ShareTarget>
         </Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Linkslap.WP.PushNotificationTask">
+          <BackgroundTasks>
+            <Task Type="pushNotification" />
+          </BackgroundTasks>
+        </Extension>
       </Extensions>
     </Application>
   </Applications>
