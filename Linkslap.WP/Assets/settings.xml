@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<appSettings>
+  <add key="baseUrl" value="http://localhost:37459/" />
+  <add key="notificationHubPath" value="linkslap1"/>
+  <add key="hubConnectionString" value="Endpoint=sb://linkslap.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=Dws7ju/tlq79uMvhO0Ab0svCKB47Ita6Kq+u969IP0w="/>
+</appSettings>

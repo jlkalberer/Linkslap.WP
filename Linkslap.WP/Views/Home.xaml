@@ -1,53 +1,52 @@
-﻿<phone:PhoneApplicationPage
+﻿<controls:PageBase
     x:Class="Linkslap.WP.Views.Home"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:local="using:Linkslap.WP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="clr-namespace:Linkslap.WP.Controls"
-    xmlns:viewModels="clr-namespace:Linkslap.WP.ViewModels"
+    xmlns:controls="using:Linkslap.WP.Controls"
     mc:Ignorable="d"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True"
-    d:DataContext="{d:DesignInstance viewModels:HomeViewModel}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <phone:PhoneApplicationPage.Resources>
+    <controls:PageBase.Resources>
         <DataTemplate x:Key="StreamTemplate">
             <TextBlock Text="{Binding Name}"/>
         </DataTemplate>
-    </phone:PhoneApplicationPage.Resources>
-    <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <!--Pivot Control-->
-        <phone:Pivot Title="Linkslap" ItemsSource="{Binding}" x:Name="Pivot">
-            <phone:PivotItem Header="New Slaps">
-                <controls:LinkLongList Links="{Binding NewLinks}"/>
-            </phone:PivotItem>
-            <phone:PivotItem Header="Streams">
-                <StackPanel>
-                    <phone:LongListSelector ItemTemplate="{StaticResource StreamTemplate}" ItemsSource="{Binding Subscriptions}" SelectionChanged="LongListSelector_OnSelectionChanged">
-                    </phone:LongListSelector>
-                </StackPanel>
-            </phone:PivotItem>
-        </phone:Pivot>
-        
+    </controls:PageBase.Resources>
+    
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TitlePanel -->
+        <StackPanel Grid.Row="0" Margin="24,17,0,28">
+            <TextBlock Text="My Application" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+        </StackPanel>
+
+        <!--TODO: Content should be placed within the following grid-->
+        <Grid Grid.Row="1">
+            <Pivot Name="Pivot">
+                <PivotItem Header="New Slaps">
+                    <controls:LinkLongList></controls:LinkLongList>
+                </PivotItem>
+                <PivotItem Header="Stream">
+                    <SemanticZoom>
+                        <SemanticZoom.ZoomedInView>
+                            <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
+                        </SemanticZoom.ZoomedInView>
+                    </SemanticZoom>
+                </PivotItem>
+            </Pivot>
+        </Grid>
     </Grid>
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Mode="Default" Opacity="1.0" IsMenuEnabled="True" IsVisible="True">
-
-            <shell:ApplicationBarIconButton Click="NewStream_Click" IconUri="/Assets/Images/Icons/new.png" Text="new" />
-            <shell:ApplicationBarIconButton Click="ShareStream_Click" IconUri="/Assets/Images/Icons/share.png" Text="share" x:Name="Share" IsEnabled="False" />
-
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Click="DeleteSubscription_Click" Text="remove stream" x:Name="DeleteSubscription" IsEnabled="False" />
-                <shell:ApplicationBarMenuItem Click="Settings_Click" Text="settings" />
-            </shell:ApplicationBar.MenuItems>
-
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-</phone:PhoneApplicationPage>
+</controls:PageBase>

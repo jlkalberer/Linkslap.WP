@@ -1,6 +1,6 @@
 ﻿namespace Linkslap.WP.Communication.Util
 {
-    using System.IO.IsolatedStorage;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The storage.
@@ -23,13 +23,12 @@
                 return false;
             }
 
-            var store = IsolatedStorageSettings.ApplicationSettings;
-            if (store.Contains(key))
+            var store = Windows.Storage.ApplicationData.Current.LocalSettings.Values;
+            if (store.ContainsKey(key))
             {
                 store.Remove(key);
             }
 
-            store.Save();
             return true;
         }
 
@@ -52,17 +51,17 @@
                 return false;
             }
 
-            var store = IsolatedStorageSettings.ApplicationSettings;
-            if (store.Contains(key))
+            var store = Windows.Storage.ApplicationData.Current.LocalSettings.Values;
+            var json = JsonConvert.SerializeObject(value);
+            if (store.ContainsKey(key))
             {
-                store[key] = value;
+                store[key] = json;
             }
             else
             {
-                store.Add(key, value);
+                store.Add(key, json);
             }
 
-            store.Save();
             return true;
         }
 
@@ -80,13 +79,13 @@
         /// </returns>
         public static TModel Load<TModel>(string key)
         {
-            var store = IsolatedStorageSettings.ApplicationSettings;
-            if (!store.Contains(key))
+            var store = Windows.Storage.ApplicationData.Current.LocalSettings.Values;
+            if (!store.ContainsKey(key))
             {
                 return default(TModel);
             }
-
-            return (TModel)store[key];
+            var v = (string)store[key];
+            return JsonConvert.DeserializeObject<TModel>((string)store[key]);
         }
     }
 }

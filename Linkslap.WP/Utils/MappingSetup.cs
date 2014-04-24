@@ -28,6 +28,10 @@
                 .ForMember(d => d.StreamKey, m => m.MapFrom(s => s.Stream.Key))
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.Stream.Name))
                 .ForMember(d => d.Links, m => m.Ignore());
+
+            Mapper.CreateMap<Link, LinkViewModel>();
+
+            Mapper.AssertConfigurationIsValid();
         }
     }
 }

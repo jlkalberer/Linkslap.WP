@@ -15,12 +15,12 @@
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
-        public string Title { get; set; }
+        public string Comment { get; set; }
 
         /// <summary>
         /// Gets or sets the user id.
         /// </summary>
-        public int UserId { get; set; }
+        // public int UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the url.
@@ -30,11 +30,11 @@
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>
-        public string UserName { get; set; }
+        // public string UserName { get; set; }
 
         /// <summary>
         /// Gets or sets the created date.
         /// </summary>
-        public DateTime CreatedDate { get; set; }
+        // public DateTime CreatedDate { get; set; }
     }
 }

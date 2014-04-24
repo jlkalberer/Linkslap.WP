@@ -15,7 +15,7 @@
         /// </summary>
         static AppSettings()
         {
-            var xml = XDocument.Load("settings.xml");
+            var xml = XDocument.Load("assets/settings.xml");
 
             if (xml == null || xml.Root == null)
             {

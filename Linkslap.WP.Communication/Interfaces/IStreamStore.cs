@@ -5,7 +5,7 @@
 
     using Linkslap.WP.Communication.Models;
 
-    public interface IStreamRepository
+    public interface IStreamStore
     {
         /// <summary>
         /// The new stream.
@@ -28,5 +28,22 @@
         /// The <see cref="Task"/>.
         /// </returns>
         Task<List<Link>> GetStreamLinks(string streamKey);
+
+        /// <summary>
+        /// The slap link.
+        /// </summary>
+        /// <param name="streamKey">
+        /// The stream key.
+        /// </param>
+        /// <param name="comment">
+        /// The comment.
+        /// </param>
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        Task<Link> SlapLink(string streamKey, string comment, string url);
     }
 }

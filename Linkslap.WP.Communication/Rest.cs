@@ -1,27 +1,27 @@
 ﻿namespace Linkslap.WP.Communication
 {
     using System;
-    using System.Net;
+    using System.IO;
+    using System.Text;
+
+    using Windows.Foundation;
+    using Windows.Web.Http.Headers;
 
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
 
+    using Windows.Web.Http;
+
     using Newtonsoft.Json;
 
-    using RestSharp;
-
-    using JsonSerializer = RestSharp.Serializers.JsonSerializer;
+    using Stream = Linkslap.WP.Communication.Models.Stream;
+    using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 
     /// <summary>
     /// The rest.
     /// </summary>
     public class Rest
     {
-        /// <summary>
-        /// The resource.
-        /// </summary>
-        private readonly string resource;
-
         /// <summary>
         /// The base url.
         /// </summary>
@@ -35,12 +35,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Rest"/> class.
         /// </summary>
-        /// <param name="resource">
-        /// The resource.
-        /// </param>
-        public Rest(string resource = null)
+        public Rest()
         {
-            this.resource = resource;
             this.baseUrl = AppSettings.BaseUrl;
 
             var account = Storage.Load<Account>("account");
@@ -54,21 +50,27 @@
         /// <summary>
         /// The get.
         /// </summary>
+        /// <param name="resource">
+        /// The resource.
+        /// </param>
         /// <param name="callback">
         /// The callback.
         /// </param>
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Get<TModel>(Action<TModel> callback = null)
+        public void Get<TModel>(string resource, Action<TModel> callback = null)
             where TModel : new()
         {
-            this.Execute(Method.GET, null, callback);
+            this.Execute(HttpMethod.Get, resource, null, callback);
         }
 
         /// <summary>
         /// The get.
         /// </summary>
+        /// <param name="resource">
+        /// The resource.
+        /// </param>
         /// <param name="parameters">
         /// The parameters.
         /// </param>
@@ -78,58 +80,39 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Get<TModel>(object parameters = null, Action<TModel> callback = null)
+        public void Get<TModel>(string resource, object parameters = null, Action<TModel> callback = null)
             where TModel : new()
         {
-            this.Execute(Method.GET, parameters, callback);
+            this.Execute(HttpMethod.Get, resource, parameters, callback);
         }
 
         /// <summary>
         /// The post.
         /// </summary>
+        /// <param name="resource">
+        /// The resource.
+        /// </param>
         /// <param name="parameters">
         /// The parameters.
         /// </param>
         /// <param name="callback">
         /// The callback.
         /// </param>
-        /// <typeparam name="TParams">
-        /// The parameters passed to the request.
-        /// </typeparam>
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Post<TModel>(object parameters = null, Action<TModel> callback = null)
+        public void Post<TModel>(string resource, object parameters = null, Action<TModel> callback = null)
             where TModel : new()
         {
-            this.Execute(Method.POST, parameters, callback);
+            this.Execute(HttpMethod.Post, resource, parameters, callback);
         }
 
         /// <summary>
         /// The put.
         /// </summary>
-        /// <param name="parameters">
-        /// The parameters.
+        /// <param name="resource">
+        /// The resource.
         /// </param>
-        /// <param name="callback">
-        /// The callback.
-        /// </param>
-        /// <typeparam name="TParams">
-        /// The parameters passed to the request.
-        /// </typeparam>
-        /// <typeparam name="TModel">
-        /// The type of model returned from the request.
-        /// </typeparam>
-        public void Put<TParams, TModel>(TParams parameters = null, Action<TModel> callback = null)
-            where TModel : new()
-            where TParams : class, new()
-        {
-            this.Execute(Method.PUT, parameters, callback);
-        }
-
-        /// <summary>
-        /// The delete.
-        /// </summary>
         /// <param name="parameters">
         /// The parameters.
         /// </param>
@@ -139,21 +122,31 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Delete<TModel>(object parameters, Action<TModel> callback)
+        public void Put<TModel>(string resource, object parameters = null, Action<TModel> callback = null)
             where TModel : new()
         {
-            this.Execute(Method.DELETE, parameters, callback);
+            this.Execute(HttpMethod.Put, resource, parameters, callback);
         }
 
         /// <summary>
         /// The delete.
         /// </summary>
+        /// <param name="resource">
+        /// The resource.
+        /// </param>
         /// <param name="parameters">
         /// The parameters.
         /// </param>
-        public void Delete(object parameters)
+        /// <param name="callback">
+        /// The callback.
+        /// </param>
+        /// <typeparam name="TModel">
+        /// The type of model returned from the request.
+        /// </typeparam>
+        public void Delete<TModel>(string resource, object parameters = null, Action<TModel> callback = null)
+            where TModel : new()
         {
-            this.Execute(Method.DELETE, parameters, (Action<object>)null);
+            this.Execute(HttpMethod.Delete, resource, parameters, callback);
         }
 
         /// <summary>
@@ -162,37 +155,41 @@
         /// <param name="method">
         /// The method.
         /// </param>
+        /// <param name="resource">
+        /// The resource.
+        /// </param>
         /// <param name="parameters">
         /// The parameters.
         /// </param>
         /// <param name="callback">
         /// The callback.
         /// </param>
-        /// <typeparam name="TParams">
-        /// The parameters passed to the request.
-        /// </typeparam>
+        /// <param name="error">
+        /// The error.
+        /// </param>
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Execute<TModel>(Method method, object parameters = null, Action<TModel> callback = null)
+        public void Execute<TModel>(HttpMethod method, string resource, object parameters = null, Action<TModel> callback = null, Action error = null)
             where TModel : new()
         {
-            var request = new RestRequest(this.resource);
-            if (parameters != null)
-            {
-                request.AddObject(parameters);
-            }
-
-            request.Method = method;
-
-            this.Execute(request, callback);
+            var message = new HttpRequestMessage();
+            message.Method = method;
+            
+            this.Execute(message, resource, parameters, callback, error);
         }
 
         /// <summary>
         /// The execute.
         /// </summary>
-        /// <param name="request">
-        /// The request.
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="restResource">
+        /// The rest resource.
+        /// </param>
+        /// <param name="parameters">
+        /// The parameters.
         /// </param>
         /// <param name="callback">
         /// The callback.
@@ -203,21 +200,57 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Execute<TModel>(RestRequest request, Action<TModel> callback = null, Action error = null)
+        public void Execute<TModel>(HttpRequestMessage message, string restResource, object parameters = null, Action<TModel> callback = null, Action error = null)
             where TModel : new()
         {
-            var client = new RestClient { BaseUrl = this.baseUrl };
-            request.JsonSerializer = new JsonSerializer();
-            if (!string.IsNullOrEmpty(this.bearerToken))
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new HttpMediaTypeWithQualityHeaderValue("application/json"));
+
+            message.RequestUri = new Uri(new Uri(this.baseUrl), restResource);
+
+            if (parameters != null)
             {
-                request.AddHeader("Authorization", string.Format("Bearer {0}", this.bearerToken));
+                if (parameters is IHttpContent)
+                {
+                    message.Content = parameters as IHttpContent;
+                }
+                else
+                {
+                    message.Content = new HttpStringContent(
+                        JsonConvert.SerializeObject(parameters),
+                        UnicodeEncoding.Utf8,
+                        "application/json");
+                }
             }
 
-            client.ExecuteAsync(
-                request,
-                response =>
+            if (!string.IsNullOrEmpty(this.bearerToken))
+            {
+                message.Headers.Add("Authorization", string.Format("Bearer {0}", this.bearerToken));
+            }
+
+            client.SendRequestAsync(message).Completed = (info, status) =>
+                {
+                    try
                     {
-                        if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        if (status == AsyncStatus.Canceled)
+                        {
+                            return;
+                        }
+
+                        if (status == AsyncStatus.Error)
+                        {
+                            return;
+                        }
+
+                        var response = info.GetResults();
+                        
+                        if (response == null || response.Content == null)
+                        {
+                            return;
+                        }
+
+                        // If this is any type of error, go to error callback
+                        if ((int)response.StatusCode >= 300)
                         {
                             if (error != null)
                             {
@@ -226,10 +259,48 @@
                         }
                         else if (callback != null)
                         {
-                            var model = JsonConvert.DeserializeObject<TModel>(response.Content);
-                            callback(model);
+                            var content = response.Content.ReadAsStringAsync();
+                            content.Completed += (asyncInfo, asyncStatus) =>
+                                {
+                                    if (status == AsyncStatus.Canceled)
+                                    {
+                                        return;
+                                    }
+
+                                    if (status == AsyncStatus.Error)
+                                    {
+                                        return;
+                                    }
+
+                                    var model = JsonConvert.DeserializeObject<TModel>(asyncInfo.GetResults());
+                                    callback(model);
+                                };
                         }
-                    });
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                };
+
+            // client.ExecuteAsync(
+            //    request, new CancellationToken())
+            //    .ContinueWith(
+            //    task =>
+            //        {
+            //            var response = task.Result;
+            //            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            //            {
+            //                if (error != null)
+            //                {
+            //                    error();
+            //                }
+            //            }
+            //            else if (callback != null)
+            //            {
+            //                var model = JsonConvert.DeserializeObject<TModel>(response.Content);
+            //                callback(model);
+            //            }
+            //        });
         }
     }
 }

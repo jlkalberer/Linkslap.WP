@@ -5,9 +5,9 @@
     using Linkslap.WP.Communication.Models;
 
     /// <summary>
-    /// The AccountRepository interface.
+    /// The AccountStore interface.
     /// </summary>
-    public interface IAccountRepository
+    public interface IAccountStore
     {
         /// <summary>
         /// The authenticate.

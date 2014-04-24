@@ -1,17 +1,19 @@
 ﻿namespace Linkslap.WP.Communication
 {
+    using System.Net;
     using System.Threading.Tasks;
 
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
 
-    using RestSharp;
+    using Windows.Storage.Streams;
+    using Windows.Web.Http;
 
     /// <summary>
     /// The account repository.
     /// </summary>
-    public class AccountRepository : IAccountRepository
+    public class AccountStore : IAccountStore
     {
         /// <summary>
         /// The rest.
@@ -19,9 +21,9 @@
         private readonly Rest rest;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AccountRepository"/> class.
+        /// Initializes a new instance of the <see cref="AccountStore"/> class.
         /// </summary>
-        public AccountRepository()
+        public AccountStore()
         {
             this.rest = new Rest();
         }
@@ -40,14 +42,17 @@
         /// </returns>
         public async Task<Account> Authenticate(string userName, string password)
         {
-            var request = new RestRequest("token") { Method = Method.POST };
-            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.AddParameter("grant_type", "password");
-            request.AddParameter("username", userName);
-            request.AddParameter("password", password);
+            var message = new HttpRequestMessage();
+            userName = WebUtility.UrlEncode(userName);
+            password = WebUtility.UrlEncode(password);
+            var data =
+                new HttpStringContent(
+                    string.Format("grant_type=password&username={0}&password={1}", userName, password),
+                    UnicodeEncoding.Utf8,
+                    "application/x-www-form-urlencoded");
 
             var task = new TaskCompletionSource<Account>();
-            this.rest.Execute<Account>(request, task.SetResult, task.SetCanceled);
+            this.rest.Execute<Account>(message, "token", data, task.SetResult, task.SetCanceled);
 
             var account = await task.Task;
             Storage.Save("account", account);
@@ -70,10 +75,8 @@
                 return null;
             }
 
-            var request = new RestRequest("/api/account/userinfo");
             var task = new TaskCompletionSource<UserInfo>();
-            this.rest.Execute<UserInfo>(request, task.SetResult, task.SetCanceled);
-            //Task.WaitAll(task.Task);
+            this.rest.Execute<UserInfo>(HttpMethod.Get, "/api/account/userinfo", null, task.SetResult, task.SetCanceled);
 
             var userInfo = await task.Task;
 

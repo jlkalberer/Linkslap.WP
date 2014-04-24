@@ -1,5 +1,5 @@
 ﻿<controls:PageBase
-    x:Class="Linkslap.WP.Views.Login"
+    x:Class="Linkslap.WP.Views.ShareLink"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Linkslap.WP.Views"
@@ -9,8 +9,13 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <controls:PageBase.Resources>
+        <DataTemplate x:Key="StreamTemplate">
+            <TextBlock Text="{Binding Name}"/>
+        </DataTemplate>
+    </controls:PageBase.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -25,16 +30,13 @@
 
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="My Application" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="page title" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="Linkslap" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+            <TextBlock Text="Slap Link" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
         </StackPanel>
-
-        <StackPanel Grid.Row="1">
-            <TextBlock Text="Username" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <TextBox Name="UserName"></TextBox>
-            <TextBlock Text="Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <PasswordBox Name="Password"></PasswordBox>
-            <Button Name="LoginButton" Click="LoginButton_OnClick">Login</Button>
-        </StackPanel>
+        <SemanticZoom Grid.Row="1">
+            <SemanticZoom.ZoomedInView>
+                <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding}" ItemTemplate="{StaticResource StreamTemplate}"/>
+            </SemanticZoom.ZoomedInView>
+        </SemanticZoom>
     </Grid>
 </controls:PageBase>

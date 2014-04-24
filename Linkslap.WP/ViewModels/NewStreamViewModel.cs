@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Linkslap.WP.ViewModels
+﻿namespace Linkslap.WP.ViewModels
 {
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using Linkslap.WP.Annotations;
-
     /// <summary>
     /// The new stream view model.
     /// </summary>

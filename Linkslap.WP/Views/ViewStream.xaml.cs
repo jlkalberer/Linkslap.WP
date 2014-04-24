@@ -1,8 +1,25 @@
-﻿namespace Linkslap.WP.Views
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
+
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+
+namespace Linkslap.WP.Views
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using System.Windows.Navigation;
+    using System.Collections.ObjectModel;
+
+    using Windows.UI.Core;
 
     using AutoMapper;
 
@@ -10,52 +27,59 @@
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
+    using Linkslap.WP.Controls;
     using Linkslap.WP.ViewModels;
 
-    using Microsoft.Phone.Controls;
-
-    public partial class ViewStream : PhoneApplicationPage
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class ViewStream : PageBase
     {
-        private readonly ISubscriptionRepository subscription;
-
-        private readonly IStreamRepository streamRepository;
-
-        private SubscriptionViewModel viewModel;
+        private readonly IStreamStore streamStore;
 
         public ViewStream()
-            : this(new SubscriptionRepository(), new StreamRepository())
+            : this(new StreamStore())
         {
         }
 
-        public ViewStream(ISubscriptionRepository subscription, IStreamRepository streamRepository)
+        public ViewStream(IStreamStore streamStore)
         {
-            this.subscription = subscription;
-            this.streamRepository = streamRepository;
-            
+            this.streamStore = streamStore;
+
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        /// <summary>
+        /// Invoked when this page is about to be displayed in a Frame.
+        /// </summary>
+        /// <param name="eventArgs">Event data that describes how this page was reached.
+        /// This parameter is typically used to configure the page.</param>
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            string subscriptionId;
-            if (NavigationContext.QueryString.TryGetValue("subScriptionId", out subscriptionId))
+            var subscription = eventArgs.Parameter as SubscriptionViewModel;
+
+            if (subscription == null)
             {
-                var id = int.Parse(subscriptionId);
-
-                this.viewModel = Mapper.Map<Subscription, SubscriptionViewModel>(this.subscription.GetSubscription(id));
-                this.DataContext = this.viewModel;
-
-                var task = this.streamRepository.GetStreamLinks(this.viewModel.StreamKey);
-
-                task.ContinueWith(
-                    links =>
-                        {
-                            var result = Mapper.Map(links.Result, this.viewModel.Links);
-                            this.viewModel.Links.AddRange(result);
-                        });
+                return;
             }
 
-            base.OnNavigatedTo(e);
+            var collection = new ObservableCollection<LinkViewModel>();
+            collection.AddRange(subscription.Links);
+
+            this.DataContext = collection;
+
+            var task = this.streamStore.GetStreamLinks(subscription.StreamKey);
+
+            task.ContinueWith(
+                links => this.Run(
+                    () =>
+                        {
+                            var result = Mapper.Map(links.Result, new List<LinkViewModel>());
+                            collection.AddRange(result);
+                        }));
+
+
+            base.OnNavigatedTo(eventArgs);
         }
     }
 }

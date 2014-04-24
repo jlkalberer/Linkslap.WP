@@ -7,9 +7,9 @@ namespace Linkslap.WP.Communication.Interfaces
     using Linkslap.WP.Communication.Models;
 
     /// <summary>
-    /// The SubscriptionRepository interface.
+    /// The SubscriptionStore interface.
     /// </summary>
-    public interface ISubscriptionRepository
+    public interface ISubscriptionStore
     {
         /// <summary>
         /// The get subscriptions.

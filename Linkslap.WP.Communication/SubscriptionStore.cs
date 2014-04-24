@@ -12,12 +12,12 @@
     /// <summary>
     /// The subscription repository.
     /// </summary>
-    public class SubscriptionRepository : ISubscriptionRepository
+    public class SubscriptionStore : ISubscriptionStore
     {
         /// <summary>
         /// The account repository.
         /// </summary>
-        private readonly IAccountRepository accountRepository;
+        private readonly IAccountStore accountStore;
 
         /// <summary>
         /// The rest.
@@ -30,23 +30,23 @@
         private ObservableCollection<Subscription> subscriptions;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubscriptionRepository"/> class.
+        /// Initializes a new instance of the <see cref="SubscriptionStore"/> class.
         /// </summary>
-        public SubscriptionRepository()
-            : this(new AccountRepository())
+        public SubscriptionStore()
+            : this(new AccountStore())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubscriptionRepository"/> class.
+        /// Initializes a new instance of the <see cref="SubscriptionStore"/> class.
         /// </summary>
-        /// <param name="accountRepository">
+        /// <param name="accountStore">
         /// The account repository.
         /// </param>
-        public SubscriptionRepository(IAccountRepository accountRepository)
+        public SubscriptionStore(IAccountStore accountStore)
         {
-            this.accountRepository = accountRepository;
-            this.rest = new Rest("api/subscription");
+            this.accountStore = accountStore;
+            this.rest = new Rest();
         }
 
         /// <summary>
@@ -70,23 +70,25 @@
                 Storage.Save("subscriptions", this.subscriptions);
             }
 
-            this.rest.Get<List<Subscription>>(values =>
-            {
-                if (values == null || !values.Any())
-                {
-                    return;
-                }
+            this.rest.Get<List<Subscription>>(
+                "api/subscription",
+                values =>
+                    {
+                        if (values == null || !values.Any())
+                        {
+                            return;
+                        }
 
-                var subs = this.subscriptions;
+                        var subs = this.subscriptions;
 
-                if (subs == null)
-                {
-                    return;
-                }
+                        if (subs == null)
+                        {
+                            return;
+                        }
 
-                subs.Remove(s => values.All(v => v.Id != s.Id));
-                subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
-            });
+                        subs.Remove(s => values.All(v => v.Id != s.Id));
+                        subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
+                    });
 
             return this.subscriptions;
         }
@@ -104,7 +106,7 @@
         {
             var task = new TaskCompletionSource<Subscription>();
 
-            this.rest.Post(new { id = streamId }, (Subscription sub) => task.SetResult(sub));
+            this.rest.Post<Subscription>("api/subscription", new { id = streamId }, task.SetResult);
 
             return task.Task;
         }
@@ -117,7 +119,8 @@
         /// </param>
         public void Delete(int subscriptionId)
         {
-            this.rest.Delete(new { id = subscriptionId });
+            var uri = string.Format("api/subscription{0}", subscriptionId);
+            this.rest.Delete<Subscription>(uri);
         }
 
         /// <summary>

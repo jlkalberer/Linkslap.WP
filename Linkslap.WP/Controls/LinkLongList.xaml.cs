@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Linkslap.WP.Controls
 {
     using System.Collections;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     using Linkslap.WP.ViewModels;
 
-    /// <summary>
-    /// The link long list.
-    /// </summary>
-    public partial class LinkLongList : UserControl
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+
+    public sealed partial class LinkLongList : UserControl
     {
         /// <summary>
         /// The links property.
@@ -27,7 +20,7 @@ namespace Linkslap.WP.Controls
             "Links",
             typeof(ObservableCollection<LinkViewModel>),
             typeof(LinkLongList),
-            new PropertyMetadata(OnLinkItemsChanged));
+            new PropertyMetadata(null, OnLinkItemsChanged));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkLongList"/> class.
@@ -51,7 +44,7 @@ namespace Linkslap.WP.Controls
 
         private static void OnLinkItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as LinkLongList).LongListSelector.ItemsSource = e.NewValue as IList;
+            (d as LinkLongList).DataContext = e.NewValue;
         }
     }
 }

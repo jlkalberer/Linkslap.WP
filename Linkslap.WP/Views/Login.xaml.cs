@@ -1,33 +1,55 @@
 ﻿namespace Linkslap.WP.Views
 {
-    using System;
     using System.Threading.Tasks;
-    using System.Windows;
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Controls;
+
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Navigation;
+
     using Linkslap.WP.Utils;
 
-    using Microsoft.Phone.Controls;
-
     /// <summary>
-    /// The login view.
+    /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public partial class Login : PhoneApplicationPage
+    public sealed partial class Login : PageBase
     {
-        private readonly IAccountRepository accountRepository;
+        /// <summary>
+        /// The account repository.
+        /// </summary>
+        private readonly IAccountStore accountStore;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Login"/> class.
+        /// </summary>
         public Login()
-            : this(new AccountRepository())
+            : this(new AccountStore())
         {
         }
 
-        public Login(IAccountRepository accountRepository)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Login"/> class.
+        /// </summary>
+        /// <param name="accountStore">
+        /// The account repository.
+        /// </param>
+        public Login(IAccountStore accountStore)
         {
-            this.accountRepository = accountRepository;
-            InitializeComponent();
+            this.accountStore = accountStore;
+            this.InitializeComponent();
         }
 
+        /// <summary>
+        /// The login button_ on click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void LoginButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(this.UserName.Text))
@@ -40,16 +62,16 @@
                 return;
             }
 
-            var task = this.accountRepository.Authenticate(this.UserName.Text, this.Password.Password);
+            var task = this.accountStore.Authenticate(this.UserName.Text, this.Password.Password);
 
             task.ContinueWith(
                 account =>
+                {
+                    if (account != null && account.Status != TaskStatus.Faulted)
                     {
-                        if (account != null)
-                        {
-                            this.Navigate("/Views/Home.xaml");
-                        }
-                    });
+                        this.Navigate<Home>();
+                    }
+                });
         }
     }
 }
