@@ -36,6 +36,8 @@ namespace Linkslap.WP.Communication.Notifications
         /// </summary>
         private ObservableCollection<Subscription> subscriptions;
 
+        private NotificationHub hub;
+
         public NotificationStore()
             : this(new SubscriptionStore())
         {
@@ -61,8 +63,8 @@ namespace Linkslap.WP.Communication.Notifications
                     };
             }
 
-            this.subscriptions = this.subscriptionStore.GetSubsriptions();
-            this.subscriptions.CollectionChanged += (sender, args) => this.RegisterChannels();
+            //this.subscriptions = this.subscriptionStore.GetSubsriptions();
+            //this.subscriptions.CollectionChanged += (sender, args) => this.RegisterChannels();
 
             var registration = new PushRegistration();
             registration.InstallationId = Storage.GetInstallationId();
@@ -70,14 +72,14 @@ namespace Linkslap.WP.Communication.Notifications
 
             var rest = new Rest();
             rest.Post<dynamic>(
-                "api/register", 
+                "api/register",
                 registration,
                 value =>
-                    {
-                        var v = 0;
-                    });
+                {
+                    var v = 0;
+                });
 
-            // this.RegisterChannels();
+            this.RegisterChannels();
         }
 
         /// <summary>
@@ -85,7 +87,10 @@ namespace Linkslap.WP.Communication.Notifications
         /// </summary>
         private async void RegisterChannels()
         {
-            //await this.hub.RegisterNativeAsync(this.channel.Uri, new[] {"admin"});
+            //this.hub = new NotificationHub(AppSettings.NotificationHubPath, AppSettings.HubConnectionString);
+
+           //var registration = await this.hub.RegisterNativeAsync(this.channel.Uri);
+            var v = 0;
         }
     }
 }

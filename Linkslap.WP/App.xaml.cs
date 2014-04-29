@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Linkslap.WP
 {
+    using Windows.ApplicationModel.Background;
     using Windows.ApplicationModel.DataTransfer;
     using Windows.ApplicationModel.DataTransfer.ShareTarget;
     using Windows.UI.Core;
@@ -35,6 +36,10 @@ namespace Linkslap.WP
     public sealed partial class App : Application
     {
         private TransitionCollection transitions;
+
+        private const string PUSH_NOTIFICATIONS_TASK_NAME = "ManageNotifications";
+        private const string PUSH_NOTIFICATIONS_TASK_ENTRY_POINT = "Linkslap.WP.Communication.Util.PushNotificationTask";
+        private const int MAINTENANCE_INTERVAL = 10 * 24 * 60;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -134,6 +139,39 @@ namespace Linkslap.WP
             // Ensure the current window is active
             Window.Current.Activate();
             MappingSetup.Map();
+
+            if (GetRegisteredTask() == null)
+            {
+                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                PushNotificationTrigger trigger = new PushNotificationTrigger();
+                taskBuilder.SetTrigger(trigger);
+
+                // Background tasks must live in separate DLL, and be included in the package manifest
+                // Also, make sure that your main application project includes a reference to this DLL
+                taskBuilder.TaskEntryPoint = PUSH_NOTIFICATIONS_TASK_ENTRY_POINT;
+                taskBuilder.Name = PUSH_NOTIFICATIONS_TASK_NAME;
+
+                try
+                {
+                    BackgroundTaskRegistration task = taskBuilder.Register();
+                   // task.Completed += BackgroundTaskCompleted;
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+
+        private IBackgroundTaskRegistration GetRegisteredTask()
+        {
+            foreach (var task in BackgroundTaskRegistration.AllTasks.Values)
+            {
+                if (task.Name == PUSH_NOTIFICATIONS_TASK_NAME)
+                {
+                    return task;
+                }
+            }
+            return null;
         }
 
         /// <summary>

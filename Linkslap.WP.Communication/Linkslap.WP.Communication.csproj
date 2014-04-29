@@ -100,6 +100,7 @@
     <Compile Include="SubscriptionStore.cs" />
     <Compile Include="Util\AppSettings.cs" />
     <Compile Include="Util\CollectionExtensions.cs" />
+    <Compile Include="Util\PushNotificationTask.cs" />
     <Compile Include="Util\Storage.cs" />
   </ItemGroup>
   <ItemGroup>

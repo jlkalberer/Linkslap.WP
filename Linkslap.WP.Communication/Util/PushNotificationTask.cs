@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Linkslap.WP.Utils
+﻿namespace Linkslap.WP.Communication.Util
 {
     using System.Diagnostics;
 
@@ -12,7 +6,7 @@ namespace Linkslap.WP.Utils
     using Windows.Networking.PushNotifications;
     using Windows.Storage;
 
-    internal class PushNotificationTask : IBackgroundTask
+    public class PushNotificationTask : IBackgroundTask
     {
         public void Run(IBackgroundTaskInstance taskInstance)
         {
