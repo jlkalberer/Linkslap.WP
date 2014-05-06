@@ -249,33 +249,35 @@
                             return;
                         }
 
-                        // If this is any type of error, go to error callback
-                        if ((int)response.StatusCode >= 300)
-                        {
-                            if (error != null)
+                        var content = response.Content.ReadAsStringAsync();
+                        content.Completed += (asyncInfo, asyncStatus) =>
                             {
-                                error();
-                            }
-                        }
-                        else if (callback != null)
-                        {
-                            var content = response.Content.ReadAsStringAsync();
-                            content.Completed += (asyncInfo, asyncStatus) =>
+                                if (status == AsyncStatus.Canceled)
                                 {
-                                    if (status == AsyncStatus.Canceled)
-                                    {
-                                        return;
-                                    }
+                                    return;
+                                }
 
-                                    if (status == AsyncStatus.Error)
-                                    {
-                                        return;
-                                    }
+                                if (status == AsyncStatus.Error)
+                                {
+                                    return;
+                                }
 
-                                    var model = JsonConvert.DeserializeObject<TModel>(asyncInfo.GetResults());
+                                var results = asyncInfo.GetResults();
+
+                                // If this is any type of error, go to error callback
+                                if ((int)response.StatusCode >= 300)
+                                {
+                                    if (error != null)
+                                    {
+                                        error();
+                                    }
+                                }
+                                else if (callback != null)
+                                {
+                                    var model = JsonConvert.DeserializeObject<TModel>(results);
                                     callback(model);
-                                };
-                        }
+                                }
+                            };
                     }
                     catch (Exception ex)
                     {

@@ -5,11 +5,9 @@
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Controls;
+    using Linkslap.WP.Utils;
 
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Navigation;
-
-    using Linkslap.WP.Utils;
 
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -69,6 +67,7 @@
                 {
                     if (account != null && account.Status != TaskStatus.Faulted)
                     {
+                        MainPage.NotificationStore.Register();
                         this.Navigate<Home>();
                     }
                 });

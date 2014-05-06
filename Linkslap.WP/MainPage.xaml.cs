@@ -2,6 +2,7 @@
 {
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
@@ -13,9 +14,21 @@
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : PageBase
+    public sealed partial class MainPage
     {
+        /// <summary>
+        /// The account store.
+        /// </summary>
         private readonly IAccountStore accountStore;
+        
+        /// <summary>
+        /// Initializes static members of the <see cref="MainPage"/> class. 
+        /// </summary>
+        static MainPage()
+        {
+            NotificationStore = new NotificationStore();
+        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainPage"/> class.
@@ -23,8 +36,12 @@
         public MainPage()
             : this(new AccountStore())
         {
-
         }
+
+        /// <summary>
+        /// Gets the notification store.
+        /// </summary>
+        public static NotificationStore NotificationStore { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainPage"/> class.
@@ -62,6 +79,7 @@
                             return;
                         }
 
+                        NotificationStore.Register();
                         this.Navigate<Home>();
                     });
         }

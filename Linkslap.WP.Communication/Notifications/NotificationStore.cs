@@ -1,53 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Linkslap.WP.Communication.Notifications
+﻿namespace Linkslap.WP.Communication.Notifications
 {
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
+    using System;
 
-    using Windows.Networking.PushNotifications;
-
-    using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
 
-    using Microsoft.WindowsAzure.Messaging;
+    using Windows.Networking.PushNotifications;
 
-    using Subscription = Linkslap.WP.Communication.Models.Subscription;
-
+    /// <summary>
+    /// The notification store.
+    /// </summary>
     public class NotificationStore
     {
-        /// <summary>
-        /// The subscription store.
-        /// </summary>
-        private readonly ISubscriptionStore subscriptionStore;
-
         /// <summary>
         /// The channel.
         /// </summary>
         private PushNotificationChannel channel;
-
-        /// <summary>
-        /// The subscriptions.
-        /// </summary>
-        private ObservableCollection<Subscription> subscriptions;
-
-        private NotificationHub hub;
-
-        public NotificationStore()
-            : this(new SubscriptionStore())
-        {
-            
-        }
-
-        public NotificationStore(ISubscriptionStore subscriptionStore)
-        {
-            this.subscriptionStore = subscriptionStore;
-        }
 
         /// <summary>
         /// The register.
@@ -57,18 +25,14 @@ namespace Linkslap.WP.Communication.Notifications
             if (this.channel == null || this.channel.ExpirationTime < DateTime.Now)
             {
                 this.channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                this.channel.PushNotificationReceived += (sender, args) =>
-                    {
-                        var v = 0;
-                    };
+                this.channel.PushNotificationReceived += this.ChannelOnPushNotificationReceived;
             }
 
-            //this.subscriptions = this.subscriptionStore.GetSubsriptions();
-            //this.subscriptions.CollectionChanged += (sender, args) => this.RegisterChannels();
-
-            var registration = new PushRegistration();
-            registration.InstallationId = Storage.GetInstallationId();
-            registration.ChannelUri = this.channel.Uri;
+            var registration = new PushRegistration
+                                   {
+                                       InstallationId = Storage.GetInstallationId(),
+                                       ChannelUri = this.channel.Uri
+                                   };
 
             var rest = new Rest();
             rest.Post<dynamic>(
@@ -78,19 +42,30 @@ namespace Linkslap.WP.Communication.Notifications
                 {
                     var v = 0;
                 });
-
-            this.RegisterChannels();
         }
 
         /// <summary>
-        /// The register channels.
+        /// The channel on push notification received.
         /// </summary>
-        private async void RegisterChannels()
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        private void ChannelOnPushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            //this.hub = new NotificationHub(AppSettings.NotificationHubPath, AppSettings.HubConnectionString);
+            if (args.NotificationType != PushNotificationType.Raw)
+            {
+                return;
+            }
 
-           //var registration = await this.hub.RegisterNativeAsync(this.channel.Uri);
-            var v = 0;
+            if (args.RawNotification == null || string.IsNullOrEmpty(args.RawNotification.Content))
+            {
+                return;
+            }
+
+            var submittedLink = args.RawNotification.Content;
         }
     }
 }

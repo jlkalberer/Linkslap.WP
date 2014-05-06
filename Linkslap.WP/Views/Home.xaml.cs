@@ -25,6 +25,9 @@
         /// </summary>
         private readonly ISubscriptionStore subscriptionStore;
 
+        /// <summary>
+        /// The view model.
+        /// </summary>
         private readonly HomeViewModel viewModel;
 
         /// <summary>
@@ -49,6 +52,12 @@
             this.viewModel = new HomeViewModel();
         }
 
+        /// <summary>
+        /// The on navigated to.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var subscriptions = this.subscriptionStore.GetSubsriptions();
@@ -72,9 +81,6 @@
             this.DataContext = this.viewModel; // this.Subscriptions;
 
             this.Pivot.SelectionChanged += this.PivotOnSelectionChanged;
-
-            var notification = new NotificationStore();
-            notification.Register();
 
             base.OnNavigatedTo(e);
         }

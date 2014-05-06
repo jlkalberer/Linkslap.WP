@@ -1,47 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
-
-namespace Linkslap.WP
+﻿namespace Linkslap.WP
 {
-    using Windows.ApplicationModel.Background;
-    using Windows.ApplicationModel.DataTransfer;
-    using Windows.ApplicationModel.DataTransfer.ShareTarget;
-    using Windows.UI.Core;
+    using System;
+    using System.Linq;
 
-    using AutoMapper;
-
+    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
+
+    using Windows.ApplicationModel;
+    using Windows.ApplicationModel.Activation;
+    using Windows.ApplicationModel.Background;
+    using Windows.ApplicationModel.DataTransfer;
+    using Windows.UI.Core;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media.Animation;
+    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public sealed partial class App : Application
+    public sealed partial class App
     {
-        private TransitionCollection transitions;
-
-        private const string PUSH_NOTIFICATIONS_TASK_NAME = "ManageNotifications";
-        private const string PUSH_NOTIFICATIONS_TASK_ENTRY_POINT = "Linkslap.WP.Communication.Util.PushNotificationTask";
-        private const int MAINTENANCE_INTERVAL = 10 * 24 * 60;
+        /// <summary>
+        /// The push notifications task name.
+        /// </summary>
+        private const string PushNotificationsTaskName = "ManageNotifications";
 
         /// <summary>
+        /// The push notifications task entry point.
+        /// </summary>
+        private const string PushNotificationsTaskEntryPoint = "Linkslap.WP.Communication.Util.PushNotificationTask";
+        
+        /// <summary>
+        /// The transitions.
+        /// </summary>
+        private TransitionCollection transitions;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class. 
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
@@ -49,8 +46,30 @@ namespace Linkslap.WP
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+            MappingSetup.Map();
+
+            if (this.GetRegisteredTask() == null)
+            {
+                var taskBuilder = new BackgroundTaskBuilder();
+                var trigger = new PushNotificationTrigger();
+                taskBuilder.SetTrigger(trigger);
+
+                // Background tasks must live in separate DLL, and be included in the package manifest
+                // Also, make sure that your main application project includes a reference to this DLL
+                taskBuilder.TaskEntryPoint = PushNotificationsTaskEntryPoint;
+                taskBuilder.Name = PushNotificationsTaskName;
+
+                taskBuilder.Register();
+            }
         }
 
+        /// <summary>
+        /// The on share target activated.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
         protected override async void OnShareTargetActivated(ShareTargetActivatedEventArgs args)
         {
             var shareOperation = args.ShareOperation;
@@ -91,17 +110,14 @@ namespace Linkslap.WP
             }
 #endif
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            var rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
-
-                // TODO: change this value to a cache size that is appropriate for your application
-                rootFrame.CacheSize = 1;
+                rootFrame = new Frame { CacheSize = 1 };
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -125,7 +141,7 @@ namespace Linkslap.WP
                 }
 
                 rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                rootFrame.Navigated += this.RootFrameFirstNavigated;
 
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
@@ -138,40 +154,17 @@ namespace Linkslap.WP
 
             // Ensure the current window is active
             Window.Current.Activate();
-            MappingSetup.Map();
-
-            if (GetRegisteredTask() == null)
-            {
-                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
-                PushNotificationTrigger trigger = new PushNotificationTrigger();
-                taskBuilder.SetTrigger(trigger);
-
-                // Background tasks must live in separate DLL, and be included in the package manifest
-                // Also, make sure that your main application project includes a reference to this DLL
-                taskBuilder.TaskEntryPoint = PUSH_NOTIFICATIONS_TASK_ENTRY_POINT;
-                taskBuilder.Name = PUSH_NOTIFICATIONS_TASK_NAME;
-
-                try
-                {
-                    BackgroundTaskRegistration task = taskBuilder.Register();
-                   // task.Completed += BackgroundTaskCompleted;
-                }
-                catch (Exception ex)
-                {
-                }
-            }
         }
 
+        /// <summary>
+        /// The get registered task.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IBackgroundTaskRegistration"/>.
+        /// </returns>
         private IBackgroundTaskRegistration GetRegisteredTask()
         {
-            foreach (var task in BackgroundTaskRegistration.AllTasks.Values)
-            {
-                if (task.Name == PUSH_NOTIFICATIONS_TASK_NAME)
-                {
-                    return task;
-                }
-            }
-            return null;
+            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => task.Name == PushNotificationsTaskName);
         }
 
         /// <summary>
@@ -179,11 +172,17 @@ namespace Linkslap.WP
         /// </summary>
         /// <param name="sender">The object where the handler is attached.</param>
         /// <param name="e">Details about the navigation event.</param>
-        private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
+        private void RootFrameFirstNavigated(object sender, NavigationEventArgs e)
         {
             var rootFrame = sender as Frame;
-            rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
-            rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+
+            if (rootFrame == null)
+            {
+                return;
+            }
+
+            rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection { new NavigationThemeTransition() };
+            rootFrame.Navigated -= this.RootFrameFirstNavigated;
         }
 
         /// <summary>

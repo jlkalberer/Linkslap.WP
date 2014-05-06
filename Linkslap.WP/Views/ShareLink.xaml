@@ -35,7 +35,7 @@
         </StackPanel>
         <SemanticZoom Grid.Row="1">
             <SemanticZoom.ZoomedInView>
-                <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding}" ItemTemplate="{StaticResource StreamTemplate}"/>
+                <ListView SelectionChanged="StreamSelectionChanged" ItemsSource="{Binding}" ItemTemplate="{StaticResource StreamTemplate}"/>
             </SemanticZoom.ZoomedInView>
         </SemanticZoom>
     </Grid>
