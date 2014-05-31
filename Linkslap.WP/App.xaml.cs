@@ -73,17 +73,6 @@
         protected override async void OnShareTargetActivated(ShareTargetActivatedEventArgs args)
         {
             var shareOperation = args.ShareOperation;
-            if (shareOperation.Data.Contains(StandardDataFormats.WebLink))
-            {
-                Uri uri = await shareOperation.Data.GetWebLinkAsync();
-                if (uri != null)
-                {
-                    // To output text from this example, you need a TextBlock control
-                    // with a name of "contentValue". 
-                   // contentValue.Text = "Uri: " + uri.AbsoluteUri + Environment.NewLine;
-                }
-            }
-
             MappingSetup.Map();
 
             var rootFrame = new Frame();

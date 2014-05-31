@@ -27,6 +27,6 @@
             <TextBlock Text="Linkslap" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
             <TextBlock Text="Slap Link" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
         </StackPanel>
-        <controls:LinkLongList Grid.Row="1" Links="{Binding}"></controls:LinkLongList>
+        <controls:LinkLongList Grid.Row="1" Links="{Binding}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
     </Grid>
 </controls:PageBase>

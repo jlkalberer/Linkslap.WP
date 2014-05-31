@@ -17,7 +17,7 @@
 
     <SemanticZoom Name="List">
         <SemanticZoom.ZoomedInView>
-            <ListView ItemTemplate="{StaticResource LinksTemplate}" ItemsSource="{Binding}">
+            <ListView ItemTemplate="{StaticResource LinksTemplate}" ItemsSource="{Binding}" SelectionChanged="Selector_OnSelectionChanged">
             </ListView>
         </SemanticZoom.ZoomedInView>
     </SemanticZoom>

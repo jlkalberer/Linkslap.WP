@@ -27,17 +27,17 @@
             page.Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal,
                 () =>
+                {
+                    var type = typeof(TType);
+                    if (parameters == null)
                     {
-                        var type = typeof(TType);
-                        if (parameters == null)
-                        {
-                            page.Frame.Navigate(type);
-                        }
-                        else
-                        {
-                            page.Frame.Navigate(type, parameters);
-                        }
-                    });
+                        page.Frame.Navigate(type);
+                    }
+                    else
+                    {
+                        page.Frame.Navigate(type, parameters);
+                    }
+                });
         }
     }
 }

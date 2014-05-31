@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+﻿using System.Collections.Generic;
+
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -18,16 +7,17 @@ using Windows.UI.Xaml.Navigation;
 namespace Linkslap.WP.Views
 {
     using System.Collections.ObjectModel;
+    using System.Linq;
 
-    using Windows.UI.Core;
+    using Windows.UI.Xaml.Controls;
 
     using AutoMapper;
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
-    using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Controls;
+    using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
 
     /// <summary>
@@ -80,6 +70,11 @@ namespace Linkslap.WP.Views
 
 
             base.OnNavigatedTo(eventArgs);
+        }
+
+        private void LinkLongList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.Navigate<View>(e.AddedItems[0] as LinkViewModel);
         }
     }
 }

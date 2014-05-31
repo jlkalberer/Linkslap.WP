@@ -11,6 +11,8 @@ namespace Linkslap.WP.Controls
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
+    using Linkslap.WP.Views;
+
     public sealed partial class LinkLongList : UserControl
     {
         /// <summary>
@@ -35,16 +37,53 @@ namespace Linkslap.WP.Controls
         /// </summary>
         public ObservableCollection<LinkViewModel> Links
         {
-            get { return (ObservableCollection<LinkViewModel>)GetValue(LinksProperty); }
+            get
+            {
+                return (ObservableCollection<LinkViewModel>)GetValue(LinksProperty);
+            }
+
             set
             {
                 this.SetValue(LinksProperty, value);
             }
         }
 
+        /// <summary>
+        /// The selection changed.
+        /// </summary>
+        public event SelectionChangedEventHandler SelectionChanged;
+
+        /// <summary>
+        /// The on link items changed.
+        /// </summary>
+        /// <param name="d">
+        /// The d.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private static void OnLinkItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as LinkLongList).DataContext = e.NewValue;
+        }
+
+        /// <summary>
+        /// The selector_ on selection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.SelectionChanged == null)
+            {
+                return;
+            }
+
+            this.SelectionChanged(sender, e);
         }
     }
 }

@@ -65,7 +65,7 @@
             task.ContinueWith(
                 account =>
                 {
-                    if (account != null && account.Status != TaskStatus.Faulted)
+                    if (account != null && account.Status == TaskStatus.RanToCompletion)
                     {
                         MainPage.NotificationStore.Register();
                         this.Navigate<Home>();

@@ -132,11 +132,10 @@
                 return;
             }
 
-            var task = this.streamStore.SlapLink(subscription.StreamKey, "Test", this.data.ToString());
-#if !DEBUG
+            var task = this.streamStore.SlapLink(subscription.StreamKey, this.shareOperation.Data.Properties.Title, this.data.ToString());
+      
             // This will shut down the app - we only want to do that if we are not debugging.
             task.ContinueWith(link => this.shareOperation.ReportCompleted());
-#endif
         }
     }
 }

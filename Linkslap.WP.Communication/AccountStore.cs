@@ -55,7 +55,11 @@
             this.rest.Execute<Account>(message, "token", data, task.SetResult, task.SetCanceled);
 
             var account = await task.Task;
-            Storage.Save("account", account);
+
+            if (task.Task.IsCompleted)
+            {
+                Storage.Save("account", account);
+            }
 
             return account;
         }
