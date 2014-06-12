@@ -73,7 +73,7 @@
             task.ContinueWith(
                 t =>
                     {
-                        if (t.Result == null)
+                        if (!t.IsCompleted || t.Result == null)
                         {
                             this.Navigate<Login>();
                             return;

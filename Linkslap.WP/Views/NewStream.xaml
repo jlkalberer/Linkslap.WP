@@ -1,5 +1,5 @@
 ﻿<controls:PageBase
-    x:Class="Linkslap.WP.Views.ViewStream"
+    x:Class="Linkslap.WP.Views.NewStream"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Linkslap.WP.Views"
@@ -18,14 +18,20 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Margin="24,17,0,28">
             <TextBlock Text="Linkslap" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="Slap Link" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+            <TextBlock Text="New Stream" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
         </StackPanel>
-        <controls:LinkLongList Grid.Row="1" Links="{Binding}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
+
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Stream Name" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
+            <TextBox Name="StreamName"></TextBox>
+            <Button Name="CreateButton" Click="CreateButtonClick">Create New Stream</Button>
+        </StackPanel>
     </Grid>
 </controls:PageBase>

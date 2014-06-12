@@ -1,14 +1,12 @@
-﻿using System;
-
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
-
-namespace Linkslap.WP.Views
+﻿namespace Linkslap.WP.Views
 {
+    using System;
+
     using Linkslap.WP.Controls;
     using Linkslap.WP.ViewModels;
+
+    using Windows.UI.Notifications;
+    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -43,6 +41,8 @@ namespace Linkslap.WP.Views
                 // TODO - Go back and show error message
                 return;
             }
+
+            ToastNotificationManager.History.Remove(this.link.Id.ToString());
 
             this.Title.Text = this.link.Comment;
             this.WebView.Navigate(new Uri(this.link.Url, UriKind.Absolute));

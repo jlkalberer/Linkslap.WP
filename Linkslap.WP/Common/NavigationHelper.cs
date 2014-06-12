@@ -189,15 +189,32 @@ namespace Linkslap.WP.Common
         /// </summary>
         public virtual void GoBack()
         {
-            if (this.Frame != null && this.Frame.CanGoBack) this.Frame.GoBack();
+            this.Page.Dispatcher.RunAsync(
+                CoreDispatcherPriority.Normal,
+                () =>
+                    {
+                        if (this.Frame != null && this.Frame.CanGoBack)
+                        {
+                            this.Frame.GoBack();
+                        }
+                    });
         }
+
         /// <summary>
         /// Virtual method used by the <see cref="GoForwardCommand"/> property
         /// to invoke the <see cref="Windows.UI.Xaml.Controls.Frame.GoForward"/> method.
         /// </summary>
         public virtual void GoForward()
         {
-            if (this.Frame != null && this.Frame.CanGoForward) this.Frame.GoForward();
+            this.Page.Dispatcher.RunAsync(
+                CoreDispatcherPriority.Normal,
+                () =>
+                    {
+                        if (this.Frame != null && this.Frame.CanGoForward)
+                        {
+                            this.Frame.GoForward();
+                        }
+                    });
         }
 
 #if WINDOWS_PHONE_APP
@@ -374,6 +391,7 @@ namespace Linkslap.WP.Common
     /// Represents the method that will handle the <see cref="NavigationHelper.LoadState"/>event
     /// </summary>
     public delegate void LoadStateEventHandler(object sender, LoadStateEventArgs e);
+
     /// <summary>
     /// Represents the method that will handle the <see cref="NavigationHelper.SaveState"/>event
     /// </summary>
@@ -388,7 +406,8 @@ namespace Linkslap.WP.Common
         /// The parameter value passed to <see cref="Frame.Navigate(Type, Object)"/> 
         /// when this page was initially requested.
         /// </summary>
-        public Object NavigationParameter { get; private set; }
+        public object NavigationParameter { get; private set; }
+
         /// <summary>
         /// A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.
@@ -413,6 +432,7 @@ namespace Linkslap.WP.Common
             this.PageState = pageState;
         }
     }
+
     /// <summary>
     /// Class used to hold the event data required when a page attempts to save state.
     /// </summary>

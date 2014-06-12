@@ -76,7 +76,7 @@
 
             if (account == null || string.IsNullOrEmpty(account.BearerToken))
             {
-                return null;
+                return account;
             }
 
             var task = new TaskCompletionSource<UserInfo>();
@@ -84,10 +84,9 @@
 
             var userInfo = await task.Task;
 
-
             if (userInfo == null)
             {
-                return null;
+                return account;
             }
 
             if (string.CompareOrdinal(account.UserName, userInfo.UserName) != 0)

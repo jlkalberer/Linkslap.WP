@@ -1,15 +1,8 @@
-﻿using System.Collections.Generic;
-
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
-
-namespace Linkslap.WP.Views
+﻿namespace Linkslap.WP.Views
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-
-    using Windows.UI.Xaml.Controls;
 
     using AutoMapper;
 
@@ -20,18 +13,33 @@ namespace Linkslap.WP.Views
     using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
 
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Navigation;
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class ViewStream : PageBase
     {
+        /// <summary>
+        /// The stream store.
+        /// </summary>
         private readonly IStreamStore streamStore;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewStream"/> class.
+        /// </summary>
         public ViewStream()
             : this(new StreamStore())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewStream"/> class.
+        /// </summary>
+        /// <param name="streamStore">
+        /// The stream store.
+        /// </param>
         public ViewStream(IStreamStore streamStore)
         {
             this.streamStore = streamStore;
@@ -65,13 +73,21 @@ namespace Linkslap.WP.Views
                     () =>
                         {
                             var result = Mapper.Map(links.Result, new List<LinkViewModel>());
-                            collection.AddRange(result);
+                            collection.AddRange(result.OrderByDescending(l => l.CreatedDate));
                         }));
-
 
             base.OnNavigatedTo(eventArgs);
         }
 
+        /// <summary>
+        /// The link long list_ on selection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void LinkLongList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.Navigate<View>(e.AddedItems[0] as LinkViewModel);

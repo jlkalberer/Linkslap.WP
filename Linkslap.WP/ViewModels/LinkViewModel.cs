@@ -35,6 +35,6 @@
         /// <summary>
         /// Gets or sets the created date.
         /// </summary>
-        // public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

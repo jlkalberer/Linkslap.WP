@@ -2,10 +2,15 @@
 {
     using System;
 
+    using AutoMapper;
+
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
 
+    using Newtonsoft.Json;
+
     using Windows.Networking.PushNotifications;
+    using Windows.UI.Notifications;
 
     /// <summary>
     /// The notification store.
@@ -66,6 +71,16 @@
             }
 
             var submittedLink = args.RawNotification.Content;
+
+            var link = JsonConvert.DeserializeObject<Link>(submittedLink);
+
+            var store = new NewSlapsStore();
+            store.AddLink(link);
+
+            var notification = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
+            var toast = new ToastNotification(notification) { Tag = link.Id.ToString() };
+
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
     }
 }

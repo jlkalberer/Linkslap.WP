@@ -16,8 +16,11 @@
     </UserControl.Resources>
 
     <SemanticZoom Name="List">
+        <!--<SemanticZoom.ZoomedOutView>
+            <ListView Name="DateView" ItemTemplate="{StaticResource DateTemplate} "></ListView>
+        </SemanticZoom.ZoomedOutView>-->
         <SemanticZoom.ZoomedInView>
-            <ListView ItemTemplate="{StaticResource LinksTemplate}" ItemsSource="{Binding}" SelectionChanged="Selector_OnSelectionChanged">
+            <ListView Name="ListView" ItemTemplate="{StaticResource LinksTemplate}" SelectionChanged="Selector_OnSelectionChanged">
             </ListView>
         </SemanticZoom.ZoomedInView>
     </SemanticZoom>

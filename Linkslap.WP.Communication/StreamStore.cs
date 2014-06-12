@@ -1,8 +1,6 @@
 ﻿namespace Linkslap.WP.Communication
 {
-    using System;
     using System.Collections.Generic;
-    using System.Net.Http;
     using System.Threading.Tasks;
 
     using Linkslap.WP.Communication.Interfaces;

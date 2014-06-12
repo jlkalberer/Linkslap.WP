@@ -20,9 +20,9 @@ namespace Linkslap.WP.Controls
         /// </summary>
         public static readonly DependencyProperty LinksProperty = DependencyProperty.Register(
             "Links",
-            typeof(ObservableCollection<LinkViewModel>),
+            typeof(IEnumerable<LinkViewModel>),
             typeof(LinkLongList),
-            new PropertyMetadata(null, OnLinkItemsChanged));
+            new PropertyMetadata(default(IEnumerable<LinkViewModel>), OnLinkItemsChanged));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkLongList"/> class.
@@ -35,11 +35,11 @@ namespace Linkslap.WP.Controls
         /// <summary>
         /// Gets or sets the links.
         /// </summary>
-        public ObservableCollection<LinkViewModel> Links
+        public IEnumerable<LinkViewModel> Links
         {
             get
             {
-                return (ObservableCollection<LinkViewModel>)GetValue(LinksProperty);
+                return (IEnumerable<LinkViewModel>)GetValue(LinksProperty);
             }
 
             set
@@ -64,7 +64,7 @@ namespace Linkslap.WP.Controls
         /// </param>
         private static void OnLinkItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as LinkLongList).DataContext = e.NewValue;
+            (d as LinkLongList).ListView.ItemsSource = e.NewValue;
         }
 
         /// <summary>

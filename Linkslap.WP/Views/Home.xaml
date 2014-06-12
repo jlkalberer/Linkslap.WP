@@ -37,7 +37,7 @@
         <Grid Grid.Row="1">
             <Pivot Name="Pivot">
                 <PivotItem Header="New Slaps">
-                    <controls:LinkLongList></controls:LinkLongList>
+                    <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
                 </PivotItem>
                 <PivotItem Header="Stream">
                     <SemanticZoom>
@@ -49,4 +49,10 @@
             </Pivot>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Label="Refresh" Icon="Refresh"/>
+            <AppBarButton Label="New Stream" Icon="Add" Click="NewStreamClick"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </controls:PageBase>

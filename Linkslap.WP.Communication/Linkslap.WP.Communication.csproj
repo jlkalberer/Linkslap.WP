@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="AccountStore.cs" />
     <Compile Include="Interfaces\IAccountStore.cs" />
+    <Compile Include="Interfaces\INewSlapsStore.cs" />
     <Compile Include="Interfaces\IStreamStore.cs" />
     <Compile Include="Interfaces\ISubscriptionStore.cs" />
     <Compile Include="Models\Account.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Models\Stream.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="NewSlapsStore.cs" />
     <Compile Include="Notifications\NotificationStore.cs" />
     <Compile Include="Notifications\Setup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +106,12 @@
     <Compile Include="Util\Storage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\wpa81\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.WPA81">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\wpa81\AutoMapper.WPA81.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Messaging.Managed">
       <HintPath>..\packages\WindowsAzure.Messaging.Managed.0.1.7.7\lib\wpa81\Microsoft.WindowsAzure.Messaging.Managed.dll</HintPath>
     </Reference>
@@ -128,6 +136,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

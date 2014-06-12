@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets or sets the creation date.
         /// </summary>
-        public DateTime CreationDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the comment.
