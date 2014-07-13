@@ -50,13 +50,16 @@
         /// </param>
         private void LoginButton_OnClick(object sender, RoutedEventArgs e)
         {
+            this.LoginButton.IsEnabled = false;
             if (string.IsNullOrEmpty(this.UserName.Text))
             {
+                this.LoginButton.IsEnabled = true;
                 return;
             }
 
             if (string.IsNullOrEmpty(this.Password.Password))
             {
+                this.LoginButton.IsEnabled = true;
                 return;
             }
 

@@ -15,7 +15,7 @@ namespace Linkslap.WP.Communication.Interfaces
         /// The get subscriptions.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable{Stream}"/>.
+        /// The <see cref="IEnumerable{StreamKey}"/>.
         /// </returns>
         ObservableCollection<Subscription> GetSubsriptions();
 

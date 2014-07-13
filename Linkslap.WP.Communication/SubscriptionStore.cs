@@ -53,7 +53,7 @@
         /// The get subscriptions.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable{Stream}"/>.
+        /// The <see cref="IEnumerable{StreamKey}"/>.
         /// </returns>
         public ObservableCollection<Subscription> GetSubsriptions()
         {

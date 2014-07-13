@@ -82,7 +82,7 @@
             var model = new LinkModel
                             {
                                 ConnectionId = string.Empty, // TODO - This needs to be set using the push notification ID..
-                                Stream = streamKey, 
+                                StreamKey = streamKey, 
                                 Comment = comment, 
                                 Url = url
                             };
