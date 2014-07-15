@@ -75,5 +75,19 @@
                     }
                 });
         }
+
+        /// <summary>
+        /// The register button_ on click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<Register>();
+        }
     }
 }

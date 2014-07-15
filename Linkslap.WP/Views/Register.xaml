@@ -1,5 +1,5 @@
 ﻿<controls:PageBase
-    x:Class="Linkslap.WP.Views.Login"
+    x:Class="Linkslap.WP.Views.Register"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Linkslap.WP.Views"
@@ -8,7 +8,6 @@
     xmlns:controls="using:Linkslap.WP.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
 
     <Grid x:Name="LayoutRoot">
         <Grid.ChildrenTransitions>
@@ -30,15 +29,15 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1">
+            <TextBlock Text="Email" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
+            <TextBox Name="Email"></TextBox>
             <TextBlock Text="Username" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
             <TextBox Name="UserName"></TextBox>
             <TextBlock Text="Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
             <PasswordBox Name="Password"></PasswordBox>
-            <Button Name="LoginButton" Click="LoginButton_OnClick">Login</Button>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 50 0 0">
-                <Button Name="RegisterButton" Click="RegisterButton_OnClick" Margin="0 0 10 0">Register</Button>
-                <Button Name="ForgotPassword">Forgot Password</Button>
-            </StackPanel>
+            <TextBlock Text="Confirm Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
+            <PasswordBox Name="ConfirmPassword"></PasswordBox>
+            <Button Name="RegisterButton" Click="RegisterButton_OnClick">Register</Button>
         </StackPanel>
     </Grid>
 </controls:PageBase>
