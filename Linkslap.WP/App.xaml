@@ -2,6 +2,12 @@
     x:Class="Linkslap.WP.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Linkslap.WP">
+    xmlns:local="using:Linkslap.WP"
+    xmlns:validation="using:Linkslap.WP.Common.Validation">
 
+    <Application.Resources>
+        <validation:ValidationCollectionToSingleStringConverter x:Key="ValidationCollectionToSingleStringConverter" />
+        <validation:ValidationMessageCollectionToStringCollectionConverter x:Key="CollectionConverter" />
+    </Application.Resources>
+    
 </Application>

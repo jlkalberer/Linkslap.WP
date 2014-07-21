@@ -11,28 +11,15 @@
     public sealed partial class Register : PageBase
     {
         /// <summary>
-        /// The view model.
-        /// </summary>
-        private readonly RegisterViewModel viewModel;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Register"/> class.
         /// </summary>
         public Register()
         {
             this.InitializeComponent();
-
-            this.viewModel = new RegisterViewModel();
-            this.DataContext = viewModel;
         }
 
         private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (!this.viewModel.Valid())
-            {
-                return;
-            }
-
             // register stuff
         }
     }

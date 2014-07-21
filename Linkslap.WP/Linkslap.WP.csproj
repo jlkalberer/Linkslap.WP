@@ -88,6 +88,13 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Common\Validation\IValidatable.cs" />
+    <Compile Include="Common\Validation\IValidationMessage.cs" />
+    <Compile Include="Common\Validation\ValidationBase.cs" />
+    <Compile Include="Common\Validation\ValidationCollectionToSingleStringConverter.cs" />
+    <Compile Include="Common\Validation\ValidationErrorMessage.cs" />
+    <Compile Include="Common\Validation\ValidationMessageCollectionToStringCollectionConverter.cs" />
+    <Compile Include="Common\Validation\ValidationWarningMessage.cs" />
     <Compile Include="Controls\LinkLongList.xaml.cs">
       <DependentUpon>LinkLongList.xaml</DependentUpon>
     </Compile>
@@ -99,8 +106,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\MappingSetup.cs" />
     <Compile Include="Utils\PageExtensions.cs" />
-    <Compile Include="Validation\IModelValidation.cs" />
-    <Compile Include="Validation\ValidationBase.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\NewStreamViewModel.cs" />
@@ -204,7 +209,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.2.1\lib\wpa81\AutoMapper.WPA81.dll</HintPath>
     </Reference>
-    
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Images\" />

@@ -6,9 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Linkslap.WP.Controls"
+    xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=viewModels:RegisterViewModel}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.DataContext>
+        <viewModels:RegisterViewModel/>
+    </Page.DataContext>
+    
     <Grid x:Name="LayoutRoot">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -30,14 +36,22 @@
 
         <StackPanel Grid.Row="1">
             <TextBlock Text="Email" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <TextBox Name="Email"></TextBox>
+            <TextBox Text="{Binding Path=Email, Mode=TwoWay}"></TextBox>
+            <TextBlock Text="{Binding Path=ValidationMessages[Email], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
+            
             <TextBlock Text="Username" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <TextBox Name="UserName"></TextBox>
+            <TextBox Text="{Binding Path=UserName, Mode=TwoWay}"></TextBox>
+            <TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
+
             <TextBlock Text="Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <PasswordBox Name="Password"></PasswordBox>
+            <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}"></PasswordBox>
+            <TextBlock Text="{Binding Path=ValidationMessages[Password], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
+
             <TextBlock Text="Confirm Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <PasswordBox Name="ConfirmPassword"></PasswordBox>
-            <Button Name="RegisterButton" Click="RegisterButton_OnClick">Register</Button>
+            <PasswordBox Password="{Binding Path=ConfirmPassword, Mode=TwoWay}"></PasswordBox>
+            <TextBlock Text="{Binding Path=ValidationMessages[ConfirmPassword], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
+
+            <Button Command="{Binding}">Register</Button>
         </StackPanel>
     </Grid>
 </controls:PageBase>

@@ -1,18 +1,30 @@
-﻿using System.Linq;
-
-namespace Linkslap.WP.ViewModels
+﻿namespace Linkslap.WP.ViewModels
 {
-    using Linkslap.WP.Validation;
+    using Linkslap.WP.Common.Validation;
 
     /// <summary>
     /// The register view model.
     /// </summary>
     public class RegisterViewModel : ValidationBase
     {
+        private string email;
+
         /// <summary>
         /// Gets or sets Email.
         /// </summary>
-        public string Email { get; set; }
+        public string Email
+        {
+            get
+            {
+                return this.email;
+            }
+            set
+            {
+                this.email = value;
+
+                this.OnPropertyChanged("Email");
+            }
+        }
 
         /// <summary>
         /// Gets or sets the user name.
@@ -30,30 +42,39 @@ namespace Linkslap.WP.ViewModels
         public string ConfirmPassword { get; set; }
 
         /// <summary>
-        /// The valid.
+        /// Validates this instance.
         /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public override bool Valid()
+        public override void Validate()
         {
-            this.ValidateMember("Email", this.Email)
-                .Required()
-                .Email();
+            this.ValidateProperty("Email", "email", this.Email)
+                    .Required()
+                    .Email();
 
-            this.ValidateMember("user name", this.UserName)
-                .Required()
-                .MaxLength(64)
-                .NotEmail();
+            this.ValidateProperty("UserName", "user name", this.UserName)
+                    .Required()
+                    .MaxLength(64)
+                    .NotEmail();
 
-            this.ValidateMember("password", this.Password)
-                .Required();
+            this.ValidateProperty("Password", "password", this.Password)
+                    .Required();
 
-            this.ValidateMember("confirmation password", this.ConfirmPassword)
-                .Required()
-                .Compare(this.Password, "The password and {0} do not match");
+            this.ValidateProperty("ConfirmPassword", "confirmation password", this.ConfirmPassword)
+                    .Required()
+                    .Compare(this.Password, "The password and {0} do not match");
 
-            return this.Errors.Any();
+            base.Validate();
+        }
+
+        public override void Execute(object parameter)
+        {
+            base.Execute(parameter);
+
+            if (this.HasErrors)
+            {
+                return;
+            }
+
+
         }
     }
 }
