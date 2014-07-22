@@ -9,13 +9,13 @@
     xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModels:RegisterViewModel}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource BackgroundBrush}">
 
     <Page.DataContext>
         <viewModels:RegisterViewModel/>
     </Page.DataContext>
-    
-    <Grid x:Name="LayoutRoot">
+
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -29,29 +29,39 @@
         </Grid.RowDefinitions>
 
         <!-- TitlePanel -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="My Application" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="page title" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
         </StackPanel>
 
-        <StackPanel Grid.Row="1">
-            <TextBlock Text="Email" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <TextBox Text="{Binding Path=Email, Mode=TwoWay}"></TextBox>
+        <StackPanel Grid.Row="1" Style="{ThemeResource MainContent}">
+            <TextBlock Text="Register" Style="{ThemeResource HeaderTextStyle}" />
+            <ItemsControl ItemsSource="{Binding Path=ValidationMessages[GenericError], Converter={StaticResource CollectionConverter}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                                   Foreground="Red" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="Email" Style="{StaticResource FormLabelStyle}"/>
+            <TextBox Text="{Binding Path=Email, Mode=TwoWay}" Style="{ThemeResource FormTextboxStyle}"></TextBox>
             <TextBlock Text="{Binding Path=ValidationMessages[Email], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
-            
-            <TextBlock Text="Username" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <TextBox Text="{Binding Path=UserName, Mode=TwoWay}"></TextBox>
+
+            <TextBlock Text="Username" Style="{StaticResource FormLabelStyle}"/>
+            <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" Style="{ThemeResource FormTextboxStyle}"></TextBox>
             <TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
 
-            <TextBlock Text="Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}"></PasswordBox>
+            <TextBlock Text="Password" Style="{StaticResource FormLabelStyle}"/>
+            <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" Style="{ThemeResource FormPasswordStyle}"></PasswordBox>
             <TextBlock Text="{Binding Path=ValidationMessages[Password], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
 
-            <TextBlock Text="Confirm Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <PasswordBox Password="{Binding Path=ConfirmPassword, Mode=TwoWay}"></PasswordBox>
+            <TextBlock Text="Confirm Password" Style="{StaticResource FormLabelStyle}"/>
+            <PasswordBox Password="{Binding Path=ConfirmPassword, Mode=TwoWay}" Style="{ThemeResource FormPasswordStyle}"></PasswordBox>
             <TextBlock Text="{Binding Path=ValidationMessages[ConfirmPassword], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Foreground="Red" />
 
-            <Button Command="{Binding}">Register</Button>
+            <Button Command="{Binding}" Style="{ThemeResource ButtonStyle}" >Register</Button>
         </StackPanel>
     </Grid>
 </controls:PageBase>

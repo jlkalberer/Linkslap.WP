@@ -17,10 +17,5 @@
         {
             this.InitializeComponent();
         }
-
-        private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            // register stuff
-        }
     }
 }

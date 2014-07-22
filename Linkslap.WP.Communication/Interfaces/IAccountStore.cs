@@ -30,5 +30,7 @@
         /// The <see cref="Account"/>.
         /// </returns>
         Task<Account> Get();
+
+        Task Register(RegisterModel user);
     }
 }

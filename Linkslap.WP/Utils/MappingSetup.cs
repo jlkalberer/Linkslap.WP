@@ -30,6 +30,7 @@
                 .ForMember(d => d.Links, m => m.Ignore());
 
             Mapper.CreateMap<Link, LinkViewModel>();
+            Mapper.CreateMap<RegisterViewModel, RegisterModel>();
 
             Mapper.AssertConfigurationIsValid();
         }

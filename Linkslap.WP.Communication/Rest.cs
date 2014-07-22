@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Net.Http;
     using System.Text;
 
     using Windows.Foundation;
@@ -14,6 +15,10 @@
 
     using Newtonsoft.Json;
 
+    using HttpClient = Windows.Web.Http.HttpClient;
+    using HttpMethod = Windows.Web.Http.HttpMethod;
+    using HttpRequestMessage = Windows.Web.Http.HttpRequestMessage;
+    using HttpResponseMessage = Windows.Web.Http.HttpResponseMessage;
     using Stream = Linkslap.WP.Communication.Models.Stream;
     using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 
@@ -170,7 +175,7 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Execute<TModel>(HttpMethod method, string resource, object parameters = null, Action<TModel> callback = null, Action error = null)
+        public void Execute<TModel>(HttpMethod method, string resource, object parameters = null, Action<TModel> callback = null, Action<HttpError> error = null)
             where TModel : new()
         {
             var message = new HttpRequestMessage();
@@ -200,7 +205,7 @@
         /// <typeparam name="TModel">
         /// The type of model returned from the request.
         /// </typeparam>
-        public void Execute<TModel>(HttpRequestMessage message, string restResource, object parameters = null, Action<TModel> callback = null, Action error = null)
+        public async void Execute<TModel>(HttpRequestMessage message, string restResource, object parameters = null, Action<TModel> callback = null, Action<HttpError> error = null)
             where TModel : new()
         {
             var client = new HttpClient();
@@ -243,13 +248,14 @@
                         }
 
                         var response = info.GetResults();
-                        
+
                         if (response == null || response.Content == null)
                         {
                             return;
                         }
 
                         var content = response.Content.ReadAsStringAsync();
+
                         content.Completed += (asyncInfo, asyncStatus) =>
                             {
                                 if (status == AsyncStatus.Canceled)
@@ -264,15 +270,19 @@
 
                                 var results = asyncInfo.GetResults();
 
-                                // If this is any type of error, go to error callback
-                                if ((int)response.StatusCode >= 300)
+
+                                if (!response.IsSuccessStatusCode)
                                 {
                                     if (error != null)
                                     {
-                                        error();
+                                        var model = JsonConvert.DeserializeObject<HttpError>(results);
+                                        error(model);
                                     }
+
+                                    return;
                                 }
-                                else if (callback != null)
+
+                                if (callback != null)
                                 {
                                     var model = JsonConvert.DeserializeObject<TModel>(results);
                                     callback(model);
@@ -283,26 +293,6 @@
                     {
                     }
                 };
-
-            // client.ExecuteAsync(
-            //    request, new CancellationToken())
-            //    .ContinueWith(
-            //    task =>
-            //        {
-            //            var response = task.Result;
-            //            if (response.StatusCode == HttpStatusCode.Unauthorized)
-            //            {
-            //                if (error != null)
-            //                {
-            //                    error();
-            //                }
-            //            }
-            //            else if (callback != null)
-            //            {
-            //                var model = JsonConvert.DeserializeObject<TModel>(response.Content);
-            //                callback(model);
-            //            }
-            //        });
         }
     }
 }

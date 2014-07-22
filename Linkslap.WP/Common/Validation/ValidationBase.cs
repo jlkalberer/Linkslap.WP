@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkslap.WP.Common.Validation
 {
     using System.ComponentModel;
     using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using System.Windows.Input;
+
+    using Linkslap.WP.Communication.Util;
 
     /// <summary>
     /// An implementation of IValidatable and INotifyPropertyChanged for validation and property change tracking.
     /// </summary>
-    public class ValidationBase : IValidatable, INotifyPropertyChanged, ICommand
+    public abstract class ValidationBase : IValidatable, INotifyPropertyChanged, ICommand
     {
+        /// <summary>
+        /// The generic error.
+        /// </summary>
+        private const string GenericError = "GenericError";
+
         /// <summary>
         /// The email regex.
         /// </summary>
@@ -24,6 +30,14 @@ namespace Linkslap.WP.Common.Validation
         /// The ValidationMessages backing field.
         /// </summary>
         private Dictionary<string, List<IValidationMessage>> validationMessages = new Dictionary<string, List<IValidationMessage>>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationBase"/> class.
+        /// </summary>
+        public ValidationBase()
+        {
+            this.validationMessages[GenericError] = new List<IValidationMessage>();
+        }
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -179,10 +193,7 @@ namespace Linkslap.WP.Common.Validation
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public abstract bool CanExecute(object parameter);
 
         /// <summary>
         /// The execute.
@@ -192,6 +203,7 @@ namespace Linkslap.WP.Common.Validation
         /// </param>
         public virtual void Execute(object parameter)
         {
+            this.validationMessages[GenericError] = new List<IValidationMessage>();
             this.Validate();
         }
 
@@ -213,6 +225,46 @@ namespace Linkslap.WP.Common.Validation
             this.validationMessages[propertyName] = new List<IValidationMessage>();
 
             return new Validator<TType>(propertyName, displayName, value, this);
+        }
+
+        /// <summary>
+        /// The validate response.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        protected void ValidateResponse(Task task)
+        {
+            if (task.Status != TaskStatus.Faulted)
+            {
+                return;
+            }
+
+            var errorMessage = task.Exception.InnerExceptions.FirstOrDefault(ie => ie is HttpError) as HttpError;
+
+            if (errorMessage == null)
+            {
+                return;
+            }
+
+            if (errorMessage.ModelState == null)
+            {
+                if (!string.IsNullOrEmpty(errorMessage.ErrorMessage))
+                {
+                    this.AddValidationMessage(GenericError, new ValidationErrorMessage(errorMessage.ErrorMessage));
+                }
+
+                return;
+            }
+
+            foreach (var kvp in errorMessage.ModelState)
+            {
+                foreach (var error in kvp.Value)
+                {
+                    var key = !string.IsNullOrEmpty(kvp.Key) ? kvp.Key : GenericError;
+                    this.AddValidationMessage(key, new ValidationErrorMessage(error));
+                }
+            }
         }
 
         /// <summary>

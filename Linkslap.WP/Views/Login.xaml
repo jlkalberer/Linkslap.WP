@@ -7,10 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Linkslap.WP.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource BackgroundBrush}">
 
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -24,20 +24,21 @@
         </Grid.RowDefinitions>
 
         <!-- TitlePanel -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="My Application" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="page title" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
         </StackPanel>
 
-        <StackPanel Grid.Row="1">
-            <TextBlock Text="Username" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <TextBox Name="UserName"></TextBox>
-            <TextBlock Text="Password" Style="{StaticResource ControlHeaderTextBlockStyle}"/>
-            <PasswordBox Name="Password"></PasswordBox>
-            <Button Name="LoginButton" Click="LoginButton_OnClick">Login</Button>
+        <StackPanel Grid.Row="1" Style="{ThemeResource MainContent}">
+            <TextBlock Text="Log in" Style="{ThemeResource HeaderTextStyle}" />
+            <TextBlock Text="Username" Style="{StaticResource FormLabelStyle}" />
+            <TextBox Name="UserName" Style="{ThemeResource FormTextboxStyle}" />
+            <TextBlock Text="Password" Style="{StaticResource FormLabelStyle}"/>
+            <PasswordBox Name="Password" Style="{ThemeResource FormPasswordStyle}" />
+            <Button Name="LoginButton" Click="LoginButton_OnClick" Style="{ThemeResource ButtonStyle}">Login</Button>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 50 0 0">
-                <Button Name="RegisterButton" Click="RegisterButton_OnClick" Margin="0 0 10 0">Register</Button>
-                <Button Name="ForgotPassword">Forgot Password</Button>
+                <Button Name="RegisterButton" Click="RegisterButton_OnClick" Margin="0 0 10 0" Style="{ThemeResource ButtonStyle}">Register</Button>
+                <Button Name="ForgotPassword" Style="{ThemeResource ButtonStyle}">Forgot Password</Button>
             </StackPanel>
         </StackPanel>
     </Grid>

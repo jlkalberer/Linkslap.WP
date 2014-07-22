@@ -90,6 +90,7 @@
     <Compile Include="Models\Link.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\PushRegistration.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\Stream.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\UserInfo.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="SubscriptionStore.cs" />
     <Compile Include="Util\AppSettings.cs" />
     <Compile Include="Util\CollectionExtensions.cs" />
+    <Compile Include="Util\HttpError.cs" />
     <Compile Include="Util\PushNotificationTask.cs" />
     <Compile Include="Util\Storage.cs" />
   </ItemGroup>
@@ -115,8 +117,9 @@
     <Reference Include="Microsoft.WindowsAzure.Messaging.Managed">
       <HintPath>..\packages\WindowsAzure.Messaging.Managed.0.1.7.7\lib\wpa81\Microsoft.WindowsAzure.Messaging.Managed.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

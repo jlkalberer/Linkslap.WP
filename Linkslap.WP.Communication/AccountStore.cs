@@ -52,7 +52,7 @@
                     "application/x-www-form-urlencoded");
 
             var task = new TaskCompletionSource<Account>();
-            this.rest.Execute<Account>(message, "token", data, task.SetResult, task.SetCanceled);
+            this.rest.Execute<Account>(message, "token", data, task.SetResult, task.SetException);
 
             var account = await task.Task;
 
@@ -80,7 +80,7 @@
             }
 
             var task = new TaskCompletionSource<UserInfo>();
-            this.rest.Execute<UserInfo>(HttpMethod.Get, "/api/account/userinfo", null, task.SetResult, task.SetCanceled);
+            this.rest.Execute<UserInfo>(HttpMethod.Get, "/api/account/userinfo", null, task.SetResult, task.SetException);
 
             var userInfo = await task.Task;
 
@@ -96,6 +96,29 @@
             }
 
             return account;
+        }
+
+        /// <summary>
+        /// The register.
+        /// </summary>
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        public Task Register(RegisterModel user)
+        {
+            var task = new TaskCompletionSource<object>();
+
+            this.rest.Execute<dynamic>(
+                HttpMethod.Post,
+                "/api/account/register",
+                user,
+                result => task.SetResult(null),
+                task.SetException);
+
+            return task.Task;
         }
     }
 }
