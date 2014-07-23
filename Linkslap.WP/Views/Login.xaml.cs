@@ -1,9 +1,17 @@
 ﻿namespace Linkslap.WP.Views
 {
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
+    using Windows.ApplicationModel.Background;
+    using Windows.Networking.PushNotifications;
+
+    using Linkslap.WP.BackgroundTask;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Notifications;
+    using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
 
@@ -65,17 +73,17 @@
 
             var task = this.accountStore.Authenticate(this.UserName.Text, this.Password.Password);
 
-            task.ContinueWith(
-                account =>
+            task.ContinueWith(async account =>
                 {
-                    if (account != null && account.Status == TaskStatus.RanToCompletion)
+                    if (account == null || account.Status != TaskStatus.RanToCompletion)
                     {
-                        MainPage.NotificationStore.Register();
-                        this.Navigate<Home>();
+                        return;
                     }
+
+                    this.Navigate<Home>();
                 });
         }
-
+        
         /// <summary>
         /// The register button_ on click.
         /// </summary>

@@ -3,12 +3,19 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
+
+    using Windows.ApplicationModel.Background;
+    using Windows.Data.Xml.Dom;
+    using Windows.UI.Notifications;
 
     using AutoMapper;
 
+    using Linkslap.WP.BackgroundTask;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
+    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
@@ -23,6 +30,11 @@
     /// </summary>
     public sealed partial class Home : PageBase
     {
+        /// <summary>
+        /// The push notifications task name.
+        /// </summary>
+        private const string PushNotificationsTaskName = "ManageNotifications";
+
         /// <summary>
         /// The new slap store.
         /// </summary>
@@ -70,7 +82,7 @@
         /// <param name="e">
         /// The e.
         /// </param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.MapNewLinks();
 
@@ -101,11 +113,13 @@
             this.Pivot.SelectionChanged += this.PivotOnSelectionChanged;
 
             base.OnNavigatedTo(e);
-            
+
             if (!this.newSlapStore.Links.Any())
             {
                 this.Pivot.SelectedIndex = 1;
             }
+
+            this.RegisterTask();
         }
 
         /// <summary>
@@ -201,6 +215,63 @@
             }
 
             this.Navigate<ViewStream>(subscription);
+        }
+
+        private async void RegisterTask()
+        {
+            var ns = new NotificationStore();
+            ns.Register();
+
+            if (this.GetRegisteredTask() == null)
+            {
+                await BackgroundExecutionManager.RequestAccessAsync();
+
+                await this.ObtainLockScreenAccess();
+                var taskBuilder = new BackgroundTaskBuilder();
+
+                // Background tasks must live in separate DLL, and be included in the package manifest
+                // Also, make sure that your main application project includes a reference to this DLL
+                taskBuilder.Name = PushNotificationsTaskName;
+                taskBuilder.TaskEntryPoint = typeof(PushNotificationTask).FullName;
+
+                var trigger = new PushNotificationTrigger();
+                taskBuilder.SetTrigger(trigger);
+
+                var internetCondition = new SystemCondition(SystemConditionType.InternetAvailable);
+                taskBuilder.AddCondition(internetCondition);
+
+                try
+                {
+                    var v = taskBuilder.Register();
+                }
+                catch (Exception exception)
+                {
+
+                }
+            }
+        }
+
+        public async Task<bool> ObtainLockScreenAccess()
+        {
+            BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
+
+            if (status == BackgroundAccessStatus.Denied || status == BackgroundAccessStatus.Unspecified)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// The get registered task.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IBackgroundTaskRegistration"/>.
+        /// </returns>
+        private IBackgroundTaskRegistration GetRegisteredTask()
+        {
+            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => task.Name == PushNotificationsTaskName);
         }
 
         /// <summary>

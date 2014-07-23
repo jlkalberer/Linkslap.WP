@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkslap.ConsoleToast", "Linkslap.ConsoleToast\Linkslap.ConsoleToast.csproj", "{851C3FC8-642A-43FC-87AE-8F695614E67D}"
 EndProject
@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{10E310
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkslap.WP", "Linkslap.WP\Linkslap.WP.csproj", "{F82BD533-396C-4EBE-B17C-50BD5F1513C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkslap.WP.Communication", "Linkslap.WP.Communication\Linkslap.WP.Communication.csproj", "{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkslap.WP.BackgroundTask", "Linkslap.WP.BackgroundTask\Linkslap.WP.BackgroundTask.csproj", "{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linkslap.WP.Communication", "Linkslap.WP.Communication\Linkslap.WP.Communication.csproj", "{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,18 +54,22 @@ Global
 		{F82BD533-396C-4EBE-B17C-50BD5F1513C0}.Release|x86.ActiveCfg = Release|x86
 		{F82BD533-396C-4EBE-B17C-50BD5F1513C0}.Release|x86.Build.0 = Release|x86
 		{F82BD533-396C-4EBE-B17C-50BD5F1513C0}.Release|x86.Deploy.0 = Release|x86
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Debug|ARM.ActiveCfg = Debug|ARM
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Debug|ARM.Build.0 = Debug|ARM
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Debug|x86.ActiveCfg = Debug|x86
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Debug|x86.Build.0 = Debug|x86
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Release|ARM.ActiveCfg = Release|ARM
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Release|ARM.Build.0 = Release|ARM
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Release|x86.ActiveCfg = Release|x86
-		{E2BE4BE5-20D8-4960-8F63-C861A2EA5F5E}.Release|x86.Build.0 = Release|x86
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EACF8959-DF3D-4B3A-BC31-A73D18E9EBA5}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

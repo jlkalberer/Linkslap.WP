@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Windows.Data.Xml.Dom;
+
     using AutoMapper;
 
     using Linkslap.WP.Communication.Models;
@@ -30,7 +32,7 @@
             if (this.channel == null || this.channel.ExpirationTime < DateTime.Now)
             {
                 this.channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                this.channel.PushNotificationReceived += this.ChannelOnPushNotificationReceived;
+                // this.channel.PushNotificationReceived += this.ChannelOnPushNotificationReceived;
             }
 
             var registration = new PushRegistration
@@ -78,8 +80,12 @@
             store.AddLink(link);
 
             var notification = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
-            var toast = new ToastNotification(notification) { Tag = link.Id.ToString() };
+            var node = notification.CreateElement("Tag");
+            node.InnerText = link.Id.ToString();
+            notification.AppendChild(node);
 
+            var toast = new ToastNotification(notification); // { Tag = link.Id.ToString() };
+            
             ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
     }

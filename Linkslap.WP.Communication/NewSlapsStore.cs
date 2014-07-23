@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Windows.Data.Xml.Dom;
+    using Windows.UI.Notifications;
+
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
@@ -53,6 +56,8 @@
             links.Add(link);
             Storage.Save(Key, links);
 
+            this.UpdateBadge(links);
+
             if (NewSlapsChanged != null)
             {
                 NewSlapsChanged(this, link);
@@ -72,6 +77,8 @@
             links.Remove(link);
             Storage.Save(Key, links);
 
+            this.UpdateBadge(links);
+
             if (NewSlapsChanged != null)
             {
                 NewSlapsChanged(this, link);
@@ -87,6 +94,30 @@
         private List<Link> GetLinks()
         {
             return Storage.Load<List<Link>>(Key) ?? new List<Link>();
+        }
+
+        /// <summary>
+        /// The update badge.
+        /// </summary>
+        /// <param name="links">
+        /// The links.
+        /// </param>
+        private void UpdateBadge(IEnumerable<Link> links)
+        {
+            var badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeNumber);
+            var badgeElement = (XmlElement)badgeXml.SelectSingleNode("/badge");
+
+            var count = links.Count();
+
+            if (count == 0)
+            {
+                BadgeUpdateManager.CreateBadgeUpdaterForApplication().Clear();
+                return;
+            }
+
+            badgeElement.SetAttribute("value", count.ToString());
+            var badge = new BadgeNotification(badgeXml);
+            BadgeUpdateManager.CreateBadgeUpdaterForApplication().Update(badge);
         }
     }
 }

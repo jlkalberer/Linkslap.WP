@@ -82,8 +82,6 @@
         {
             this.shareOperation = e.Parameter as ShareOperation;
 
-            MainPage.NotificationStore.Register();
-
             if (this.shareOperation == null)
             {
                 return;

@@ -3,14 +3,12 @@
     using System;
     using System.Linq;
 
-    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
 
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;
     using Windows.ApplicationModel.Background;
-    using Windows.ApplicationModel.DataTransfer;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -22,16 +20,6 @@
     /// </summary>
     public sealed partial class App
     {
-        /// <summary>
-        /// The push notifications task name.
-        /// </summary>
-        private const string PushNotificationsTaskName = "ManageNotifications";
-
-        /// <summary>
-        /// The push notifications task entry point.
-        /// </summary>
-        private const string PushNotificationsTaskEntryPoint = "Linkslap.WP.Communication.Util.PushNotificationTask";
-        
         /// <summary>
         /// The transitions.
         /// </summary>
@@ -49,19 +37,6 @@
 
             MappingSetup.Map();
 
-            if (this.GetRegisteredTask() == null)
-            {
-                var taskBuilder = new BackgroundTaskBuilder();
-                var trigger = new PushNotificationTrigger();
-                taskBuilder.SetTrigger(trigger);
-
-                // Background tasks must live in separate DLL, and be included in the package manifest
-                // Also, make sure that your main application project includes a reference to this DLL
-                taskBuilder.TaskEntryPoint = PushNotificationsTaskEntryPoint;
-                taskBuilder.Name = PushNotificationsTaskName;
-
-                taskBuilder.Register();
-            }
         }
 
         /// <summary>
@@ -144,18 +119,7 @@
             // Ensure the current window is active
             Window.Current.Activate();
         }
-
-        /// <summary>
-        /// The get registered task.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IBackgroundTaskRegistration"/>.
-        /// </returns>
-        private IBackgroundTaskRegistration GetRegisteredTask()
-        {
-            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => task.Name == PushNotificationsTaskName);
-        }
-
+        
         /// <summary>
         /// Restores the content transitions after the app has launched.
         /// </summary>

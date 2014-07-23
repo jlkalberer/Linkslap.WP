@@ -200,12 +200,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Linkslap.WP.Communication\Linkslap.WP.Communication.csproj">
-      <Project>{e2be4be5-20d8-4960-8f63-c861a2ea5f5e}</Project>
-      <Name>Linkslap.WP.Communication</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.2.1\lib\wpa81\AutoMapper.dll</HintPath>
@@ -219,7 +213,16 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Linkslap.WP.BackgroundTask\Linkslap.WP.BackgroundTask.csproj">
+      <Project>{eacf8959-df3d-4b3a-bc31-a73d18e9eba5}</Project>
+      <Name>Linkslap.WP.BackgroundTask</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Linkslap.WP.Communication\Linkslap.WP.Communication.csproj">
+      <Project>{C3E03EC8-4F18-4A70-8B96-8D9EEC7B6453}</Project>
+      <Name>Linkslap.WP.Communication</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

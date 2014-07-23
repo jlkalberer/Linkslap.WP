@@ -22,26 +22,12 @@
         private readonly IAccountStore accountStore;
         
         /// <summary>
-        /// Initializes static members of the <see cref="MainPage"/> class. 
-        /// </summary>
-        static MainPage()
-        {
-            NotificationStore = new NotificationStore();
-        }
-
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="MainPage"/> class.
         /// </summary>
         public MainPage()
             : this(new AccountStore())
         {
         }
-
-        /// <summary>
-        /// Gets the notification store.
-        /// </summary>
-        public static NotificationStore NotificationStore { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainPage"/> class.
@@ -79,7 +65,6 @@
                             return;
                         }
 
-                        NotificationStore.Register();
                         this.Navigate<Home>();
                     });
         }
