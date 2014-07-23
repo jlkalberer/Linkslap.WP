@@ -26,5 +26,7 @@
         /// The id.
         /// </param>
         void RemoveLink(int id);
+
+        void Clear();
     }
 }

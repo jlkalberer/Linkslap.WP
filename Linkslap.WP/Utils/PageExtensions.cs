@@ -1,12 +1,9 @@
 ﻿namespace Linkslap.WP.Utils
 {
-    using System;
+    using System.Linq;
 
     using Windows.UI.Core;
-    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-
-    using Linkslap.WP.Controls;
 
     /// <summary>
     /// The page extensions.
@@ -40,6 +37,26 @@
                             page.Frame.Navigate(type, parameters);
                         }
                     });
+        }
+
+        public static void NavigateRoot<TType>(this Page page, object parameters = null)
+        {
+            CrossThread(
+                page,
+                () =>
+                {
+                    var type = typeof(TType);
+                    if (parameters == null)
+                    {
+                        page.Frame.Navigate(type);
+                    }
+                    else
+                    {
+                        page.Frame.Navigate(type, parameters);
+                    }
+
+                    page.Frame.BackStack.Clear();
+                });
         }
 
         /// <summary>

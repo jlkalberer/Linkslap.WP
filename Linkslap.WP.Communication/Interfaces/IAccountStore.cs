@@ -32,5 +32,7 @@
         Task<Account> Get();
 
         Task Register(RegisterModel user);
+
+        void Logout();
     }
 }

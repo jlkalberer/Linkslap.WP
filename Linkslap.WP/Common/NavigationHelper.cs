@@ -168,8 +168,9 @@ namespace Linkslap.WP.Common
         /// </returns>
         public virtual bool CanGoBack()
         {
-            return this.Frame != null && this.Frame.CanGoBack;
+            return this.Frame != null;
         }
+
         /// <summary>
         /// Virtual method used by the <see cref="GoForwardCommand"/> property
         /// to determine if the <see cref="Frame"/> can go forward.
@@ -193,9 +194,18 @@ namespace Linkslap.WP.Common
                 CoreDispatcherPriority.Normal,
                 () =>
                     {
-                        if (this.Frame != null && this.Frame.CanGoBack)
+                        if (this.Frame == null)
+                        {
+                            return;
+                        }
+                        
+                        if (this.Frame.CanGoBack)
                         {
                             this.Frame.GoBack();
+                        }
+                        else
+                        {
+                            Application.Current.Exit();
                         }
                     });
         }
@@ -210,7 +220,7 @@ namespace Linkslap.WP.Common
                 CoreDispatcherPriority.Normal,
                 () =>
                     {
-                        if (this.Frame != null && this.Frame.CanGoForward)
+                        if (this.Frame == null && this.Frame.CanGoForward)
                         {
                             this.Frame.GoForward();
                         }

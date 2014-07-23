@@ -51,8 +51,13 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Label="Refresh" Icon="Refresh"/>
-            <AppBarButton Label="New Stream" Icon="Add" Click="NewStreamClick"/>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Refresh" Icon="Refresh"/>
+                <AppBarButton Label="New Stream" Icon="Add" Click="NewStreamClick"/>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 </controls:PageBase>

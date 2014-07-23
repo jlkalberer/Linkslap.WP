@@ -1,9 +1,15 @@
 ﻿namespace Linkslap.WP
 {
     using System;
+    using System.Linq;
+
+    using AutoMapper;
 
     using Linkslap.WP.BackgroundTask;
+    using Linkslap.WP.Communication;
+    using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Utils;
+    using Linkslap.WP.ViewModels;
     using Linkslap.WP.Views;
 
     using Windows.ApplicationModel;
@@ -120,7 +126,15 @@
 
             if (!string.IsNullOrEmpty(e.Arguments))
             {
-                // rootFrame.Navigate(typeof())
+                var linkRepo = new NewSlapsStore();
+                var link = linkRepo.Links.FirstOrDefault(l => l.Id == int.Parse(e.Arguments));
+
+                var page = rootFrame.Content as Page;
+                if (link != null && page != null)
+                {
+                    var linkViewModel = Mapper.Map<Link, LinkViewModel>(link);
+                    page.Frame.Navigate(typeof(View), linkViewModel);
+                }
             }
 
             // Ensure the current window is active

@@ -1,5 +1,9 @@
 ﻿namespace Linkslap.WP
 {
+    using System.Threading.Tasks;
+
+    using Windows.UI.Xaml;
+
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Notifications;
@@ -43,7 +47,7 @@
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
+            // HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
         }
 
         /// <summary>
@@ -55,11 +59,17 @@
         {
             base.OnNavigatedTo(e);
 
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                Application.Current.Exit();
+                return;
+            }
+
             var task = this.accountStore.Get();
             task.ContinueWith(
                 t =>
                     {
-                        if (!t.IsCompleted || t.Result == null)
+                        if (t.Status == TaskStatus.Faulted || !t.IsCompleted || t.Result == null)
                         {
                             this.Navigate<Login>();
                             return;
@@ -67,19 +77,6 @@
 
                         this.Navigate<Home>();
                     });
-        }
-
-        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
-            if (!this.ScenarioFrame.CanGoBack)
-            {
-                return;
-            }
-
-            this.ScenarioFrame.GoBack();
-
-            //Indicate the back button press is handled so the app does not exit
-            e.Handled = true;
         }
     }
 }

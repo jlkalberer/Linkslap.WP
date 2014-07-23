@@ -30,6 +30,8 @@
     /// </summary>
     public sealed partial class Home : PageBase
     {
+        private readonly IAccountStore accountStore;
+
         /// <summary>
         /// The new slap store.
         /// </summary>
@@ -49,7 +51,7 @@
         /// Initializes a new instance of the <see cref="Home"/> class.
         /// </summary>
         public Home()
-            : this(new NewSlapsStore(), new SubscriptionStore())
+            : this(new AccountStore(), new NewSlapsStore(), new SubscriptionStore())
         {
         }
 
@@ -62,8 +64,9 @@
         /// <param name="subscriptionStore">
         /// The subscription repository.
         /// </param>
-        public Home(INewSlapsStore newSlapStore, ISubscriptionStore subscriptionStore)
+        public Home(IAccountStore accountStore, INewSlapsStore newSlapStore, ISubscriptionStore subscriptionStore)
         {
+            this.accountStore = accountStore;
             this.newSlapStore = newSlapStore;
             this.subscriptionStore = subscriptionStore;
             this.InitializeComponent();
@@ -137,6 +140,11 @@
         /// </param>
         private void NewSlapsStoreOnNewSlapsChanged(object sender, Link link)
         {
+            if (link == null)
+            {
+                return;
+            }
+
             var linkId = link.Id;
             this.CrossThread(
                 () =>
@@ -241,6 +249,22 @@
 
             this.newSlapStore.RemoveLink(link.Id);
             this.Navigate<View>(link);
+        }
+
+        /// <summary>
+        /// The logout click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void LogoutClick(object sender, RoutedEventArgs e)
+        {
+            this.accountStore.Logout();
+
+            this.NavigateRoot<Login>();
         }
     }
 }

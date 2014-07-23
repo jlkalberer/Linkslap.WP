@@ -85,6 +85,19 @@
             }
         }
 
+        public void Clear()
+        {
+            var links = new List<Link>();
+            Storage.Save(Key, links);
+
+            this.UpdateBadge(links);
+
+            if (NewSlapsChanged != null)
+            {
+                NewSlapsChanged(this, null);
+            }
+        }
+
         /// <summary>
         /// The get links.
         /// </summary>

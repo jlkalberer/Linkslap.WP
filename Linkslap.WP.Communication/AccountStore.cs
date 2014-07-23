@@ -5,6 +5,7 @@
 
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
+    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Communication.Util;
 
     using Windows.Storage.Streams;
@@ -15,16 +16,24 @@
     /// </summary>
     public class AccountStore : IAccountStore
     {
+        private readonly INewSlapsStore newSlapsStore;
+
         /// <summary>
         /// The rest.
         /// </summary>
         private readonly Rest rest;
 
+        public AccountStore()
+            : this(new NewSlapsStore())
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountStore"/> class.
         /// </summary>
-        public AccountStore()
+        public AccountStore(INewSlapsStore newSlapsStore)
         {
+            this.newSlapsStore = newSlapsStore;
             this.rest = new Rest();
         }
 
@@ -119,6 +128,16 @@
                 task.SetException);
 
             return task.Task;
+        }
+
+        public void Logout()
+        {
+            Storage.Save("account", null);
+
+            var ns = new NotificationStore();
+            ns.UnRegister();
+
+            this.newSlapsStore.Clear();
         }
     }
 }

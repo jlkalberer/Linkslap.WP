@@ -76,7 +76,7 @@
                     var ns = new NotificationStore();
                     ns.Register();
 
-                    this.Navigate<Home>();
+                    this.NavigateRoot<Home>();
                 });
         }
         
