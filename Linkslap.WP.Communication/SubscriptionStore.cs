@@ -88,6 +88,8 @@
 
                         subs.Remove(s => values.All(v => v.Id != s.Id));
                         subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
+
+                        Storage.Save("subscriptions", subs);
                     });
 
             return this.subscriptions;
@@ -109,6 +111,14 @@
             this.rest.Post<Subscription>("api/subscription", new { id = streamId }, task.SetResult);
 
             return task.Task;
+        }
+
+        public void AddSubscription(Subscription subscription)
+        {
+            var subscriptions = this.GetSubsriptions();
+
+            subscriptions.Add(subscription);
+            Storage.Save("subscriptions", subscriptions);
         }
 
         /// <summary>

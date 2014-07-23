@@ -1,17 +1,10 @@
 ﻿namespace Linkslap.WP.Views
 {
-    using System;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using Windows.ApplicationModel.Background;
-    using Windows.Networking.PushNotifications;
-
-    using Linkslap.WP.BackgroundTask;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Notifications;
-    using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
 
@@ -79,6 +72,9 @@
                     {
                         return;
                     }
+
+                    var ns = new NotificationStore();
+                    ns.Register();
 
                     this.Navigate<Home>();
                 });

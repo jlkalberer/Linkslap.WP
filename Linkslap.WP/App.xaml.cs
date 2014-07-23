@@ -1,14 +1,13 @@
 ﻿namespace Linkslap.WP
 {
     using System;
-    using System.Linq;
 
+    using Linkslap.WP.BackgroundTask;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
 
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;
-    using Windows.ApplicationModel.Background;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -67,6 +66,9 @@
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            // Register all the tasks...
+            RegisterTasks.Run();
+
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -114,6 +116,11 @@
                 {
                     throw new Exception("Failed to create initial page");
                 }
+            }
+
+            if (!string.IsNullOrEmpty(e.Arguments))
+            {
+                // rootFrame.Navigate(typeof())
             }
 
             // Ensure the current window is active

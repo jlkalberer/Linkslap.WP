@@ -31,11 +31,6 @@
     public sealed partial class Home : PageBase
     {
         /// <summary>
-        /// The push notifications task name.
-        /// </summary>
-        private const string PushNotificationsTaskName = "ManageNotifications";
-
-        /// <summary>
         /// The new slap store.
         /// </summary>
         private readonly INewSlapsStore newSlapStore;
@@ -118,8 +113,6 @@
             {
                 this.Pivot.SelectedIndex = 1;
             }
-
-            this.RegisterTask();
         }
 
         /// <summary>
@@ -216,64 +209,7 @@
 
             this.Navigate<ViewStream>(subscription);
         }
-
-        private async void RegisterTask()
-        {
-            var ns = new NotificationStore();
-            ns.Register();
-
-            if (this.GetRegisteredTask() == null)
-            {
-                await BackgroundExecutionManager.RequestAccessAsync();
-
-                await this.ObtainLockScreenAccess();
-                var taskBuilder = new BackgroundTaskBuilder();
-
-                // Background tasks must live in separate DLL, and be included in the package manifest
-                // Also, make sure that your main application project includes a reference to this DLL
-                taskBuilder.Name = PushNotificationsTaskName;
-                taskBuilder.TaskEntryPoint = typeof(PushNotificationTask).FullName;
-
-                var trigger = new PushNotificationTrigger();
-                taskBuilder.SetTrigger(trigger);
-
-                var internetCondition = new SystemCondition(SystemConditionType.InternetAvailable);
-                taskBuilder.AddCondition(internetCondition);
-
-                try
-                {
-                    var v = taskBuilder.Register();
-                }
-                catch (Exception exception)
-                {
-
-                }
-            }
-        }
-
-        public async Task<bool> ObtainLockScreenAccess()
-        {
-            BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
-
-            if (status == BackgroundAccessStatus.Denied || status == BackgroundAccessStatus.Unspecified)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// The get registered task.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IBackgroundTaskRegistration"/>.
-        /// </returns>
-        private IBackgroundTaskRegistration GetRegisteredTask()
-        {
-            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => task.Name == PushNotificationsTaskName);
-        }
-
+        
         /// <summary>
         /// The new stream click.
         /// </summary>

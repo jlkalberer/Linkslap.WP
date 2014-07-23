@@ -1,11 +1,16 @@
 ﻿namespace Linkslap.WP.BackgroundTask
 {
-    using System.Diagnostics;
+    using System;
 
     using Windows.ApplicationModel.Background;
+    using Windows.Data.Xml.Dom;
     using Windows.Networking.PushNotifications;
-    using Windows.Storage;
     using Windows.UI.Notifications;
+
+    using Linkslap.WP.Communication;
+    using Linkslap.WP.Communication.Models;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The push notification task.
@@ -14,22 +19,72 @@
     {
         public void Run(IBackgroundTaskInstance taskInstance)
         {           
-            // Get the background task details
-            ApplicationDataContainer settings = ApplicationData.Current.LocalSettings;
-            string taskName = taskInstance.Task.Name;
-
-            Debug.WriteLine("Background " + taskName + " starting...");
-
             // Store the content received from the notification so it can be retrieved from the UI.
-            RawNotification rawNotification = (RawNotification)taskInstance.TriggerDetails;
-            settings.Values[taskName] = rawNotification.Content;
+            var rawNotification = (RawNotification)taskInstance.TriggerDetails;
 
-            Debug.WriteLine("Background " + taskName + " completed!");
+            if (rawNotification == null || string.IsNullOrEmpty(rawNotification.Content))
+            {
+                return;
+            }
+
+            if (this.SendLinkNotification(rawNotification.Content))
+            {
+                return;
+            }
+
+            if (this.AddSubscription(rawNotification.Content))
+            {
+                return;
+            }
+        }
+        
+        private bool SendLinkNotification(string content)
+        {
+            Link link;
+            try
+            {
+                link = JsonConvert.DeserializeObject<Link>(content);
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
+
+            var store = new NewSlapsStore();
+            store.AddLink(link);
 
             var notification = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
-            var toast = new ToastNotification(notification) { };
+            var toastElement = ((XmlElement)notification.SelectSingleNode("/toast"));
+            toastElement.SetAttribute("launch", link.Id.ToString());
+
+            var badgeElements = notification.DocumentElement.SelectNodes(".//text");
+
+            badgeElements[0].InnerText = "Linkslap";
+            badgeElements[1].InnerText = "New link in " + link.StreamName;
+            
+            var toast = new ToastNotification(notification); // { Tag = link.Id.ToString() };
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
+
+            return true;
+        }
+
+        private bool AddSubscription(string content)
+        {
+            Subscription subscription;
+            try
+            {
+                subscription = JsonConvert.DeserializeObject<Subscription>(content);
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
+
+            var store = new SubscriptionStore();
+            store.AddSubscription(subscription);
+
+            return true;
         }
     }
 }
