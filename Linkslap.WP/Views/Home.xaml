@@ -6,16 +6,20 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Linkslap.WP.Controls"
+    xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    Background="{ThemeResource BackgroundBrush}">
+    <Page.DataContext>
+        <viewModels:HomeViewModel/>
+    </Page.DataContext>
+    
     <controls:PageBase.Resources>
         <DataTemplate x:Key="StreamTemplate">
-            <TextBlock Text="{Binding Name}"/>
+            <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTextStyle}"/>
         </DataTemplate>
     </controls:PageBase.Resources>
-    
-    <Grid x:Name="LayoutRoot">
+
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
 
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -29,15 +33,21 @@
         </Grid.RowDefinitions>
 
         <!-- TitlePanel -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="My Application" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1">
             <Pivot Name="Pivot">
+                <Pivot.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Style="{ThemeResource HeaderTextStyle}" />
+                    </DataTemplate>
+                </Pivot.HeaderTemplate>
                 <PivotItem Header="New Slaps">
-                    <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
+                    <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible"></controls:LinkLongList>
                 </PivotItem>
                 <PivotItem Header="Stream">
                     <SemanticZoom>

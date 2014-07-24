@@ -6,9 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Linkslap.WP.Controls"
+    xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource BackgroundBrush}">
 
+    <Page.DataContext>
+        <viewModels:LoginViewModel/>
+    </Page.DataContext>
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
         <Grid.ChildrenTransitions>
@@ -19,7 +23,6 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -29,15 +32,35 @@
             <Rectangle Height="20" Fill="#323232"></Rectangle>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Style="{ThemeResource MainContent}">
-            <TextBlock Text="Log in" Style="{ThemeResource HeaderTextStyle}" />
-            <TextBlock Text="Username" Style="{StaticResource FormLabelStyle}" />
-            <TextBox Name="UserName" Style="{ThemeResource FormTextboxStyle}" />
-            <TextBlock Text="Password" Style="{StaticResource FormLabelStyle}"/>
-            <PasswordBox Name="Password" Style="{ThemeResource FormPasswordStyle}" />
-            <Button Name="LoginButton" Click="LoginButton_OnClick" Style="{ThemeResource ButtonStyle}">Login</Button>
-            <HyperlinkButton Click="RegisterButton_OnClick" Style="{ThemeResource HyperlinkButtonStyle}" Margin="0,20,0,0">Register</HyperlinkButton>
-            <HyperlinkButton Style="{ThemeResource HyperlinkButtonStyle}">Forgot Password</HyperlinkButton>
-        </StackPanel>
+        <Grid Grid.Row="1" Style="{ThemeResource MainContent}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" Text="Log in" Style="{ThemeResource HeaderTextStyle}" />
+            
+            <StackPanel Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding Path=ValidationMessages[GenericError], Converter={StaticResource CollectionConverter}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Style="{ThemeResource ErrorTextBlockStyle}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            
+                <TextBlock Text="Username" />
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" />
+                <TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+            
+                <TextBlock Text="Password"/>
+                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" />
+                <TextBlock Text="{Binding Path=ValidationMessages[Password], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+
+                <Button Command="{Binding}">Login</Button>
+                <HyperlinkButton Click="RegisterButton_OnClick" Margin="0,20,0,0">Register</HyperlinkButton>
+                <HyperlinkButton>Forgot Password</HyperlinkButton>
+            </StackPanel>
+        </Grid>
     </Grid>
 </controls:PageBase>

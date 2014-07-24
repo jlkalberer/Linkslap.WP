@@ -25,11 +25,37 @@ namespace Linkslap.WP.Controls
             new PropertyMetadata(default(IEnumerable<LinkViewModel>), OnLinkItemsChanged));
 
         /// <summary>
+        /// The links property.
+        /// </summary>
+        public static readonly DependencyProperty RemovableLinksProperty = DependencyProperty.Register(
+            "RemovableLinks",
+            typeof(Visibility),
+            typeof(LinkLongList),
+            new PropertyMetadata(Visibility.Collapsed, OnRemovableLinksChanged));
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LinkLongList"/> class.
         /// </summary>
         public LinkLongList()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether removable links.
+        /// </summary>
+        public Visibility RemovableLinks
+        {
+            get
+            {
+                return (Visibility)GetValue(RemovableLinksProperty);
+            }
+
+            set
+            {
+                this.SetValue(RemovableLinksProperty, value);
+            }
         }
 
         /// <summary>
@@ -65,6 +91,11 @@ namespace Linkslap.WP.Controls
         private static void OnLinkItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as LinkLongList).ListView.ItemsSource = e.NewValue;
+        }
+
+        private static void OnRemovableLinksChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var v = 0;
         }
 
         /// <summary>

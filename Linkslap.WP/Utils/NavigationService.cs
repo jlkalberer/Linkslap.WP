@@ -25,5 +25,13 @@
 
             frame.GoBack();
         }
+
+        public void NavigateRoot<TType>(object parameters = null)
+        {
+            var frame = Window.Current.Content as Frame;
+            var page = frame.Content as Page;
+
+            page.NavigateRoot<TType>(parameters);
+        }
     }
 }

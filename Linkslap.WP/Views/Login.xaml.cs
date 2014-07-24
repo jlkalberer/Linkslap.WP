@@ -39,46 +39,6 @@
             this.accountStore = accountStore;
             this.InitializeComponent();
         }
-
-        /// <summary>
-        /// The login button_ on click.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void LoginButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.LoginButton.IsEnabled = false;
-            if (string.IsNullOrEmpty(this.UserName.Text))
-            {
-                this.LoginButton.IsEnabled = true;
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.Password.Password))
-            {
-                this.LoginButton.IsEnabled = true;
-                return;
-            }
-
-            var task = this.accountStore.Authenticate(this.UserName.Text, this.Password.Password);
-
-            task.ContinueWith(async account =>
-                {
-                    if (account == null || account.Status != TaskStatus.RanToCompletion)
-                    {
-                        return;
-                    }
-
-                    var ns = new NotificationStore();
-                    ns.Register();
-
-                    this.NavigateRoot<Home>();
-                });
-        }
         
         /// <summary>
         /// The register button_ on click.

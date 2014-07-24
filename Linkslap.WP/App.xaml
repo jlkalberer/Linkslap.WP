@@ -7,6 +7,8 @@
     xmlns:system="using:System">
 
     <Application.Resources>
+        
+        
         <validation:ValidationCollectionToSingleStringConverter x:Key="ValidationCollectionToSingleStringConverter" />
         <validation:ValidationMessageCollectionToStringCollectionConverter x:Key="CollectionConverter" />
         <ImageBrush x:Key="BodyBrush" ImageSource="../Assets/Images/background.png"></ImageBrush>
@@ -24,31 +26,40 @@
             <Setter Property="Height" Value="60"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
-        <Style x:Key="MainContent" TargetType="StackPanel">
+        <Style x:Key="HeaderImagePartial" TargetType="Image">
+            <Setter Property="Source" Value="../Assets/Images/logo-partial.png"/>
+            <Setter Property="Margin" Value="10,0,0,10"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style x:Key="MainContent" TargetType="Grid">
             <Setter Property="Margin" Value="20,0,20,20" />
         </Style>
         <Style x:Key="HeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}">
             <Setter Property="Foreground" Value="#333333" />
             <Setter Property="Margin" Value="0,0,0,10"></Setter>
         </Style>
-        <Style x:Key="FormLabelStyle" TargetType="TextBlock" BasedOn="{StaticResource ControlHeaderTextBlockStyle}">
+        <Style TargetType="TextBlock" BasedOn="{StaticResource ControlHeaderTextBlockStyle}">
             <Setter Property="Foreground" Value="#333333" />
         </Style>
-        <Style x:Key="FormTextboxStyle" TargetType="TextBox">
+        <Style x:Key="ErrorTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource ControlHeaderTextBlockStyle}">
+            <Setter Property="Foreground" Value="Red" />
+        </Style>
+        <Style TargetType="TextBox">
             <Setter Property="Foreground" Value="#555555" />
             <Setter Property="BorderBrush" Value="#cccccc" />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
-        <Style x:Key="FormPasswordStyle" TargetType="PasswordBox">
+        <Style TargetType="PasswordBox">
             <Setter Property="Foreground" Value="#555555" />
             <Setter Property="BorderBrush" Value="#cccccc" />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
-        <Style x:Key="HyperlinkButtonStyle" TargetType="HyperlinkButton">
+        <Style TargetType="HyperlinkButton">
             <Setter Property="Foreground" Value="#555555" />
             <Setter Property="FontSize" Value="28"></Setter>
         </Style>
-        <Style x:Key="ButtonStyle" TargetType="Button">
+        <Style TargetType="Button">
             <Setter Property="BorderThickness" Value="0"></Setter>
             <Setter Property="Foreground" Value="White"></Setter>
             <Setter Property="Template">
@@ -132,6 +143,22 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="{ThemeResource ButtonGradientBrush}"/>
+            <Setter Property="Padding" Value="15,8,0,10"/>
+        </Style>
+        <Style x:Key="ListItemTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="LineHeight" Value="18" />
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="ListItemInfoTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+            <Setter Property="Foreground" Value="#fcfcfc"/>
         </Style>
     </Application.Resources>
 

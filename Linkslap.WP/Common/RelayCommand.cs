@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace Linkslap.WP.Common
+﻿namespace Linkslap.WP.Common
 {
+    using System;
+    using System.Windows.Input;
+
     /// <summary>
     /// A command whose sole purpose is to relay its functionality 
     /// to other objects by invoking delegates. 

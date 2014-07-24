@@ -110,10 +110,13 @@
     <Compile Include="Utils\PageExtensions.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\NewStreamViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\ViewLinkViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewStreamViewModel.cs" />
     <Compile Include="Views\NewStream.xaml.cs">
       <DependentUpon>NewStream.xaml</DependentUpon>
     </Compile>
@@ -145,6 +148,7 @@
     <Content Include="Assets\badge-58x58.png" />
     <Content Include="Assets\BadgeLogo.scale-240.png" />
     <Content Include="Assets\Images\background.png" />
+    <Content Include="Assets\Images\logo-partial.png" />
     <Content Include="Assets\Images\logo.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
@@ -161,6 +165,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Assets\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="Controls\LinkLongList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

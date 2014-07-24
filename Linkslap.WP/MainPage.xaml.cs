@@ -2,17 +2,12 @@
 {
     using System.Threading.Tasks;
 
-    using Windows.UI.Xaml;
-
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
-    using Linkslap.WP.Communication.Notifications;
-    using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
 
-    using Windows.Phone.UI.Input;
-    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Navigation;
 
     /// <summary>
@@ -46,8 +41,6 @@
             this.accountStore = accountStore;
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
-            // HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
         }
 
         /// <summary>

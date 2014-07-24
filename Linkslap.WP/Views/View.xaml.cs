@@ -18,12 +18,16 @@
         /// </summary>
         private LinkViewModel link;
 
+        private ViewLinkViewModel viewModel;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="View"/> class.
         /// </summary>
         public View()
         {
             this.InitializeComponent();
+
+            this.viewModel = this.DataContext as ViewLinkViewModel;
         }
 
         /// <summary>
@@ -45,6 +49,7 @@
             ToastNotificationManager.History.Remove(this.link.Id.ToString());
 
             this.Title.Text = this.link.Comment;
+            this.LinkInfo.Text = this.link.Info;
             this.WebView.Navigate(new Uri(this.link.Url, UriKind.Absolute));
 
             base.OnNavigatedTo(eventArgs);

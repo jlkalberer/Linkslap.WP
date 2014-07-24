@@ -20,5 +20,17 @@
         /// Gets or sets the model state.
         /// </summary>
         public Dictionary<string, List<string>> ModelState { get; set; }
+
+        /// <summary>
+        /// Sets the error description.
+        /// </summary>
+        [JsonProperty("error_description")]
+        public string ErrorDescription
+        {
+            set
+            {
+                this.ErrorMessage = value;
+            }
+        }
     }
 }

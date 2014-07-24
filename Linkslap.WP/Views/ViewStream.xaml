@@ -2,30 +2,37 @@
     x:Class="Linkslap.WP.Views.ViewStream"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Linkslap.WP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Linkslap.WP.Controls"
+    xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource BackgroundBrush}">
 
-    <Grid>
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
-
+    <Page.DataContext>
+        <viewModels:ViewStreamViewModel/>
+    </Page.DataContext>
+    
+    <Grid Background="{ThemeResource BodyBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- TitlePanel -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="Linkslap" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="Slap Link" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
         </StackPanel>
-        <controls:LinkLongList Grid.Row="1" Links="{Binding}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
+
+        <Grid Grid.Row="1" Style="{ThemeResource MainContent}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="{Binding StreamName}" Style="{ThemeResource HeaderTextStyle}" />
+            <controls:LinkLongList Grid.Row="1" Links="{Binding Links}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
+        </Grid>
     </Grid>
 </controls:PageBase>

@@ -71,7 +71,7 @@
             this.subscriptionStore = subscriptionStore;
             this.InitializeComponent();
 
-            this.viewModel = new HomeViewModel();
+            this.viewModel = this.DataContext as HomeViewModel;
         }
 
         /// <summary>

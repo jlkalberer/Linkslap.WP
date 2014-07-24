@@ -22,19 +22,22 @@
             // Store the content received from the notification so it can be retrieved from the UI.
             var rawNotification = (RawNotification)taskInstance.TriggerDetails;
 
+
             if (rawNotification == null || string.IsNullOrEmpty(rawNotification.Content))
             {
                 return;
             }
 
-            if (this.SendLinkNotification(rawNotification.Content))
-            {
-                return;
-            }
+            var content = rawNotification.Content;
+            dynamic jsonObject = JsonConvert.DeserializeObject(content);
 
-            if (this.AddSubscription(rawNotification.Content))
+            if (jsonObject.ObjectType == "submittedlink")
             {
-                return;
+                this.SendLinkNotification(content);
+            }
+            else if (jsonObject.ObjectType == "subscription")
+            {
+                this.AddSubscription(content);
             }
         }
         
@@ -62,7 +65,8 @@
             badgeElements[0].InnerText = "Linkslap";
             badgeElements[1].InnerText = "New link in " + link.StreamName;
             
-            var toast = new ToastNotification(notification); // { Tag = link.Id.ToString() };
+            dynamic toast = new ToastNotification(notification); //{ Tag = link.Id.ToString() };
+            toast.Tag = link.Id.ToString();
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
 

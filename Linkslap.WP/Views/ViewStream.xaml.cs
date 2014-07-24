@@ -1,7 +1,6 @@
 ﻿namespace Linkslap.WP.Views
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
 
     using AutoMapper;
@@ -26,6 +25,8 @@
         /// </summary>
         private readonly IStreamStore streamStore;
 
+        private readonly ViewStreamViewModel viewModel;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewStream"/> class.
         /// </summary>
@@ -45,6 +46,8 @@
             this.streamStore = streamStore;
 
             this.InitializeComponent();
+
+            this.viewModel = this.DataContext as ViewStreamViewModel;
         }
 
         /// <summary>
@@ -61,10 +64,8 @@
                 return;
             }
 
-            var collection = new ObservableCollection<LinkViewModel>();
-            collection.AddRange(subscription.Links);
-
-            this.DataContext = collection;
+            this.viewModel.StreamName = subscription.Name;
+            this.viewModel.Links.AddRange(subscription.Links);
 
             var task = this.streamStore.GetStreamLinks(subscription.StreamKey);
 
@@ -73,7 +74,7 @@
                     () =>
                         {
                             var result = Mapper.Map(links.Result, new List<LinkViewModel>());
-                            collection.AddRange(result.OrderByDescending(l => l.CreatedDate));
+                            this.viewModel.Links.AddRange(result.OrderByDescending(l => l.CreatedDate));
                         }));
 
             base.OnNavigatedTo(eventArgs);
