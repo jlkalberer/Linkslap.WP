@@ -370,6 +370,10 @@ namespace Linkslap.WP.Common.Validation
                 {
                     this.AddError("{0} is required.");
                 }
+                else if (this.value is string && string.IsNullOrWhiteSpace((this.value as string)))
+                {
+                    this.AddError("{0} is required");
+                }
 
                 return this;
             }

@@ -31,7 +31,7 @@
                                 <TextBlock Text="{Binding Comment}" Style="{ThemeResource ListItemTextStyle}" TextWrapping="WrapWholeWords" />
                                 <TextBlock Text="{Binding Info}" Style="{ThemeResource ListItemInfoTextStyle}"/>
                             </StackPanel>
-                            <HyperlinkButton Visibility="{Binding RemovableLinks, ElementName=Control }"  Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" Padding="15,0,15,0">
+                            <HyperlinkButton Visibility="{Binding RemovableLinks, ElementName=Control }" DataContext="{Binding Id}" Click="RemoveClick"  Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" Padding="15,0,15,0">
                                 <SymbolIcon Symbol="Cancel"/>
                             </HyperlinkButton>
                         </Grid>

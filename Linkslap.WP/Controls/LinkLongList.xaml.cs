@@ -1,17 +1,12 @@
 ﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace Linkslap.WP.Controls
 {
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
 
     using Linkslap.WP.ViewModels;
 
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-
-    using Linkslap.WP.Views;
 
     public sealed partial class LinkLongList : UserControl
     {
@@ -80,6 +75,11 @@ namespace Linkslap.WP.Controls
         public event SelectionChangedEventHandler SelectionChanged;
 
         /// <summary>
+        /// The remove item clicked.
+        /// </summary>
+        public event RoutedEventHandler RemoveItemClicked;
+
+        /// <summary>
         /// The on link items changed.
         /// </summary>
         /// <param name="d">
@@ -115,6 +115,23 @@ namespace Linkslap.WP.Controls
             }
 
             this.SelectionChanged(sender, e);
+        }
+
+        /// <summary>
+        /// The remove click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void RemoveClick(object sender, RoutedEventArgs e)
+        {
+            if (this.RemoveItemClicked != null)
+            {
+                this.RemoveItemClicked(sender, e);
+            }
         }
     }
 }

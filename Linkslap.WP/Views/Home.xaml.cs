@@ -7,6 +7,7 @@
 
     using Windows.ApplicationModel.Background;
     using Windows.Data.Xml.Dom;
+    using Windows.Networking.PushNotifications;
     using Windows.UI.Notifications;
 
     using AutoMapper;
@@ -82,6 +83,16 @@
         /// </param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            var ns = new NotificationStore();
+            ns.Register();
+
+            ns.Channel.PushNotificationReceived += (sender, args) => this.CrossThread(
+                () =>
+                    {
+                        var tasK = new PushNotificationTask();
+                        tasK.Process(args.RawNotification.Content, false);
+                    });
+
             this.MapNewLinks();
 
             NewSlapsStore.NewSlapsChanged += this.NewSlapsStoreOnNewSlapsChanged;
@@ -186,24 +197,19 @@
         /// </param>
         private void PivotOnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
-            var subscription = selectionChangedEventArgs.AddedItems[0] as SubscriptionViewModel;
-
-            if (subscription == null)
+            if (!(sender is Pivot))
             {
                 return;
             }
-            //var buttons = ApplicationBar.Buttons.Cast<ApplicationBarIconButton>().ToList();
 
-            //if (subscription.Id == 0)
-            //{
-            //    buttons[1].IsEnabled = false;
-            //    //buttons[2].IsEnabled = false;
-            //}
-            //else
-            //{
-            //    buttons[1].IsEnabled = true;
-            //    //buttons[2].IsEnabled = true;
-            //}
+            var pivot = sender as Pivot;
+
+            this.viewModel.PanelHeaderStyles[0] = (Style)Application.Current.Resources["PivotStyle"];
+            this.viewModel.PanelHeaderStyles[1] = (Style)Application.Current.Resources["PivotStyle"];
+
+            this.viewModel.PanelHeaderStyles[pivot.SelectedIndex] = (Style)Application.Current.Resources["PivotSelectedStyle"];
+
+            this.ClearAppBarButton.Visibility = pivot.SelectedIndex == 1 || !this.viewModel.NewLinks.Any() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void StreamSelectionChanaged(object sender, SelectionChangedEventArgs eventArgs)
@@ -262,9 +268,34 @@
         /// </param>
         private void LogoutClick(object sender, RoutedEventArgs e)
         {
+            ToastNotificationManager.History.Clear();
             this.accountStore.Logout();
 
             this.NavigateRoot<Login>();
+        }
+
+        private void RemoveNewSlap(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is HyperlinkButton))
+            {
+                return;
+            }
+
+            int id = (sender as HyperlinkButton).DataContext is int ? (int)(sender as HyperlinkButton).DataContext : 0;
+
+            if (id == default(int))
+            {
+                return;
+            }
+
+            this.newSlapStore.RemoveLink(id);
+        }
+
+        private void ClearNewSlapsClick(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.NewLinks.Clear();
+            this.newSlapStore.Clear();
+            ToastNotificationManager.History.Clear();
         }
     }
 }

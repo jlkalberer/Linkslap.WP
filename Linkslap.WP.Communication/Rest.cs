@@ -275,8 +275,16 @@
                                 {
                                     if (error != null)
                                     {
-                                        var model = JsonConvert.DeserializeObject<HttpError>(results);
-                                        error(model);
+                                        try
+                                        {
+                                            var model = JsonConvert.DeserializeObject<HttpError>(results);
+                                            error(model);
+                                        }
+                                        catch (Exception)
+                                        {
+                                           error(new HttpError { ErrorDescription = "Whoah!! There was an error on the server. We'll take care of that."});
+                                        }
+                                        
                                     }
 
                                     return;

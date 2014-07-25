@@ -16,24 +16,16 @@
     /// </summary>
     public class AccountStore : IAccountStore
     {
-        private readonly INewSlapsStore newSlapsStore;
-
         /// <summary>
         /// The rest.
         /// </summary>
         private readonly Rest rest;
 
-        public AccountStore()
-            : this(new NewSlapsStore())
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountStore"/> class.
         /// </summary>
-        public AccountStore(INewSlapsStore newSlapsStore)
+        public AccountStore()
         {
-            this.newSlapsStore = newSlapsStore;
             this.rest = new Rest();
         }
 
@@ -130,6 +122,9 @@
             return task.Task;
         }
 
+        /// <summary>
+        /// The logout.
+        /// </summary>
         public void Logout()
         {
             Storage.Save("account", null);
@@ -137,7 +132,7 @@
             var ns = new NotificationStore();
             ns.UnRegister();
 
-            this.newSlapsStore.Clear();
+            Storage.ClearAll();
         }
     }
 }

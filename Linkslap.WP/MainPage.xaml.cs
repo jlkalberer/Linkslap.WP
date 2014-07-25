@@ -58,6 +58,11 @@
                 return;
             }
 
+            if (e.Parameter == null || !string.IsNullOrEmpty((string)e.Parameter))
+            {
+                return;
+            }
+
             var task = this.accountStore.Get();
             task.ContinueWith(
                 t =>

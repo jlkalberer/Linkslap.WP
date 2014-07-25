@@ -1,5 +1,6 @@
 ﻿namespace Linkslap.WP.Communication
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
@@ -50,6 +51,11 @@
         }
 
         /// <summary>
+        /// The new slaps changed.
+        /// </summary>
+        public static event EventHandler<Subscription> SubscriptionsChanged;
+
+        /// <summary>
         /// The get subscriptions.
         /// </summary>
         /// <returns>
@@ -74,21 +80,18 @@
                 "api/subscription",
                 values =>
                     {
+                        var subs = this.subscriptions;
                         if (values == null || !values.Any())
                         {
-                            return;
+                            subs.Clear();
                         }
-
-                        var subs = this.subscriptions;
-
-                        if (subs == null)
+                        else
                         {
-                            return;
+                            subs.Remove(s => values.All(v => v.Id != s.Id));
+                            subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
                         }
 
-                        subs.Remove(s => values.All(v => v.Id != s.Id));
-                        subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
-
+                        
                         Storage.Save("subscriptions", subs);
                     });
 
@@ -117,8 +120,23 @@
         {
             var subscriptions = this.GetSubsriptions();
 
+            if (subscriptions.Any(s => s.Id == subscription.Id))
+            {
+                if (SubscriptionsChanged != null)
+                {
+                    SubscriptionsChanged(this, subscription);
+                }
+
+                return;
+            }
+
             subscriptions.Add(subscription);
             Storage.Save("subscriptions", subscriptions);
+
+            if (SubscriptionsChanged != null)
+            {
+                SubscriptionsChanged(this, subscription);
+            }
         }
 
         /// <summary>
@@ -131,6 +149,11 @@
         {
             var uri = string.Format("api/subscription{0}", subscriptionId);
             this.rest.Delete<Subscription>(uri);
+
+            if (SubscriptionsChanged != null)
+            {
+                SubscriptionsChanged(this, null);
+            }
         }
 
         /// <summary>

@@ -2,6 +2,8 @@
 {
     using System.Collections.ObjectModel;
 
+    using Windows.UI.Xaml;
+
     /// <summary>
     /// The home view model.
     /// </summary>
@@ -14,6 +16,11 @@
         {
             this.NewLinks = new ObservableCollection<LinkViewModel>();
             this.Subscriptions = new ObservableCollection<SubscriptionViewModel>();
+            this.PanelHeaderStyles = new ObservableCollection<Style>
+                                         {
+                                             new Style(),
+                                             new Style()
+                                         };
         }
 
         /// <summary>
@@ -25,5 +32,7 @@
         /// Gets the subscriptions.
         /// </summary>
         public ObservableCollection<SubscriptionViewModel> Subscriptions { get; private set; }
+
+        public ObservableCollection<Style> PanelHeaderStyles { get; private set; }
     }
 }

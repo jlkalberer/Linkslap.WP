@@ -53,6 +53,17 @@
         public void AddLink(Link link)
         {
             var links = this.GetLinks();
+
+            if (links.Any(l => l.Id == link.Id))
+            {
+                if (NewSlapsChanged != null)
+                {
+                    NewSlapsChanged(this, link);
+                }
+
+                return;
+            }
+
             links.Add(link);
             Storage.Save(Key, links);
 

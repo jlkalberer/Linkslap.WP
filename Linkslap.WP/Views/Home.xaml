@@ -43,11 +43,11 @@
             <Pivot Name="Pivot">
                 <Pivot.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Style="{ThemeResource HeaderTextStyle}" />
+                        <TextBlock Text="{Binding}" Style="{Binding PanelHeaderStyles[Pivot.SelectedIndex]}" />
                     </DataTemplate>
                 </Pivot.HeaderTemplate>
                 <PivotItem Header="New Slaps">
-                    <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible"></controls:LinkLongList>
+                    <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible" RemoveItemClicked="RemoveNewSlap"></controls:LinkLongList>
                 </PivotItem>
                 <PivotItem Header="Stream">
                     <SemanticZoom>
@@ -62,8 +62,8 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Refresh" Icon="Refresh"/>
                 <AppBarButton Label="New Stream" Icon="Add" Click="NewStreamClick"/>
+                <AppBarButton Name="ClearAppBarButton" Label="Clear" Icon="Clear" Click="ClearNewSlapsClick"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>

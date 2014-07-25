@@ -28,6 +28,12 @@
             return (string)container.Values["InstallationId"];
         }
 
+        public static void ClearAll()
+        {
+            var store = ApplicationData.Current.LocalSettings.Values;
+            store.Clear();
+        }
+
         /// <summary>
         /// The clear persistent.
         /// </summary>
@@ -126,5 +132,6 @@
 
             return ApplicationData.Current.LocalSettings.Containers["InstallationContainer"];
         }
+
     }
 }

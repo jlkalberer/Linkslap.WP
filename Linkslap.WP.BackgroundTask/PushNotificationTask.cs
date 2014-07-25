@@ -1,6 +1,7 @@
 ﻿namespace Linkslap.WP.BackgroundTask
 {
     using System;
+    using System.Linq;
 
     using Windows.ApplicationModel.Background;
     using Windows.Data.Xml.Dom;
@@ -28,20 +29,24 @@
                 return;
             }
 
-            var content = rawNotification.Content;
+            this.Process(rawNotification.Content, true);
+        }
+
+        public void Process(string content, bool showNotifications)
+        {
             dynamic jsonObject = JsonConvert.DeserializeObject(content);
 
             if (jsonObject.ObjectType == "submittedlink")
             {
-                this.SendLinkNotification(content);
+                this.SendLinkNotification(content, showNotifications);
             }
             else if (jsonObject.ObjectType == "subscription")
             {
                 this.AddSubscription(content);
             }
         }
-        
-        private bool SendLinkNotification(string content)
+
+        private bool SendLinkNotification(string content, bool showNotifications)
         {
             Link link;
             try
@@ -54,7 +59,18 @@
             }
 
             var store = new NewSlapsStore();
-            store.AddLink(link);
+
+            if (store.Links.All(l => l.Id != link.Id))
+            {
+                store.AddLink(link);
+            }
+            
+
+            // Do not show notification if processing from inside the app.
+            if (!showNotifications)
+            {
+                return true;
+            }
 
             var notification = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
             var toastElement = ((XmlElement)notification.SelectSingleNode("/toast"));
@@ -86,6 +102,12 @@
             }
 
             var store = new SubscriptionStore();
+
+            if (store.GetSubsriptions().Any(s => s.Id == subscription.Id))
+            {
+                return false;
+            }
+
             store.AddSubscription(subscription);
 
             return true;

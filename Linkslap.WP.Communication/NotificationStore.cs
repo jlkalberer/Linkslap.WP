@@ -17,12 +17,12 @@
         /// </summary>
         public async void Register()
         {
-            var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            this.Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
 
             var registration = new PushRegistration
                                    {
                                        InstallationId = Storage.GetInstallationId(),
-                                       ChannelUri = channel.Uri
+                                       ChannelUri = Channel.Uri
                                    };
 
             var rest = new Rest();
@@ -34,16 +34,18 @@
         /// </summary>
         public async void UnRegister()
         {
-            var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            this.Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
 
             var registration = new PushRegistration
                                    {
                                        InstallationId = Storage.GetInstallationId(),
-                                       ChannelUri = channel.Uri
+                                       ChannelUri = this.Channel.Uri
                                    };
 
             var rest = new Rest();
             rest.Post<dynamic>("api/push/unregister", registration);
         }
+
+        public PushNotificationChannel Channel { get; private set; }
     }
 }
