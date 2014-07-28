@@ -1,6 +1,9 @@
 ﻿namespace Linkslap.WP.Views
 {
     using System;
+    using System.Collections.Generic;
+
+    using Windows.UI.Xaml.Controls;
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
@@ -35,16 +38,13 @@
               }());";
 
         /// <summary>
-        /// The link.
+        /// The view model.
         /// </summary>
-        private LinkViewModel link;
-
-        private ViewLinkViewModel viewModel;
+        private ViewLinksViewModel viewModel;
 
         public View()
             : this(new NewSlapsStore())
         {
-            
         }
 
         /// <summary>
@@ -55,7 +55,7 @@
             this.newSlapsStore = newSlapsStore;
             this.InitializeComponent();
 
-            this.viewModel = this.DataContext as ViewLinkViewModel;
+            this.viewModel = this.DataContext as ViewLinksViewModel;
         }
 
         /// <summary>
@@ -66,31 +66,40 @@
         /// </param>
         protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            this.link = eventArgs.Parameter as LinkViewModel;
+            var links = eventArgs.Parameter as ViewLinksViewModel;
 
-            if (this.link == null)
+            if (links == null)
             {
                 // TODO - Go back and show error message
                 return;
             }
 
-            ToastNotificationManager.History.Remove(this.link.Id.ToString());
-
-            this.newSlapsStore.RemoveLink(this.link.Id);
-
-            this.Title.Text = this.link.Comment;
-            this.LinkInfo.Text = this.link.Info;
-            this.WebView.Navigate(new Uri(this.link.Url, UriKind.Absolute));
-            this.WebView.DOMContentLoaded += async (sender, args) =>
-                {
-                    var s = this.WebView.Source;
-                    await this.WebView.InvokeScriptAsync("eval", new[] { CssStyle, "document.body" });
-                    var val = await this.WebView.InvokeScriptAsync("eval", new[] { "document.documentElement.innerHTML" });
-                    var v = 0; 
-                    
-                };
+            this.viewModel.Links = links.Links;
+            this.viewModel.SelectedItem = links.SelectedItem;
 
             base.OnNavigatedTo(eventArgs);
+        }
+
+        private async void ViewLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
+        {
+            await sender.InvokeScriptAsync("eval", new[] { CssStyle, "document.body" });
+            // await sender.InvokeScriptAsync("eval", new[] { "document.documentElement.innerHTML" });
+        }
+
+        /// <summary>
+        /// The flip view changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void FlipViewChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var link = this.viewModel.SelectedItem;
+            ToastNotificationManager.History.Remove(link.Id.ToString());
+            this.newSlapsStore.RemoveLink(link.Id);
         }
     }
 }

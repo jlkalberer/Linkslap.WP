@@ -20,12 +20,11 @@
     </controls:PageBase.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
-
-        <Grid.ChildrenTransitions>
+        <!--<Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
-        </Grid.ChildrenTransitions>
+        </Grid.ChildrenTransitions>-->
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -39,25 +38,23 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1">
-            <Pivot Name="Pivot">
-                <Pivot.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" Style="{Binding PanelHeaderStyles[Pivot.SelectedIndex]}" />
-                    </DataTemplate>
-                </Pivot.HeaderTemplate>
-                <PivotItem Header="New Slaps">
-                    <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible" RemoveItemClicked="RemoveNewSlap"></controls:LinkLongList>
-                </PivotItem>
-                <PivotItem Header="Stream">
-                    <SemanticZoom>
-                        <SemanticZoom.ZoomedInView>
-                            <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
-                        </SemanticZoom.ZoomedInView>
-                    </SemanticZoom>
-                </PivotItem>
-            </Pivot>
-        </Grid>
+        <Pivot Grid.Row="1" Name="Pivot">
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Style="{Binding PanelHeaderStyles[Pivot.SelectedIndex]}" />
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <PivotItem Header="New Slaps">
+                <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible" RemoveItemClicked="RemoveNewSlap"></controls:LinkLongList>
+            </PivotItem>
+            <PivotItem Header="Stream">
+                <SemanticZoom>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
+                    </SemanticZoom.ZoomedInView>
+                </SemanticZoom>
+            </PivotItem>
+        </Pivot>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>

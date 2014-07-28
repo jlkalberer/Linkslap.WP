@@ -26,6 +26,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="1" Canvas.ZIndex="2" Background="#22000000" VerticalAlignment="Center">
+            <ProgressRing IsActive="True" Background="#22000000" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </StackPanel>
+
         <!-- TitlePanel -->
         <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
             <Image Style="{ThemeResource HeaderImage}" />
@@ -50,12 +54,13 @@
                 </ItemsControl>
             
                 <TextBlock Text="Username" />
-                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" />
-                <TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
-            
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <!--<TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />-->
+                <controls:ErrorText DataContext="{Binding ValidationMessages[UserName], Mode=OneWay}" />
+                
                 <TextBlock Text="Password"/>
-                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" />
-                <TextBlock Text="{Binding Path=ValidationMessages[Password], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <controls:ErrorText DataContext="{Binding ValidationMessages[Password], Mode=OneWay}" />
 
                 <Button Command="{Binding}">Login</Button>
                 <HyperlinkButton Click="RegisterButton_OnClick" Margin="0,20,0,0">Register</HyperlinkButton>
@@ -63,4 +68,9 @@
             </StackPanel>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Name="CommandBar" Visibility="Collapsed">
+            <AppBarButton Label="Login" Icon="Accept" Command="{Binding}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </controls:PageBase>

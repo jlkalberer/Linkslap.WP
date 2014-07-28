@@ -95,6 +95,10 @@
     <Compile Include="Common\Validation\ValidationErrorMessage.cs" />
     <Compile Include="Common\Validation\ValidationMessageCollectionToStringCollectionConverter.cs" />
     <Compile Include="Common\Validation\ValidationWarningMessage.cs" />
+    <Compile Include="Common\Validation\VisibilityConverter.cs" />
+    <Compile Include="Controls\ErrorText.xaml.cs">
+      <DependentUpon>ErrorText.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LinkLongList.xaml.cs">
       <DependentUpon>LinkLongList.xaml</DependentUpon>
     </Compile>
@@ -114,7 +118,7 @@
     <Compile Include="ViewModels\NewStreamViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
-    <Compile Include="ViewModels\ViewLinkViewModel.cs" />
+    <Compile Include="ViewModels\ViewLinksViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewStreamViewModel.cs" />
     <Compile Include="Views\NewStream.xaml.cs">
@@ -165,10 +169,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Assets\Generic.xaml">
+    <Page Include="Assets\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Assets\FlipViewStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Controls\ErrorText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\LinkLongList.xaml">
       <SubType>Designer</SubType>

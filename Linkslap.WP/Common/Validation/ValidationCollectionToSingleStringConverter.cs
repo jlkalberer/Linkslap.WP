@@ -20,6 +20,11 @@ namespace Linkslap.WP.Common.Validation
         /// <returns>Returns a string representing the message of the first object in the collection provided.</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             // The view will provide us with a collection of IValidationMessages.
             if (!(value is IEnumerable<IValidationMessage>))
             {

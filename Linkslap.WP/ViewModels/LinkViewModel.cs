@@ -56,5 +56,16 @@
                     this.StreamName);
             }
         }
+
+        /// <summary>
+        /// Gets the uri.
+        /// </summary>
+        public Uri Uri
+        {
+            get
+            {
+                return new Uri(this.Url, UriKind.RelativeOrAbsolute);
+            }
+        }
     }
 }

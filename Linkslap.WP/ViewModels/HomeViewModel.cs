@@ -19,7 +19,7 @@
             this.PanelHeaderStyles = new ObservableCollection<Style>
                                          {
                                              new Style(),
-                                             new Style()
+                                             new Style(),
                                          };
         }
 

@@ -254,7 +254,7 @@
             }
 
             this.newSlapStore.RemoveLink(link.Id);
-            this.Navigate<View>(link);
+            this.Navigate<View>(new ViewLinksViewModel(link));
         }
 
         /// <summary>

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Linkslap.WP.Common.Validation
+﻿namespace Linkslap.WP.Common.Validation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Windows.UI.Xaml.Data;
 
     class ValidationMessageCollectionToStringCollectionConverter : IValueConverter

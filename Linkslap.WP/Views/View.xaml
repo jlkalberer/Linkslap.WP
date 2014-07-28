@@ -11,35 +11,43 @@
     Background="{ThemeResource BackgroundBrush}">
 
     <Page.DataContext>
-        <viewModels:ViewLinkViewModel/>
+        <viewModels:ViewLinksViewModel/>
     </Page.DataContext>
-    
-    <Grid Background="{ThemeResource BodyBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Style="{ThemeResource HeaderImagePartial}" />
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="Foo" Name="Title" Foreground="White" FontSize="20" TextWrapping="WrapWholeWords" Padding="15, 0, 10, 10"></TextBlock>
-                    <TextBlock Text="Slapped at 7/23/2014 1:45 pm by myron to aaron/john/myron" Padding="15,0,10,0" Name="LinkInfo" Style="{ThemeResource ListItemInfoTextStyle}" />
-                </StackPanel>
-            </Grid>
-            <Rectangle Height="20" Fill="#323232"></Rectangle>
-        </StackPanel>
-        <WebView Grid.Row="1" Name="WebView"></WebView>
-    </Grid>
-    <Page.BottomAppBar>
+
+
+    <FlipView ItemsSource="{Binding Links}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionChanged="FlipViewChanged">
+        <FlipView.ItemTemplate>
+            <DataTemplate>
+                <Grid Background="{ThemeResource BodyBrush}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Style="{ThemeResource HeaderImagePartial}" />
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding Comment}" Foreground="White" FontSize="20" TextWrapping="WrapWholeWords" Padding="15, 0, 10, 10"></TextBlock>
+                                <TextBlock Text="{Binding Info}" Padding="15,0,10,10" Name="LinkInfo" Style="{ThemeResource ListItemInfoTextStyle}" />
+                            </StackPanel>
+                        </Grid>
+                        <Rectangle Height="20" Fill="#323232"></Rectangle>
+                    </StackPanel>
+                    <WebView Grid.Row="1" Source="{Binding Uri}" DOMContentLoaded="ViewLoaded" ></WebView>
+                    <Rectangle Grid.Row="1" Canvas.ZIndex="2" Fill="Transparent"></Rectangle>
+                </Grid>
+            </DataTemplate>
+        </FlipView.ItemTemplate>
+    </FlipView>
+    <!--<Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Label="Gif Search" Icon="Zoom"/>
             <AppBarButton Label="Previous" Icon="Back"/>
             <AppBarButton Label="Next" Icon="Forward" />
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 </controls:PageBase>

@@ -91,7 +91,7 @@
         /// </param>
         private void LinkLongList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.Navigate<View>(e.AddedItems[0] as LinkViewModel);
+            this.Navigate<View>(new ViewLinksViewModel(e.AddedItems[0] as LinkViewModel, this.viewModel.Links));
         }
     }
 }

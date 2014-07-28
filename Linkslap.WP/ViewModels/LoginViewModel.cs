@@ -1,5 +1,7 @@
 ﻿namespace Linkslap.WP.ViewModels
 {
+    using Windows.UI.Xaml;
+
     using Linkslap.WP.Common.Validation;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
@@ -27,7 +29,6 @@
         public LoginViewModel()
             : this(new AccountStore(), new NavigationService())
         {
-            
         }
 
         /// <summary>

@@ -10,6 +10,8 @@
 
     using Windows.UI.Xaml;
 
+    using Linkslap.WP.ViewModels;
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -19,6 +21,8 @@
         /// The account repository.
         /// </summary>
         private readonly IAccountStore accountStore;
+
+        private LoginViewModel viewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Login"/> class.
@@ -38,6 +42,8 @@
         {
             this.accountStore = accountStore;
             this.InitializeComponent();
+
+            this.viewModel = this.DataContext as LoginViewModel;
         }
         
         /// <summary>
@@ -52,6 +58,16 @@
         private void RegisterButton_OnClick(object sender, RoutedEventArgs e)
         {
             this.Navigate<Register>();
+        }
+
+        private void TextboxFocused(object sender, RoutedEventArgs e)
+        {
+            this.CommandBar.Visibility = Visibility.Visible;
+        }
+
+        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            this.CommandBar.Visibility = Visibility.Collapsed;
         }
     }
 }
