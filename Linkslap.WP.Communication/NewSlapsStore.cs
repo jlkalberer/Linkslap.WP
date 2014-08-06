@@ -4,18 +4,23 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Windows.Data.Xml.Dom;
-    using Windows.UI.Notifications;
-
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
+
+    using Windows.Data.Xml.Dom;
+    using Windows.UI.Notifications;
 
     /// <summary>
     /// The new slaps store.
     /// </summary>
     public class NewSlapsStore : INewSlapsStore
     {
+        /// <summary>
+        /// The subscription store.
+        /// </summary>
+        private readonly ISubscriptionStore subscriptionStore;
+
         /// <summary>
         /// The key.
         /// </summary>
@@ -25,7 +30,19 @@
         /// Initializes a new instance of the <see cref="NewSlapsStore"/> class.
         /// </summary>
         public NewSlapsStore()
+            : this(new SubscriptionStore())
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewSlapsStore"/> class.
+        /// </summary>
+        /// <param name="subscriptionStore">
+        /// The subscription Store.
+        /// </param>
+        public NewSlapsStore(ISubscriptionStore subscriptionStore)
+        {
+            this.subscriptionStore = subscriptionStore;
         }
 
         /// <summary>

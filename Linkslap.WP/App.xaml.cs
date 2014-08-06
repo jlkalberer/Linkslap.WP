@@ -1,6 +1,7 @@
 ﻿namespace Linkslap.WP
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using AutoMapper;
@@ -64,9 +65,42 @@
                 () => rootFrame.Navigate(typeof(ShareLink), shareOperation));
         }
 
-        protected override void OnActivated(IActivatedEventArgs args)
+        /// <summary>
+        /// The on activated.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        protected override async void OnActivated(IActivatedEventArgs args)
         {
+            if (args.Kind == ActivationKind.Protocol)
+            {
+                var protocalArgs = (ProtocolActivatedEventArgs)args;
+                var url = protocalArgs.Uri;
+                var queryString = ParseQueryString(url.Query);
+
+                if (queryString.ContainsKey("streamKey"))
+                {
+                    var subscriptionStore = new SubscriptionStore();
+                    var subscription = await subscriptionStore.Add(queryString["streamKey"]);
+
+                    var rootFrame = Window.Current.Content as Frame;
+                    var page = rootFrame.Content as Page;
+                    var subscriptionViewModel = Mapper.Map<Subscription, SubscriptionViewModel>(subscription);
+                    
+                    page.Frame.Navigate(typeof(ViewStream), subscriptionViewModel);
+                }
+            }
+
             base.OnActivated(args);
+        }
+
+
+        private static Dictionary<string, string> ParseQueryString(string uri)
+        {
+            var substring = uri.Substring(((uri.LastIndexOf('?') == -1) ? 0 : uri.LastIndexOf('?') + 1));
+            var pairs = substring.Split('&');
+            return pairs.Select(piece => piece.Split('=')).ToDictionary(pair => pair[0], pair => pair[1]);
         }
 
         /// <summary>

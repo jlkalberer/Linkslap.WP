@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -86,7 +87,7 @@
             var ns = new NotificationStore();
             ns.Register();
 
-            ns.Channel.PushNotificationReceived += (sender, args) => this.CrossThread(
+            NotificationStore.Channel.PushNotificationReceived += (sender, args) => this.CrossThread(
                 () =>
                     {
                         var tasK = new PushNotificationTask();
@@ -254,7 +255,7 @@
             }
 
             this.newSlapStore.RemoveLink(link.Id);
-            this.Navigate<View>(new ViewLinksViewModel(link));
+            this.Navigate<View>(new ViewLinksViewModel(link, new ObservableCollection<LinkViewModel>(this.viewModel.NewLinks)));
         }
 
         /// <summary>

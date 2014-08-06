@@ -19,18 +19,25 @@
         {
             try
             {
-                this.Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                if (Channel == null)
+                {
+                    Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                }
             }
             catch (Exception)
             {
                 return;
             }
 
-            var registration = new PushRegistration
-                                   {
-                                       InstallationId = Storage.GetInstallationId(),
-                                       ChannelUri = Channel.Uri
-                                   };
+            this.RegisterToUserStreams();
+        }
+
+        /// <summary>
+        /// The register to user streams.
+        /// </summary>
+        public void RegisterToUserStreams()
+        {
+            var registration = new PushRegistration { InstallationId = Storage.GetInstallationId(), ChannelUri = Channel.Uri };
 
             var rest = new Rest();
             rest.Post<dynamic>("api/push/register", registration);
@@ -41,18 +48,21 @@
         /// </summary>
         public async void UnRegister()
         {
-            this.Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
 
             var registration = new PushRegistration
                                    {
                                        InstallationId = Storage.GetInstallationId(),
-                                       ChannelUri = this.Channel.Uri
+                                       ChannelUri = Channel.Uri
                                    };
 
             var rest = new Rest();
             rest.Post<dynamic>("api/push/unregister", registration);
         }
 
-        public PushNotificationChannel Channel { get; private set; }
+        /// <summary>
+        /// Gets the channel.
+        /// </summary>
+        public static PushNotificationChannel Channel { get; private set; }
     }
 }

@@ -8,6 +8,7 @@
 
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
+    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Communication.Util;
 
     /// <summary>
@@ -91,7 +92,6 @@
                             subs.AddRange(values.Where(v => subs.All(s => s.Id != v.Id)));
                         }
 
-                        
                         Storage.Save("subscriptions", subs);
                     });
 
@@ -101,17 +101,28 @@
         /// <summary>
         /// The add.
         /// </summary>
-        /// <param name="streamId">
+        /// <param name="streamKey">
         /// The stream id.
         /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public Task<Subscription> Add(string streamId)
+        public Task<Subscription> Add(string streamKey)
         {
             var task = new TaskCompletionSource<Subscription>();
 
-            this.rest.Post<Subscription>("api/subscription", new { id = streamId }, task.SetResult);
+            var subs = this.GetSubsriptions();
+            var subscription = subs.FirstOrDefault(s => s.Stream.Key == streamKey);
+            if (subscription != null)
+            {
+                task.SetResult(subscription);
+                return task.Task;
+            }
+
+            this.rest.Post<Subscription>("api/subscription/join", new { streamKey }, task.SetResult);
+
+            var ns = new NotificationStore();
+            ns.RegisterToUserStreams();
 
             return task.Task;
         }
@@ -133,6 +144,9 @@
             subscriptions.Add(subscription);
             Storage.Save("subscriptions", subscriptions);
 
+            var ns = new NotificationStore();
+            ns.RegisterToUserStreams();
+
             if (SubscriptionsChanged != null)
             {
                 SubscriptionsChanged(this, subscription);
@@ -149,6 +163,9 @@
         {
             var uri = string.Format("api/subscription{0}", subscriptionId);
             this.rest.Delete<Subscription>(uri);
+
+            var ns = new NotificationStore();
+            ns.RegisterToUserStreams();
 
             if (SubscriptionsChanged != null)
             {

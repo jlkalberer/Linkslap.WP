@@ -22,13 +22,13 @@ namespace Linkslap.WP.Communication.Interfaces
         /// <summary>
         /// The add.
         /// </summary>
-        /// <param name="streamId">
+        /// <param name="streamKey">
         /// The stream id.
         /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        Task<Subscription> Add(string streamId);
+        Task<Subscription> Add(string streamKey);
 
         /// <summary>
         /// The delete.
