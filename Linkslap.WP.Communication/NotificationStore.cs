@@ -17,7 +17,14 @@
         /// </summary>
         public async void Register()
         {
-            this.Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            try
+            {
+                this.Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
             var registration = new PushRegistration
                                    {

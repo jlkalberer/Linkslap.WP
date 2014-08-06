@@ -6,37 +6,48 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Linkslap.WP.Controls"
+    xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource BackgroundBrush}">
 
+    <Page.DataContext>
+        <viewModels:ShareLinkViewModel/>
+    </Page.DataContext>
+    
     <controls:PageBase.Resources>
         <DataTemplate x:Key="StreamTemplate">
-            <TextBlock Text="{Binding Name}"/>
+            <TextBlock Text="{Binding Name}" Style="{ThemeResource ListItemTextStyle}" />
         </DataTemplate>
     </controls:PageBase.Resources>
-
-    <Grid>
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
-
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- TitlePanel -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28">
-            <TextBlock Text="Linkslap" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
-            <TextBlock Text="Slap Link" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
         </StackPanel>
-        <SemanticZoom Grid.Row="1">
-            <SemanticZoom.ZoomedInView>
-                <ListView SelectionChanged="StreamSelectionChanged" ItemsSource="{Binding}" ItemTemplate="{StaticResource StreamTemplate}"/>
-            </SemanticZoom.ZoomedInView>
-        </SemanticZoom>
+
+        <Grid Grid.Row="1" Style="{ThemeResource MainContent}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Share Link" Style="{ThemeResource HeaderTextStyle}" />
+
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="Comment" />
+                <TextBox Text="{Binding Path=Comment, Mode=TwoWay}" />
+                <SemanticZoom>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView SelectionChanged="StreamSelectionChanged" IsEnabled="{Binding CanSubmit}" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
+                    </SemanticZoom.ZoomedInView>
+                </SemanticZoom>
+            </StackPanel>
+        </Grid>
     </Grid>
 </controls:PageBase>

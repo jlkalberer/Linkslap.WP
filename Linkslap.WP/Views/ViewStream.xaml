@@ -12,7 +12,7 @@
     <Page.DataContext>
         <viewModels:ViewStreamViewModel/>
     </Page.DataContext>
-    
+
     <Grid Background="{ThemeResource BodyBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -35,4 +35,19 @@
             <controls:LinkLongList Grid.Row="1" Links="{Binding Links}" SelectionChanged="LinkLongList_OnSelectionChanged"></controls:LinkLongList>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Reply" Click="ReplyClick">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xe269;" FontSize="30" Margin="-4, -12, 0, 0"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Share" Icon="Reshare" Click="ShareClick"/>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Settings" Icon="Switch" Click="SettingsClick"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </controls:PageBase>

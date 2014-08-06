@@ -134,5 +134,28 @@
 
             Storage.ClearAll();
         }
+
+        /// <summary>
+        /// The reset password.
+        /// </summary>
+        /// <param name="email">
+        /// The email.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        public Task<bool> ResetPassword(string email)
+        {
+            var task = new TaskCompletionSource<bool>();
+
+            this.rest.Execute<dynamic>(
+                HttpMethod.Post,
+                "/api/account/resetpassword",
+                new { email },
+                result => task.SetResult(true),
+                task.SetException);
+
+            return task.Task;
+        }
     }
 }

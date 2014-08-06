@@ -47,6 +47,12 @@
             <Task Type="pushNotification" />
           </BackgroundTasks>
         </Extension>
+        <Extension Category="windows.protocol">
+          <Protocol Name="linkslap">
+            <Logo>Assets\badge-58x58.png</Logo>
+            <DisplayName>Linkslap</DisplayName>
+          </Protocol>
+        </Extension>
       </Extensions>
     </Application>
   </Applications>

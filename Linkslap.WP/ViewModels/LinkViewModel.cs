@@ -51,7 +51,7 @@
             {
                 return string.Format(
                     "Slapped at {0} by {1} to {2}",
-                    this.CreatedDate.ToString("M/d/yyyy h:mm tt"),
+                    this.CreatedDate.ToLocalTime().ToString("M/d/yyyy h:mm tt"),
                     this.UserName,
                     this.StreamName);
             }

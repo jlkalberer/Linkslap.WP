@@ -1,46 +1,53 @@
-﻿namespace Linkslap.WP.ViewModels
+namespace Linkslap.WP.ViewModels
 {
-    using Windows.UI.Xaml;
+    using System;
+
+    using Windows.UI.Popups;
 
     using Linkslap.WP.Common.Validation;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
-    using Linkslap.WP.Communication.Notifications;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
 
     /// <summary>
-    /// The login view model.
+    /// The password reset view model.
     /// </summary>
-    public class LoginViewModel : ValidationBase
+    public class PasswordResetViewModel : ValidationBase
     {
         /// <summary>
         /// The account store.
         /// </summary>
         private readonly IAccountStore accountStore;
 
+        /// <summary>
+        /// The navigation service.
+        /// </summary>
         private readonly INavigationService navigationService;
 
         /// <summary>
-        /// The running request.
+        /// The execute button enabled.
         /// </summary>
         private bool executeButtonEnabled;
 
-        public LoginViewModel()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PasswordResetViewModel"/> class.
+        /// </summary>
+        public PasswordResetViewModel()
             : this(new AccountStore(), new NavigationService())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
+        /// Initializes a new instance of the <see cref="PasswordResetViewModel"/> class.
         /// </summary>
         /// <param name="accountStore">
-        /// The account store.
+        /// The account Store.
         /// </param>
         /// <param name="navigationService">
-        /// The navigation service.
+        /// The navigation Service.
         /// </param>
-        public LoginViewModel(IAccountStore accountStore, INavigationService navigationService)
+        public PasswordResetViewModel(IAccountStore accountStore, INavigationService navigationService)
         {
             this.accountStore = accountStore;
             this.navigationService = navigationService;
@@ -48,14 +55,9 @@
         }
 
         /// <summary>
-        /// Gets or sets the user name.
+        /// Gets or sets the email.
         /// </summary>
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        public string Password { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether execute button enabled.
@@ -79,11 +81,9 @@
         /// </summary>
         public override void Validate()
         {
-            this.ValidateProperty("UserName", "user name", this.UserName)
-                .Required();
-
-            this.ValidateProperty("Password", "password", this.Password)
-                .Required();
+            this.ValidateProperty("Email", "Email", this.Email)
+                .Required()
+                .Email();
 
             base.Validate();
         }
@@ -119,7 +119,7 @@
                 return;
             }
 
-            var result = this.accountStore.Authenticate(this.UserName, this.Password);
+            var result = this.accountStore.ResetPassword(this.Email);
 
             await result.ContinueWith(this.ValidateResponse);
 
@@ -130,10 +130,10 @@
                 return;
             }
 
-            var ns = new NotificationStore();
-            ns.Register();
+            var dialog = new MessageDialog("An email has been sent to your address.  Follow the instructions to reset your password.");
+            await dialog.ShowAsync();
 
-            this.navigationService.NavigateRoot<Home>();
+            this.navigationService.NavigateRoot<Login>();
         }
     }
 }

@@ -22,14 +22,14 @@
     public sealed partial class ShareLink
     {
         /// <summary>
-        /// The subscription store.
-        /// </summary>
-        private readonly ISubscriptionStore subscriptionStore;
-
-        /// <summary>
         /// The stream store.
         /// </summary>
         private readonly IStreamStore streamStore;
+
+        /// <summary>
+        /// The view model.
+        /// </summary>
+        private readonly ShareLinkViewModel viewModel;
 
         /// <summary>
         /// The share operation.
@@ -37,35 +37,24 @@
         private ShareOperation shareOperation;
 
         /// <summary>
-        /// The data.
-        /// </summary>
-        private Uri data;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ShareLink"/> class.
         /// </summary>
         public ShareLink()
-            : this(new SubscriptionStore(), new StreamStore())
+            : this(new StreamStore())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareLink"/> class.
         /// </summary>
-        /// <param name="subscriptionStore">
-        /// The subscription store.
-        /// </param>
         /// <param name="streamStore">
         /// The stream store.
         /// </param>
-        public ShareLink(ISubscriptionStore subscriptionStore, IStreamStore streamStore)
+        public ShareLink(IStreamStore streamStore)
         {
-            this.subscriptionStore = subscriptionStore;
             this.streamStore = streamStore;
             this.InitializeComponent();
-
-            this.Subscriptions = new ObservableCollection<SubscriptionViewModel>();
-            this.DataContext = this.Subscriptions;
+            this.viewModel = this.DataContext as ShareLinkViewModel;
         }
 
         /// <summary>
@@ -80,34 +69,25 @@
         /// This parameter is typically used to configure the page.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.shareOperation = e.Parameter as ShareOperation;
-
-            if (this.shareOperation == null)
+            if (e.Parameter is ShareOperation)
             {
-                return;
+                this.shareOperation = e.Parameter as ShareOperation;
+
+                if (this.shareOperation == null)
+                {
+                    return;
+                }
+
+                this.viewModel.Uri = await this.shareOperation.Data.GetWebLinkAsync();
+                this.viewModel.Comment = this.shareOperation.Data.Properties.Title;
             }
+            else if (e.Parameter is GifViewModel)
+            {
+                var model = e.Parameter as GifViewModel;
 
-            this.data = await this.shareOperation.Data.GetWebLinkAsync();
-
-            var subscriptions = this.subscriptionStore.GetSubsriptions();
-
-            var mappedSubscriptions = new List<SubscriptionViewModel>();
-            mappedSubscriptions = Mapper.Map(subscriptions, mappedSubscriptions);
-
-            this.Subscriptions.AddRange(mappedSubscriptions);
-
-            subscriptions.CollectionChanged += (sender, args) => this.Dispatcher.RunAsync(
-                CoreDispatcherPriority.Normal,
-                () =>
-                    {
-                        var newItems = new List<SubscriptionViewModel>();
-                        newItems = Mapper.Map(args.NewItems, newItems);
-                        this.Subscriptions.AddRange(newItems);
-
-                        var oldItems = new List<SubscriptionViewModel>();
-                        oldItems = Mapper.Map(args.NewItems, oldItems);
-                        this.Subscriptions.RemoveRange(oldItems);
-                    });
+                this.viewModel.Uri = new Uri(model.Gif, UriKind.RelativeOrAbsolute);
+                this.viewModel.Comment = model.Gif;
+            }
 
             base.OnNavigatedTo(e);
         }
@@ -130,10 +110,17 @@
                 return;
             }
 
-            var task = this.streamStore.SlapLink(subscription.StreamKey, this.shareOperation.Data.Properties.Title, this.data.ToString());
-      
-            // This will shut down the app - we only want to do that if we are not debugging.
-            task.ContinueWith(link => this.shareOperation.ReportCompleted());
+            var task = this.streamStore.SlapLink(subscription.StreamKey, this.viewModel.Comment, this.viewModel.Uri.ToString());
+
+            if (this.shareOperation != null)
+            {
+                // This will shut down the app - we only want to do that if we are not debugging.
+                task.ContinueWith(link => this.shareOperation.ReportCompleted());
+            }
+            else
+            {
+                this.NavigationHelper.GoBack();
+            }
         }
     }
 }

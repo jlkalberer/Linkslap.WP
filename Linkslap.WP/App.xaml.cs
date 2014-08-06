@@ -64,6 +64,11 @@
                 () => rootFrame.Navigate(typeof(ShareLink), shareOperation));
         }
 
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+        }
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used when the application is launched to open a specific file, to display
@@ -133,7 +138,9 @@
                 if (link != null && page != null)
                 {
                     var linkViewModel = Mapper.Map<Link, LinkViewModel>(link);
-                    page.Frame.Navigate(typeof(View), linkViewModel);
+
+                    var viewLinksViewModel = new ViewLinksViewModel(linkViewModel);
+                    page.Frame.Navigate(typeof(View), viewLinksViewModel);
                 }
             }
 

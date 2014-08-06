@@ -1,18 +1,18 @@
 ﻿namespace Linkslap.WP.Views
 {
-    using Linkslap.WP.Controls;
-
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Register : PageBase
+    public sealed partial class PasswordReset : Page
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Register"/> class.
+        /// Initializes a new instance of the <see cref="PasswordReset"/> class.
         /// </summary>
-        public Register()
+        public PasswordReset()
         {
             this.InitializeComponent();
         }

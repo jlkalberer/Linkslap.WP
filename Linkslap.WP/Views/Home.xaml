@@ -50,7 +50,7 @@
             <PivotItem Header="Stream">
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
-                        <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
+                        <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}" />
                     </SemanticZoom.ZoomedInView>
                 </SemanticZoom>
             </PivotItem>

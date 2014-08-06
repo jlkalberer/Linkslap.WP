@@ -38,7 +38,7 @@
                         <Rectangle Height="20" Fill="#323232"></Rectangle>
                     </StackPanel>
                     <WebView Grid.Row="1" Source="{Binding Uri}" DOMContentLoaded="ViewLoaded" ></WebView>
-                    <Rectangle Grid.Row="1" Canvas.ZIndex="2" Fill="Transparent"></Rectangle>
+                    <Rectangle Grid.Row="1" Canvas.ZIndex="2" Fill="Transparent" Tapped="RectangleTapped"></Rectangle>
                 </Grid>
             </DataTemplate>
         </FlipView.ItemTemplate>

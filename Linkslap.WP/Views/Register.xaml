@@ -16,12 +16,6 @@
     </Page.DataContext>
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -42,32 +36,31 @@
             
             <TextBlock Grid.Row="0" Text="Register" Style="{ThemeResource HeaderTextStyle}" />
             <StackPanel Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding Path=ValidationMessages[GenericError], Converter={StaticResource CollectionConverter}}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" Style="{ThemeResource ErrorTextBlockStyle}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <controls:ErrorCollection DataContext="{Binding Path=ValidationMessages[GenericError], Mode=OneWay}" />
 
                 <TextBlock Text="Email"/>
-                <TextBox Text="{Binding Path=Email, Mode=TwoWay}"></TextBox>
-                <TextBlock Text="{Binding Path=ValidationMessages[Email], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+                <TextBox Text="{Binding Path=Email, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus"></TextBox>
+                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[Email], Mode=OneWay}" />
 
                 <TextBlock Text="Username"/>
-                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}"></TextBox>
-                <TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[UserName], Mode=OneWay}" />
 
                 <TextBlock Text="Password"/>
-                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}"></PasswordBox>
-                <TextBlock Text="{Binding Path=ValidationMessages[Password], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[Password], Mode=OneWay}" />
 
                 <TextBlock Text="Confirm Password"/>
-                <PasswordBox Password="{Binding Path=ConfirmPassword, Mode=TwoWay}"></PasswordBox>
-                <TextBlock Text="{Binding Path=ValidationMessages[ConfirmPassword], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />
+                <PasswordBox Password="{Binding Path=ConfirmPassword, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[ConfirmPassword], Mode=OneWay}" />
 
-                <Button Command="{Binding}">Register</Button>
+                <Button Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled}">Register</Button>
             </StackPanel>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Name="CommandBar" Visibility="Collapsed">
+            <AppBarButton Label="Register" Icon="Accept" Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </controls:PageBase>

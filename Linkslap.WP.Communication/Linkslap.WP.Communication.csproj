@@ -41,11 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStore.cs" />
+    <Compile Include="GifStore.cs" />
     <Compile Include="Interfaces\IAccountStore.cs" />
+    <Compile Include="Interfaces\IGifStore.cs" />
     <Compile Include="Interfaces\INewSlapsStore.cs" />
     <Compile Include="Interfaces\IStreamStore.cs" />
     <Compile Include="Interfaces\ISubscriptionStore.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\GifMeModel.cs" />
     <Compile Include="Models\Link.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\PushRegistration.cs" />

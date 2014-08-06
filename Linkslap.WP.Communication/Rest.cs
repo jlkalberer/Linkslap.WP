@@ -41,15 +41,25 @@
         /// Initializes a new instance of the <see cref="Rest"/> class.
         /// </summary>
         public Rest()
+            : this(AppSettings.BaseUrl)
         {
-            this.baseUrl = AppSettings.BaseUrl;
-
             var account = Storage.Load<Account>("account");
 
             if (account != null)
             {
                 this.bearerToken = account.BearerToken;
             }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rest"/> class.
+        /// </summary>
+        /// <param name="baseUrl">
+        /// The base Url.
+        /// </param>
+        public Rest(string baseUrl)
+        {
+            this.baseUrl = baseUrl;
         }
 
         /// <summary>

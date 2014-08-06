@@ -9,7 +9,5 @@
     mc:Ignorable="d"
     Background="{ThemeResource BodyBrush}">
 
-    <Grid>
-        <Frame x:Name="ScenarioFrame" Margin="0,25,0,0" Background="Transparent"/>
-    </Grid>
+    <Frame x:Name="ScenarioFrame" Background="{ThemeResource BodyBrush}"/>
 </controls:PageBase>

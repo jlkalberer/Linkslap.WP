@@ -5,10 +5,12 @@ using System.Linq;
 namespace Linkslap.WP.Common.Validation
 {
     using System.ComponentModel;
+    using System.Runtime.CompilerServices;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Windows.Input;
 
+    using Linkslap.WP.Annotations;
     using Linkslap.WP.Communication.Util;
 
     /// <summary>
@@ -271,7 +273,8 @@ namespace Linkslap.WP.Common.Validation
         /// Called when the specified property is changed.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        public virtual void OnPropertyChanged(string propertyName)
+        [NotifyPropertyChangedInvocator]
+        public virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
             var handler = this.PropertyChanged;
             if (handler != null)

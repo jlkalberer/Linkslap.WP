@@ -34,5 +34,7 @@
         Task Register(RegisterModel user);
 
         void Logout();
+
+        Task<bool> ResetPassword(string email);
     }
 }

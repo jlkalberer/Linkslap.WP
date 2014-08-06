@@ -69,5 +69,10 @@
         {
             this.CommandBar.Visibility = Visibility.Collapsed;
         }
+
+        private void ForgotPasswordClick(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<PasswordReset>();
+        }
     }
 }

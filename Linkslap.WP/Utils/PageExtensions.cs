@@ -59,6 +59,26 @@
                 });
         }
 
+        public static void NavigateReplace<TType>(this Page page, object parameters = null)
+        {
+            CrossThread(
+                page,
+                () =>
+                {
+                    var type = typeof(TType);
+                    if (parameters == null)
+                    {
+                        page.Frame.Navigate(type);
+                    }
+                    else
+                    {
+                        page.Frame.Navigate(type, parameters);
+                    }
+
+                    page.Frame.BackStack.RemoveAt(0);
+                });
+        }
+
         /// <summary>
         /// The cross thread.
         /// </summary>

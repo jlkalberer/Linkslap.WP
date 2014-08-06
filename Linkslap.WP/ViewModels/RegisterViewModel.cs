@@ -28,9 +28,9 @@
         private readonly INavigationService navigationService;
 
         /// <summary>
-        /// The waiting for response.
+        /// The execute button enabled.
         /// </summary>
-        private bool waitingForResponse;
+        private bool executeButtonEnabled;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterViewModel"/> class.
@@ -53,10 +53,7 @@
         {
             this.accountStore = accountStore;
             this.navigationService = navigationService;
-
-            this.Email = "a@b.com";
-            this.UserName = "admin";
-            this.Password = this.ConfirmPassword = "password";
+            this.ExecuteButtonEnabled = true;
         }
 
         /// <summary>
@@ -78,6 +75,23 @@
         /// Gets or sets ConfirmPassword.
         /// </summary>
         public string ConfirmPassword { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether execute button enabled.
+        /// </summary>
+        public bool ExecuteButtonEnabled
+        {
+            get
+            {
+                return this.executeButtonEnabled;
+            }
+
+            set
+            {
+                this.executeButtonEnabled = value;
+                this.OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Validates this instance.
@@ -116,7 +130,7 @@
         /// </returns>
         public override bool CanExecute(object parameter)
         {
-            return !this.waitingForResponse;
+            return this.ExecuteButtonEnabled;
         }
 
         /// <summary>
@@ -127,23 +141,24 @@
         /// </param>
         public override async void Execute(object parameter)
         {
+            this.ExecuteButtonEnabled = false;
             base.Execute(parameter);
 
             if (this.HasErrors)
             {
+                this.ExecuteButtonEnabled = true;
                 return;
             }
 
             var model = Mapper.Map<RegisterViewModel, RegisterModel>(this);
 
-            this.waitingForResponse = true;
             var result = this.accountStore.Register(model);
 
             await result.ContinueWith(this.ValidateResponse);
 
             if (result.IsFaulted)
             {
-                this.waitingForResponse = false;
+                this.ExecuteButtonEnabled = true;
                 this.OnPropertyChanged(string.Empty);
                 return;
             }

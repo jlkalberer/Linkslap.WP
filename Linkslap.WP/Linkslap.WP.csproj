@@ -96,6 +96,12 @@
     <Compile Include="Common\Validation\ValidationMessageCollectionToStringCollectionConverter.cs" />
     <Compile Include="Common\Validation\ValidationWarningMessage.cs" />
     <Compile Include="Common\Validation\VisibilityConverter.cs" />
+    <Compile Include="Controls\AnimationImage.xaml.cs">
+      <DependentUpon>AnimationImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ErrorCollection.xaml.cs">
+      <DependentUpon>ErrorCollection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ErrorText.xaml.cs">
       <DependentUpon>ErrorText.xaml</DependentUpon>
     </Compile>
@@ -103,6 +109,7 @@
       <DependentUpon>LinkLongList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PageBase.cs" />
+    <Compile Include="ViewModels\FindGifViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -112,15 +119,21 @@
     <Compile Include="Utils\MappingSetup.cs" />
     <Compile Include="Utils\NavigationService.cs" />
     <Compile Include="Utils\PageExtensions.cs" />
+    <Compile Include="ViewModels\GifViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\NewStreamViewModel.cs" />
+    <Compile Include="ViewModels\PasswordResetViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\ShareLinkViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\ViewLinksViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewStreamViewModel.cs" />
+    <Compile Include="Views\FindGifs.xaml.cs">
+      <DependentUpon>FindGifs.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewStream.xaml.cs">
       <DependentUpon>NewStream.xaml</DependentUpon>
     </Compile>
@@ -129,6 +142,9 @@
     </Compile>
     <Compile Include="Views\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasswordReset.xaml.cs">
+      <DependentUpon>PasswordReset.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
@@ -152,7 +168,11 @@
     <Content Include="Assets\badge-58x58.png" />
     <Content Include="Assets\BadgeLogo.scale-240.png" />
     <Content Include="Assets\Images\background.png" />
+    <Content Include="Assets\Images\dog-slap.gif" />
+    <Content Include="Assets\Images\dog-slap.png" />
+    <Content Include="Assets\Images\dog-slap2.png" />
     <Content Include="Assets\Images\logo-partial.png" />
+    <Content Include="Assets\Images\logo-text.png" />
     <Content Include="Assets\Images\logo.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
@@ -179,6 +199,14 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
+    <Page Include="Controls\AnimationImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ErrorCollection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ErrorText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,6 +219,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\FindGifs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NewStream.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -200,6 +232,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PasswordReset.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,9 +265,33 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.2.1\lib\wpa81\AutoMapper.WPA81.dll</HintPath>
     </Reference>
+    <Reference Include="ImageTools">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Filtering">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.Filtering.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Bmp">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Bmp.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Gif">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Gif.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Jpeg">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Jpeg.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Png">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Png.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.PCL">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.PCL.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PhoneCodeContractsAssemblies">
+      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\PhoneCodeContractsAssemblies.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

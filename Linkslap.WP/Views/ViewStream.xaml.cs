@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Windows.UI.Xaml;
+
     using AutoMapper;
 
     using Linkslap.WP.Communication;
@@ -65,6 +67,7 @@
             }
 
             this.viewModel.StreamName = subscription.Name;
+            this.viewModel.StreamKey = subscription.StreamKey;
             this.viewModel.Links.AddRange(subscription.Links);
 
             var task = this.streamStore.GetStreamLinks(subscription.StreamKey);
@@ -92,6 +95,19 @@
         private void LinkLongList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.Navigate<View>(new ViewLinksViewModel(e.AddedItems[0] as LinkViewModel, this.viewModel.Links));
+        }
+
+        private void ReplyClick(object sender, RoutedEventArgs e)
+        {
+            this.NavigateReplace<FindGifs>(this.viewModel.StreamKey);
+        }
+        private void ShareClick(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+        private void SettingsClick(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
