@@ -27,7 +27,7 @@
         /// </summary>
         private static async void PushNotifications()
         {
-            const string PushNotificationTaskName = "PushNotifications";
+            const string PushNotificationTaskName = "ToastNotifications";
 
             if (GetRegisteredTask(PushNotificationTaskName) != null)
             {

@@ -41,7 +41,16 @@
 
             <StackPanel Grid.Row="1">
                 <TextBlock Text="Comment" />
-                <TextBox Text="{Binding Path=Comment, Mode=TwoWay}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Text="{Binding Path=Comment, Mode=TwoWay}" />
+                    <HyperlinkButton Command="{Binding RemoveCommentCommand}" Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="8,6,12,6" Background="{ThemeResource ButtonGradientBrush}">
+                        <SymbolIcon Symbol="Cancel" />
+                    </HyperlinkButton>
+                </Grid>
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
                         <ListView SelectionChanged="StreamSelectionChanged" IsEnabled="{Binding CanSubmit}" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>

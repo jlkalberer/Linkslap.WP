@@ -1,18 +1,13 @@
 ﻿namespace Linkslap.WP.Views
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-
-    using AutoMapper;
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
-    using Linkslap.WP.Communication.Util;
     using Linkslap.WP.ViewModels;
 
     using Windows.ApplicationModel.DataTransfer.ShareTarget;
-    using Windows.UI.Core;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
 
@@ -86,7 +81,7 @@
                 var model = e.Parameter as GifViewModel;
 
                 this.viewModel.Uri = new Uri(model.Gif, UriKind.RelativeOrAbsolute);
-                this.viewModel.Comment = model.Gif;
+                // this.viewModel.Comment = model.Gif;
             }
 
             base.OnNavigatedTo(e);

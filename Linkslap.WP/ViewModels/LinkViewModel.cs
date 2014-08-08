@@ -43,6 +43,11 @@
         public string StreamName { get; set; }
 
         /// <summary>
+        /// Gets or sets the stream key.
+        /// </summary>
+        public string StreamKey { get; set; }
+
+        /// <summary>
         /// Gets the info.
         /// </summary>
         public string Info

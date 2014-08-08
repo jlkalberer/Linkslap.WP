@@ -17,9 +17,9 @@
     public class SubscriptionStore : ISubscriptionStore
     {
         /// <summary>
-        /// The account repository.
+        /// The subscriptions.
         /// </summary>
-        private readonly IAccountStore accountStore;
+        private static ObservableCollection<Subscription> subscriptions;
 
         /// <summary>
         /// The rest.
@@ -27,27 +27,10 @@
         private readonly Rest rest;
 
         /// <summary>
-        /// The subscriptions.
-        /// </summary>
-        private ObservableCollection<Subscription> subscriptions;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionStore"/> class.
         /// </summary>
         public SubscriptionStore()
-            : this(new AccountStore())
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubscriptionStore"/> class.
-        /// </summary>
-        /// <param name="accountStore">
-        /// The account repository.
-        /// </param>
-        public SubscriptionStore(IAccountStore accountStore)
-        {
-            this.accountStore = accountStore;
             this.rest = new Rest();
         }
 
@@ -64,24 +47,25 @@
         /// </returns>
         public ObservableCollection<Subscription> GetSubsriptions()
         {
-            if (this.subscriptions != null)
+            // If the channel is null then push notifications are probably turned off...
+            if (subscriptions != null)
             {
-                return this.subscriptions;
+                return subscriptions;
             }
 
-            this.subscriptions = Storage.Load<ObservableCollection<Subscription>>("subscriptions");
+            subscriptions = Storage.Load<ObservableCollection<Subscription>>("subscriptions");
 
-            if (this.subscriptions == null)
+            if (subscriptions == null)
             {
-                this.subscriptions = new ObservableCollection<Subscription>();
-                Storage.Save("subscriptions", this.subscriptions);
+                subscriptions = new ObservableCollection<Subscription>();
+                Storage.Save("subscriptions", subscriptions);
             }
 
             this.rest.Get<List<Subscription>>(
                 "api/subscription",
                 values =>
                     {
-                        var subs = this.subscriptions;
+                        var subs = subscriptions;
                         if (values == null || !values.Any())
                         {
                             subs.Clear();
@@ -95,7 +79,7 @@
                         Storage.Save("subscriptions", subs);
                     });
 
-            return this.subscriptions;
+            return subscriptions;
         }
 
         /// <summary>
@@ -122,7 +106,7 @@
             this.rest.Post<Subscription>("api/subscription/join", new { streamKey }, task.SetResult);
 
             var ns = new NotificationStore();
-            ns.RegisterToUserStreams();
+            ns.Register();
 
             return task.Task;
         }
@@ -145,7 +129,7 @@
             Storage.Save("subscriptions", subscriptions);
 
             var ns = new NotificationStore();
-            ns.RegisterToUserStreams();
+            ns.Register();
 
             if (SubscriptionsChanged != null)
             {
@@ -159,13 +143,15 @@
         /// <param name="subscriptionId">
         /// The subscription id.
         /// </param>
-        public void Delete(int subscriptionId)
+        public void Delete(string streamKey)
         {
-            var uri = string.Format("api/subscription{0}", subscriptionId);
+            this.Remove(streamKey);
+
+            var uri = string.Format("api/subscription?streamKey={0}", streamKey);
             this.rest.Delete<Subscription>(uri);
 
             var ns = new NotificationStore();
-            ns.RegisterToUserStreams();
+            ns.Register();
 
             if (SubscriptionsChanged != null)
             {
@@ -185,6 +171,24 @@
         public Subscription GetSubscription(int id)
         {
             return Storage.Load<ObservableCollection<Subscription>>("subscriptions").FirstOrDefault(s => s.Id == id);
+        }
+
+        public Subscription GetSubscription(string streamKey)
+        {
+            return this.GetSubsriptions().FirstOrDefault(s => s.Stream.Key == streamKey);
+        }
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="streamKey">
+        /// The stream key.
+        /// </param>
+        public void Remove(string streamKey)
+        {
+            var subs = this.GetSubsriptions();
+            subs.Remove(s => s.Stream.Key == streamKey);
+            Storage.Save("subscriptions", subs);
         }
     }
 }

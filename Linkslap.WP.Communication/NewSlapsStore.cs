@@ -21,6 +21,8 @@
         /// </summary>
         private readonly ISubscriptionStore subscriptionStore;
 
+        private readonly ISettingsStore settingsStore;
+
         /// <summary>
         /// The key.
         /// </summary>
@@ -30,7 +32,7 @@
         /// Initializes a new instance of the <see cref="NewSlapsStore"/> class.
         /// </summary>
         public NewSlapsStore()
-            : this(new SubscriptionStore())
+            : this(new SubscriptionStore(), new SettingsStore())
         {
         }
 
@@ -40,9 +42,13 @@
         /// <param name="subscriptionStore">
         /// The subscription Store.
         /// </param>
-        public NewSlapsStore(ISubscriptionStore subscriptionStore)
+        /// <param name="settingsStore">
+        /// The settings Store.
+        /// </param>
+        public NewSlapsStore(ISubscriptionStore subscriptionStore, ISettingsStore settingsStore)
         {
             this.subscriptionStore = subscriptionStore;
+            this.settingsStore = settingsStore;
         }
 
         /// <summary>
@@ -69,6 +75,16 @@
         /// </param>
         public void AddLink(Link link)
         {
+            if (!this.settingsStore.ShowInNewLinks(link.StreamKey))
+            {
+                if (NewSlapsChanged != null)
+                {
+                    NewSlapsChanged(this, link);
+                }
+
+                return;
+            }
+
             var links = this.GetLinks();
 
             if (links.Any(l => l.Id == link.Id))

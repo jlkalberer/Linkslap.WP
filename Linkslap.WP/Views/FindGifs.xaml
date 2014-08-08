@@ -68,4 +68,15 @@
             </SemanticZoom>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Home" Click="GoHome" Icon="Home" />
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Settings" Icon="Setting" Click="Settings"/>
+                <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </controls:PageBase>

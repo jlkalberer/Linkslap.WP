@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net.Http;
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading.Tasks;
@@ -80,6 +81,7 @@
                 {
                     if (this.IsEnabled)
                     {
+                        ProgressRing.Visibility = Visibility.Visible;
                         await this.LoadImage();
                     }
                     else
@@ -99,11 +101,15 @@
         {
             if (String.IsNullOrEmpty(ImageUrl))
             {
+                this.ProgressRing.Visibility = Visibility.Collapsed;
+                this.ErrorIcon.Visibility = Visibility.Visible;
+
                 return;
             }
 
             try
             {
+                var speeds = new List<TimeSpan>();
                 // Get the file e.g. "/Assets/MyAnimation.gif"
                 var storageFile =
                     await StorageFile.GetFileFromApplicationUriAsync(new Uri(String.Format("ms-appx://{0}", ImageUrl)));
@@ -122,6 +128,16 @@
                     for (uint frameIndex = 0; frameIndex < FrameCount; frameIndex++)
                     {
                         var frame = await decoder.GetFrameAsync(frameIndex);
+                        var delayPropertyDictionary = await frame.BitmapProperties.GetPropertiesAsync(new List<string> { "/grctlext/Delay" });
+
+                        if (delayPropertyDictionary.ContainsKey("Delay"))
+                        {
+                            speeds.Add(TimeSpan.FromMilliseconds(double.Parse(delayPropertyDictionary["Delay"].Value.ToString()) * 10));
+                        }
+                        else
+                        {
+                            speeds.Add(TimeSpan.FromMilliseconds(100));
+                        }
 
                         var writeableBitmap = new WriteableBitmap(
                             (int)decoder.OrientedPixelWidth,
@@ -162,7 +178,7 @@
                 }
 
                 //  Fill out the story board for the animation magic
-                BuildStoryBoard();
+                BuildStoryBoard(speeds);
 
                 //  Start the animation if needed and fire the event
                 if (PlayOnLoad)
@@ -177,10 +193,10 @@
             }
             catch (Exception exception)
             {
-                //  Yeah, I know this is kinda' "cowboyish" - but hey, I don't want it to fail in the designer!
                 if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
                 {
-                    throw;
+                    this.ProgressRing.Visibility = Visibility.Collapsed;
+                    this.ErrorIcon.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -189,17 +205,23 @@
         {
             if (string.IsNullOrEmpty(ImageUrl) || !ImageUrl.ToLower().EndsWith(".gif"))
             {
+                this.ProgressRing.Visibility = Visibility.Collapsed;
+                this.ErrorIcon.Visibility = Visibility.Visible;
+
                 return;
             }
 
             try
             {
+                var speeds = new List<TimeSpan>();
                 using (var webClient = new HttpClient())
                 {
                     using (var response = await webClient.GetAsync(ImageUrl))
                     {
                         if (!response.IsSuccessStatusCode)
                         {
+                            this.ProgressRing.Visibility = Visibility.Collapsed;
+                            this.ErrorIcon.Visibility = Visibility.Visible;
                             return;
                         }
 
@@ -217,15 +239,28 @@
                             bitmapFrames.Clear();
 
                             byte[] lastFrame = null;
+                            var totalWidth = 0;
 
                             // Extract each frame and create a WriteableBitmap for each of these (store them in an internal list)
                             for (uint frameIndex = 0; frameIndex < FrameCount; frameIndex++)
                             {
                                 var frame = await imageDecoder.GetFrameAsync(frameIndex);
+                                var propertyDictionary = await frame.BitmapProperties.GetPropertiesAsync(new List<string> { "/imgdesc/Width", "/imgdesc/Height", "/imgdesc/Left", "/imgdesc/Top", "/grctlext/Delay" });
+                                var test = await frame.BitmapProperties.GetPropertiesAsync(new List<string> { "/grctlext" });
+                                var test2 = await (test["/grctlext"].Value as BitmapPropertiesView).GetPropertiesAsync(new List<string>());
+                                var list = test2.ToList();
+
+                                speeds.Add(TimeSpan.FromMilliseconds(double.Parse(propertyDictionary["/grctlext/Delay"].Value.ToString()) * 10));
+
+                                var top = int.Parse(propertyDictionary["/imgdesc/Top"].Value.ToString());
+                                var left = int.Parse(propertyDictionary["/imgdesc/Left"].Value.ToString());
+                                var width = int.Parse(propertyDictionary["/imgdesc/Width"].Value.ToString());
+                                var height = int.Parse(propertyDictionary["/imgdesc/Height"].Value.ToString());
+
                                 var writeableBitmap = new WriteableBitmap(
                                     (int)imageDecoder.OrientedPixelWidth,
                                     (int)imageDecoder.OrientedPixelHeight);
-
+                                
                                 // Extract the pixel data and fill the WriteableBitmap with them
                                 var bitmapTransform = new BitmapTransform();
 
@@ -240,41 +275,56 @@
 
                                 var pixels = pixelDataProvider.DetachPixelData();
 
-                                if (lastFrame != null && lastFrame.Length == pixels.Length)
+                                if (lastFrame != null)
                                 {
-                                    for (var i = 0; i < pixels.Length; i += 4)
+                                    for (var j = 0; j < height; j++)
                                     {
-                                        if (pixels[i + 3] != 0)
+                                        for (var i = 0; i < width; i++)
                                         {
-                                            continue;
-                                        }
+                                            var offset = (i + (j * width)) * 4;
+                                            if (pixels[offset + 3] == 0)
+                                            {
+                                                continue;
+                                            }
 
-                                        pixels[i] = lastFrame[i];
-                                        pixels[i + 1] = lastFrame[i + 1];
-                                        pixels[i + 2] = lastFrame[i + 2];
-                                        pixels[i + 3] = lastFrame[i + 3];
+                                            var overallOffset = (((top + j) * totalWidth) + i + left) * 4;
+
+                                            lastFrame[overallOffset] = pixels[offset];
+                                            lastFrame[overallOffset + 1] = pixels[offset + 1];
+                                            lastFrame[overallOffset + 2] = pixels[offset + 2];
+                                            lastFrame[overallOffset + 3] = pixels[offset + 3];
+                                        }
                                     }
                                 }
 
-                                if (lastFrame == null || lastFrame.Length == pixels.Length)
+                                if (lastFrame == null)
                                 {
                                     lastFrame = pixels;
-
-                                    using (var bitmapStream = writeableBitmap.PixelBuffer.AsStream())
-                                    {
-                                        bitmapStream.Write(pixels, 0, pixels.Length);
-                                    }
-
-                                    // Finally we have a frame (WriteableBitmap) that can internally be stored.
-                                    bitmapFrames.Add(writeableBitmap);
+                                    totalWidth = int.Parse(propertyDictionary["/imgdesc/Width"].Value.ToString());
                                 }
+
+                                using (var bitmapStream = writeableBitmap.PixelBuffer.AsStream())
+                                {
+                                    bitmapStream.Write(lastFrame, 0, lastFrame.Length);
+                                }
+
+                                // Finally we have a frame (WriteableBitmap) that can internally be stored.
+                                bitmapFrames.Add(writeableBitmap);
                             }
                         }
                     }
                 }
 
+                for (var i = 0; i < speeds.Count; i += 1)
+                {
+                    if (speeds[i] == TimeSpan.Zero)
+                    {
+                        speeds[i] = speeds[0];
+                    }
+                }
+
                 //  Fill out the story board for the animation magic
-                BuildStoryBoard();
+                BuildStoryBoard(speeds);
 
                 //  Start the animation if needed and fire the event
                 if (PlayOnLoad)
@@ -289,11 +339,14 @@
             }
             catch (Exception ex)
             {
-                var v = 0;
+                this.ProgressRing.Visibility = Visibility.Collapsed;
+                this.ErrorIcon.Visibility = Visibility.Visible;
             }
+
+            ProgressRing.Visibility = Visibility.Collapsed;
         }
 
-        private void BuildStoryBoard()
+        private void BuildStoryBoard(List<TimeSpan> speeds)
         {
             //  Clear the story board, if it has previously been filled
             if (storyboard.Children.Count > 0)
@@ -306,7 +359,6 @@
             anim.BeginTime = TimeSpan.FromSeconds(0);
 
             var ts = new TimeSpan();
-            var speed = TimeSpan.FromMilliseconds(100); // Standard GIF framerate 10 fps?
 
             // Create each DiscreteObjectKeyFrame and advance the KeyTime by 100 ms (=10 fps) and add it to 
             // the storyboard.
@@ -317,7 +369,7 @@
                 keyFrame.KeyTime = KeyTime.FromTimeSpan(ts);
                 keyFrame.Value = this.bitmapFrames[frameIndex];
 
-                ts = ts.Add(speed);
+                ts = ts.Add(speeds[frameIndex]);
                 anim.KeyFrames.Add(keyFrame);
             }
 

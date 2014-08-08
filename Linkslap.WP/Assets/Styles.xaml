@@ -57,6 +57,10 @@
         <Setter Property="BorderBrush" Value="#cccccc" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
+    <Style TargetType="CheckBox">
+        <Setter Property="Foreground" Value="#555555"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
     <Style TargetType="HyperlinkButton">
         <Setter Property="Foreground" Value="#555555" />
         <Setter Property="FontSize" Value="28"></Setter>

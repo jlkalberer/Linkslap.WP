@@ -3,21 +3,27 @@
     using System;
     using System.Linq;
 
-    using Windows.ApplicationModel.Background;
-    using Windows.Data.Xml.Dom;
-    using Windows.Networking.PushNotifications;
-    using Windows.UI.Notifications;
-
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Models;
 
     using Newtonsoft.Json;
+
+    using Windows.ApplicationModel.Background;
+    using Windows.Data.Xml.Dom;
+    using Windows.Networking.PushNotifications;
+    using Windows.UI.Notifications;
 
     /// <summary>
     /// The push notification task.
     /// </summary>
     public sealed class PushNotificationTask : IBackgroundTask
     {
+        /// <summary>
+        /// The run.
+        /// </summary>
+        /// <param name="taskInstance">
+        /// The task instance.
+        /// </param>
         public void Run(IBackgroundTaskInstance taskInstance)
         {           
             // Store the content received from the notification so it can be retrieved from the UI.
@@ -32,21 +38,47 @@
             this.Process(rawNotification.Content, true);
         }
 
+        /// <summary>
+        /// The process.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <param name="showNotifications">
+        /// The show notifications.
+        /// </param>
         public void Process(string content, bool showNotifications)
         {
             dynamic jsonObject = JsonConvert.DeserializeObject(content);
-
+            
             if (jsonObject.ObjectType == "submittedlink")
             {
-                this.SendLinkNotification(content, showNotifications);
+                SendLinkNotification(content, showNotifications);
             }
             else if (jsonObject.ObjectType == "subscription")
             {
                 this.AddSubscription(content);
             }
+            else if (jsonObject.streamKey != null)
+            {
+                var store = new SubscriptionStore();
+                store.Remove((string)jsonObject.streamKey);
+            }
         }
 
-        private bool SendLinkNotification(string content, bool showNotifications)
+        /// <summary>
+        /// The send link notification.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <param name="showNotifications">
+        /// The show notifications.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private static bool SendLinkNotification(string content, bool showNotifications)
         {
             Link link;
             try
@@ -72,6 +104,13 @@
                 return true;
             }
 
+
+            var settings = new SettingsStore();
+            if (!settings.ShowPushNotification(link.StreamKey))
+            {
+                return true;
+            }
+
             var notification = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
             var toastElement = ((XmlElement)notification.SelectSingleNode("/toast"));
             toastElement.SetAttribute("launch", link.Id.ToString());
@@ -89,6 +128,15 @@
             return true;
         }
 
+        /// <summary>
+        /// The add subscription.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool AddSubscription(string content)
         {
             Subscription subscription;

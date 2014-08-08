@@ -33,11 +33,9 @@ namespace Linkslap.WP.Communication.Interfaces
         /// <summary>
         /// The delete.
         /// </summary>
-        /// <param name="subscriptionId">
-        /// The subscription id.
-        /// </param>
-        void Delete(int subscriptionId);
+        void Delete(string streamKey);
 
         Subscription GetSubscription(int id);
+        Subscription GetSubscription(string streamKey);
     }
 }

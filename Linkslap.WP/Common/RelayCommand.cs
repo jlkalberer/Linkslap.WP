@@ -13,7 +13,9 @@
     public class RelayCommand : ICommand
     {
         private readonly Action _execute;
+        private readonly Action<object> _executeObject;
         private readonly Func<bool> _canExecute;
+
 
         /// <summary>
         /// Raised when RaiseCanExecuteChanged is called.
@@ -29,6 +31,11 @@
         {
         }
 
+        public RelayCommand(Action<object> execute)
+            : this(execute, null)
+        {
+        }
+
         /// <summary>
         /// Creates a new command.
         /// </summary>
@@ -39,6 +46,14 @@
             if (execute == null)
                 throw new ArgumentNullException("execute");
             _execute = execute;
+            _canExecute = canExecute;
+        }
+
+        public RelayCommand(Action<object> execute, Func<bool> canExecute)
+        {
+            if (execute == null)
+                throw new ArgumentNullException("execute");
+            _executeObject = execute;
             _canExecute = canExecute;
         }
 
@@ -62,6 +77,12 @@
         /// </param>
         public void Execute(object parameter)
         {
+            if (_executeObject != null)
+            {
+                _executeObject(parameter);
+                return;
+            }
+
             _execute();
         }
 

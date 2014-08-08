@@ -2,11 +2,18 @@
 {
     using System.Collections.ObjectModel;
 
+    using Windows.UI.Xaml;
+
     /// <summary>
     /// The view link view model.
     /// </summary>
     public class ViewLinksViewModel : ViewModelBase
     {
+        /// <summary>
+        /// The browsing.
+        /// </summary>
+        private Visibility uiVisibility;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewLinksViewModel"/> class.
         /// </summary>
@@ -39,6 +46,25 @@
         {
             this.Links = links;
             this.SelectedItem = linkViewModel;
+
+            this.uiVisibility = Visibility.Visible;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether browsing.
+        /// </summary>
+        public Visibility UiVisibility
+        {
+            get
+            {
+                return this.uiVisibility;
+            }
+
+            set
+            {
+                this.uiVisibility = value;
+                this.OnPropertyChanged();
+            }
         }
 
         /// <summary>

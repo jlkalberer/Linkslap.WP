@@ -77,6 +77,7 @@
             {
                 var protocalArgs = (ProtocolActivatedEventArgs)args;
                 var url = protocalArgs.Uri;
+
                 var queryString = ParseQueryString(url.Query);
 
                 if (queryString.ContainsKey("streamKey"))

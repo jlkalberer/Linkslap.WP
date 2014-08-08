@@ -28,6 +28,9 @@
             return (string)container.Values["InstallationId"];
         }
 
+        /// <summary>
+        /// The clear all.
+        /// </summary>
         public static void ClearAll()
         {
             var store = ApplicationData.Current.LocalSettings.Values;

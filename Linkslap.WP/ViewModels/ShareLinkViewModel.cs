@@ -6,6 +6,7 @@
 
     using AutoMapper;
 
+    using Linkslap.WP.Common;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Util;
@@ -20,6 +21,9 @@
         /// </summary>
         private readonly IStreamStore streamStore;
 
+        /// <summary>
+        /// The comment.
+        /// </summary>
         private string comment;
 
         /// <summary>
@@ -28,7 +32,18 @@
         public ShareLinkViewModel()
             : this(new SubscriptionStore(), new StreamStore())
         {
+            this.RemoveCommentCommand = new RelayCommand(
+                () =>
+                    {
+                        this.Comment = null;
+                    },
+                () => !string.IsNullOrEmpty(this.Comment));
         }
+
+        /// <summary>
+        /// Gets or sets the remove comment command.
+        /// </summary>
+        public RelayCommand RemoveCommentCommand { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareLinkViewModel"/> class.
@@ -76,10 +91,12 @@
             {
                 return this.comment;
             }
+
             set
             {
                 this.comment = value;
 
+                this.OnPropertyChanged();
                 this.OnPropertyChanged("CanSubmit");
             }
         }

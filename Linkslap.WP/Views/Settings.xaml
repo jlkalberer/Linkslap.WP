@@ -1,0 +1,84 @@
+﻿<controls:PageBase
+    x:Class="Linkslap.WP.Views.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:Linkslap.WP.ViewModels"
+    xmlns:controls="using:Linkslap.WP.Controls"
+    mc:Ignorable="d"
+    Name="Control"
+    Background="{ThemeResource BackgroundBrush}">
+    <Page.DataContext>
+        <viewModels:SettingsViewModel/>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource BodyBrush}" DataContext="{Binding}" Name="Grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TitlePanel -->
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Style="{ThemeResource MainContent}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Settings" Style="{ThemeResource HeaderTextStyle}" />
+            <ScrollViewer Grid.Row="1">
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding EnableAllNotifications, Mode=TwoWay}">Enable All Toasts</CheckBox>
+                    <ListView ItemsSource="{Binding SubscriptionSettings}" SelectionMode="None">
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Toasts" TextAlignment="Center" VerticalAlignment="Bottom"/>
+                                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Text="New Links" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Bottom"/>
+                                    <TextBlock Grid.Column="2" TextWrapping="Wrap" Text="Stream Name" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding ToastNotifications, Mode=TwoWay}" IsEnabled="{Binding DataContext.EnableAllNotifications, ElementName=Control}" Margin="0,-15" Background="White" />
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding ShowNewLinks, Mode=TwoWay}" Margin="0,-15" Background="White" />
+                                    <TextBlock Grid.Column="2" Text="{Binding StreamName}" Style="{ThemeResource ListItemTextStyle}"/>
+                                    <HyperlinkButton Grid.Column="3" DataContext="{Binding}" Command="{Binding DataContext.DeleteSubscription, ElementName=Control}" CommandParameter="{Binding}" Foreground="White" HorizontalContentAlignment="Center" Padding="0,0,15,0">
+                                        <SymbolIcon Symbol="Cancel"/>
+                                    </HyperlinkButton>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    
+                    <HyperlinkButton Click="OpenUrl" Margin="0, 20" HorizontalAlignment="Right">
+                        <TextBlock>
+                            <Underline>
+                                <Run>Privacy Policy</Run>
+                            </Underline>
+                        </TextBlock>
+                    </HyperlinkButton>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</controls:PageBase>

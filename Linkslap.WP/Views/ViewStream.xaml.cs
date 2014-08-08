@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Windows.ApplicationModel.DataTransfer;
+    using Windows.UI.Notifications;
     using Windows.UI.Xaml;
 
     using AutoMapper;
@@ -31,6 +32,9 @@
         /// </summary>
         private readonly IStreamStore streamStore;
 
+        /// <summary>
+        /// The account store.
+        /// </summary>
         private readonly AccountStore accountStore;
 
         /// <summary>
@@ -38,8 +42,14 @@
         /// </summary>
         private readonly ViewStreamViewModel viewModel;
 
-        private DataTransferManager dataTransferManager;
+        /// <summary>
+        /// The data transfer manager.
+        /// </summary>
+        private readonly DataTransferManager dataTransferManager;
 
+        /// <summary>
+        /// The account.
+        /// </summary>
         private Task<Account> account;
 
         /// <summary>
@@ -67,7 +77,6 @@
             this.viewModel = this.DataContext as ViewStreamViewModel;
             this.dataTransferManager = DataTransferManager.GetForCurrentView();
             this.dataTransferManager.DataRequested += this.ShareStream;
-
         }
 
         /// <summary>
@@ -194,6 +203,20 @@
         }
 
         /// <summary>
+        /// The go home.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void GoHome(object sender, RoutedEventArgs e)
+        {
+            this.NavigateRoot<Home>();
+        }
+
+        /// <summary>
         /// The settings click.
         /// </summary>
         /// <param name="sender">
@@ -202,11 +225,26 @@
         /// <param name="e">
         /// The e.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         private void SettingsClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            this.Navigate<Settings>();
+        }
+
+        /// <summary>
+        /// The logout click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void LogoutClick(object sender, RoutedEventArgs e)
+        {
+            ToastNotificationManager.History.Clear();
+            this.accountStore.Logout();
+
+            this.NavigateRoot<Login>();
         }
     }
 }

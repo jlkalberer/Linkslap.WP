@@ -1,6 +1,9 @@
 ﻿namespace Linkslap.WP.Communication.Notifications
 {
     using System;
+    using System.Threading.Tasks;
+
+    using Windows.Foundation;
 
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
@@ -13,47 +16,50 @@
     public class NotificationStore
     {
         /// <summary>
+        /// Gets the channel.
+        /// </summary>
+        private static PushNotificationChannel channel;
+
+        /// <summary>
+        /// The push notification received.
+        /// </summary>
+        public static event TypedEventHandler<PushNotificationChannel, PushNotificationReceivedEventArgs> PushNotificationReceived;
+
+        private static void OnPushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
+        {
+            TypedEventHandler<PushNotificationChannel, PushNotificationReceivedEventArgs> handler =
+                PushNotificationReceived;
+            if (handler != null)
+            {
+                handler(sender, args);
+            }
+        }
+
+        /// <summary>
         /// The register.
         /// </summary>
         public async void Register()
         {
-            try
-            {
-                if (Channel == null)
-                {
-                    Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                }
-            }
-            catch (Exception)
-            {
-                return;
-            }
+            await TryRegisterChannel();
 
-            this.RegisterToUserStreams();
-        }
-
-        /// <summary>
-        /// The register to user streams.
-        /// </summary>
-        public void RegisterToUserStreams()
-        {
-            var registration = new PushRegistration { InstallationId = Storage.GetInstallationId(), ChannelUri = Channel.Uri };
+            var registration = new PushRegistration { InstallationId = Storage.GetInstallationId(), ChannelUri = channel.Uri };
 
             var rest = new Rest();
             rest.Post<dynamic>("api/push/register", registration);
         }
+
 
         /// <summary>
         /// The un register.
         /// </summary>
         public async void UnRegister()
         {
-            Channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            await TryRegisterChannel();
 
             var registration = new PushRegistration
                                    {
                                        InstallationId = Storage.GetInstallationId(),
-                                       ChannelUri = Channel.Uri
+                                       ChannelUri = channel.Uri
                                    };
 
             var rest = new Rest();
@@ -61,8 +67,27 @@
         }
 
         /// <summary>
-        /// Gets the channel.
+        /// The try register channel.
         /// </summary>
-        public static PushNotificationChannel Channel { get; private set; }
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private static async Task<bool> TryRegisterChannel()
+        {
+            try
+            {
+                if (channel == null)
+                {
+                    channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                    channel.PushNotificationReceived += OnPushNotificationReceived;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

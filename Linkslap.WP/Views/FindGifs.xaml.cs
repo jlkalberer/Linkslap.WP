@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using System.Linq;
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace Linkslap.WP.Views
 {
+    using Windows.UI.Notifications;
+
+    using Linkslap.WP.Communication;
+    using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
@@ -26,8 +22,30 @@ namespace Linkslap.WP.Views
     /// </summary>
     public sealed partial class FindGifs : PageBase
     {
+        /// <summary>
+        /// The account store.
+        /// </summary>
+        private readonly IAccountStore accountStore;
+
+        private string streamKey;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindGifs"/> class.
+        /// </summary>
         public FindGifs()
+            : this(new AccountStore())
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindGifs"/> class.
+        /// </summary>
+        /// <param name="accountStore">
+        /// The account store.
+        /// </param>
+        public FindGifs(IAccountStore accountStore)
+        {
+            this.accountStore = accountStore;
             this.InitializeComponent();
         }
 
@@ -38,6 +56,7 @@ namespace Linkslap.WP.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.streamKey = (string)e.Parameter;
             base.OnNavigatedTo(e);
         }
 
@@ -97,6 +116,33 @@ namespace Linkslap.WP.Views
         private void ItemHeld(object sender, HoldingRoutedEventArgs e)
         {
             this.Navigate<ShareLink>(((Image)e.OriginalSource).DataContext);
+        }
+
+        /// <summary>
+        /// The go home.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void GoHome(object sender, RoutedEventArgs e)
+        {
+            this.NavigateRoot<Home>();
+        }
+
+        private void Settings(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<SettingsFlyout>();
+        }
+
+        private void LogoutClick(object sender, RoutedEventArgs e)
+        {
+            ToastNotificationManager.History.Clear();
+            this.accountStore.Logout();
+
+            this.NavigateRoot<Login>();
         }
     }
 }

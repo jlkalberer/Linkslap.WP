@@ -168,8 +168,13 @@ namespace Linkslap.WP.Common
         /// </returns>
         public virtual bool CanGoBack()
         {
-            return this.Frame != null;
+            return this.Frame != null && !this.Disabled;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether disabled.
+        /// </summary>
+        public bool Disabled { get; set; }
 
         /// <summary>
         /// Virtual method used by the <see cref="GoForwardCommand"/> property
@@ -181,7 +186,7 @@ namespace Linkslap.WP.Common
         /// </returns>
         public virtual bool CanGoForward()
         {
-            return this.Frame != null && this.Frame.CanGoForward;
+            return this.Frame != null && this.Frame.CanGoForward && !this.Disabled;
         }
 
         /// <summary>

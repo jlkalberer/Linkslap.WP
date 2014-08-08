@@ -44,33 +44,62 @@
         /// </summary>
         private readonly ISubscriptionStore subscriptionStore;
 
+        private readonly ISettingsStore settingsStore;
+
         /// <summary>
         /// The view model.
         /// </summary>
         private readonly HomeViewModel viewModel;
 
         /// <summary>
+        /// Initializes static members of the <see cref="Home"/> class.
+        /// </summary>
+        static Home()
+        {
+            var ns = new NotificationStore();
+            ns.Register();
+
+            NotificationStore.PushNotificationReceived += (sender, args) => 
+                {
+                    if (args.RawNotification == null)
+                    {
+                        return;
+                    }
+
+                    var tasK = new PushNotificationTask();
+                    tasK.Process(args.RawNotification.Content, false);
+                };
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Home"/> class.
         /// </summary>
         public Home()
-            : this(new AccountStore(), new NewSlapsStore(), new SubscriptionStore())
+            : this(new AccountStore(), new NewSlapsStore(), new SubscriptionStore(), new SettingsStore())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Home"/> class.
         /// </summary>
+        /// <param name="accountStore">
+        /// The account Store.
+        /// </param>
         /// <param name="newSlapStore">
         /// The new Slap Store.
         /// </param>
         /// <param name="subscriptionStore">
         /// The subscription repository.
         /// </param>
-        public Home(IAccountStore accountStore, INewSlapsStore newSlapStore, ISubscriptionStore subscriptionStore)
+        /// <param name="settingsStore">
+        /// The settings Store.
+        /// </param>
+        public Home(IAccountStore accountStore, INewSlapsStore newSlapStore, ISubscriptionStore subscriptionStore, ISettingsStore settingsStore)
         {
             this.accountStore = accountStore;
             this.newSlapStore = newSlapStore;
             this.subscriptionStore = subscriptionStore;
+            this.settingsStore = settingsStore;
             this.InitializeComponent();
 
             this.viewModel = this.DataContext as HomeViewModel;
@@ -84,16 +113,6 @@
         /// </param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var ns = new NotificationStore();
-            ns.Register();
-
-            NotificationStore.Channel.PushNotificationReceived += (sender, args) => this.CrossThread(
-                () =>
-                    {
-                        var tasK = new PushNotificationTask();
-                        tasK.Process(args.RawNotification.Content, false);
-                    });
-
             this.MapNewLinks();
 
             NewSlapsStore.NewSlapsChanged += this.NewSlapsStoreOnNewSlapsChanged;
@@ -108,14 +127,15 @@
             subscriptions.CollectionChanged += (sender, args) => this.CrossThread(
                 () =>
                     {
-
                         var newItems = new List<SubscriptionViewModel>();
                         newItems = Mapper.Map(args.NewItems, newItems);
                         this.viewModel.Subscriptions.AddRange(newItems);
 
-                        var oldItems = new List<SubscriptionViewModel>();
-                        oldItems = Mapper.Map(args.NewItems, oldItems);
-                        this.viewModel.Subscriptions.RemoveRange(oldItems);
+                        if (args.OldItems != null)
+                        {
+                            args.OldItems.Cast<Subscription>()
+                                .Each(s => this.viewModel.Subscriptions.Remove(svm => svm.Id == s.Id));
+                        }
                     });
 
             this.DataContext = this.viewModel; // this.Subscriptions;
@@ -167,7 +187,7 @@
                         {
                             this.viewModel.NewLinks.RemoveRange(oldLinks);
                         }
-                        else
+                        else if (this.settingsStore.ShowInNewLinks(link.StreamKey))
                         {
                             this.viewModel.NewLinks.Insert(0, Mapper.Map<Link, LinkViewModel>(link));
                         }
@@ -258,23 +278,6 @@
             this.Navigate<View>(new ViewLinksViewModel(link, new ObservableCollection<LinkViewModel>(this.viewModel.NewLinks)));
         }
 
-        /// <summary>
-        /// The logout click.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void LogoutClick(object sender, RoutedEventArgs e)
-        {
-            ToastNotificationManager.History.Clear();
-            this.accountStore.Logout();
-
-            this.NavigateRoot<Login>();
-        }
-
         private void RemoveNewSlap(object sender, RoutedEventArgs e)
         {
             if (!(sender is HyperlinkButton))
@@ -297,6 +300,51 @@
             this.viewModel.NewLinks.Clear();
             this.newSlapStore.Clear();
             ToastNotificationManager.History.Clear();
+        }
+
+        /// <summary>
+        /// The search gif click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void SearchGifClick(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<FindGifs>();
+        }
+
+        /// <summary>
+        /// The go to settings.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void GoToSettings(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<Settings>();
+        }
+
+        /// <summary>
+        /// The logout click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void LogoutClick(object sender, RoutedEventArgs e)
+        {
+            ToastNotificationManager.History.Clear();
+            this.accountStore.Logout();
+
+            this.NavigateRoot<Login>();
         }
     }
 }

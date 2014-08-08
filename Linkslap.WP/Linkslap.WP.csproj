@@ -109,6 +109,7 @@
       <DependentUpon>LinkLongList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PageBase.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\FindGifViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -149,6 +150,9 @@
     <Compile Include="Views\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShareLink.xaml.cs">
       <DependentUpon>ShareLink.xaml</DependentUpon>
     </Compile>
@@ -174,6 +178,7 @@
     <Content Include="Assets\Images\logo-partial.png" />
     <Content Include="Assets\Images\logo-text.png" />
     <Content Include="Assets\Images\logo.png" />
+    <Content Include="Assets\Images\share-icon.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />
@@ -240,6 +245,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Register.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

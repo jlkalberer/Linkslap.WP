@@ -38,15 +38,17 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Reply" Click="ReplyClick">
+                <AppBarButton Label="Home" Icon="Home" Click="GoHome"/>
+                <AppBarButton Label="Search Gif" Click="ReplyClick" Icon="Find" />
+                <AppBarButton Label="Share" Click="ShareClick" Padding="10,2,7,7">
                     <AppBarButton.Icon>
-                        <FontIcon Glyph="&#xe269;" FontSize="30" Margin="-4, -12, 0, 0"/>
+                        <BitmapIcon UriSource="ms-appx:///Assets/Images/share-icon.png" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Label="Share" Icon="Reshare" Click="ShareClick"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Settings" Icon="Switch" Click="SettingsClick"/>
+                <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

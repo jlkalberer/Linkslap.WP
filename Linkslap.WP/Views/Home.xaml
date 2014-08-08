@@ -59,10 +59,12 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Search Gif" Click="SearchGifClick" Icon="Find" />
                 <AppBarButton Label="New Stream" Icon="Add" Click="NewStreamClick"/>
-                <AppBarButton Name="ClearAppBarButton" Label="Clear" Icon="Clear" Click="ClearNewSlapsClick"/>
+                <AppBarButton Name="ClearAppBarButton" Label="Clear" Icon="Cancel" Click="ClearNewSlapsClick"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Settings" Icon="Setting" Click="GoToSettings"/>
                 <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>

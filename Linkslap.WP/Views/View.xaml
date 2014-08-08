@@ -8,6 +8,7 @@
     xmlns:controls="using:Linkslap.WP.Controls"
     xmlns:viewModels="using:Linkslap.WP.ViewModels"
     mc:Ignorable="d"
+    Name="PageControl"
     Background="{ThemeResource BackgroundBrush}">
 
     <Page.DataContext>
@@ -23,7 +24,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+                    <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}" Visibility="{Binding DataContext.UiVisibility, ElementName=PageControl}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -35,19 +36,29 @@
                                 <TextBlock Text="{Binding Info}" Padding="15,0,10,10" Name="LinkInfo" Style="{ThemeResource ListItemInfoTextStyle}" />
                             </StackPanel>
                         </Grid>
-                        <Rectangle Height="20" Fill="#323232"></Rectangle>
+                        <Rectangle Height="20" Fill="#323232"/>
                     </StackPanel>
-                    <WebView Grid.Row="1" Source="{Binding Uri}" DOMContentLoaded="ViewLoaded" ></WebView>
-                    <Rectangle Grid.Row="1" Canvas.ZIndex="2" Fill="Transparent" Tapped="RectangleTapped"></Rectangle>
+                    <WebView Grid.Row="1" Source="{Binding Uri}" DOMContentLoaded="ViewLoaded"></WebView>
+                    <Rectangle Grid.Row="1" Canvas.ZIndex="2" Fill="Transparent" Tapped="RectangleTapped" Visibility="{Binding DataContext.UiVisibility, ElementName=PageControl}"></Rectangle>
                 </Grid>
             </DataTemplate>
         </FlipView.ItemTemplate>
     </FlipView>
-    <!--<Page.BottomAppBar>
+    <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Label="Gif Search" Icon="Zoom"/>
-            <AppBarButton Label="Previous" Icon="Back"/>
-            <AppBarButton Label="Next" Icon="Forward" />
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Home" Icon="Home" Click="GoHome"/>
+                <AppBarButton Label="Search Gif" Click="ReplyClick" Icon="Find" />
+                <AppBarButton Label="Share" Click="ShareClick" Padding="10,2,7,7">
+                    <AppBarButton.Icon>
+                        <BitmapIcon UriSource="ms-appx:///Assets/Images/share-icon.png" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Settings" Icon="Switch" Click="SettingsClick"/>
+                <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
-    </Page.BottomAppBar>-->
+    </Page.BottomAppBar>
 </controls:PageBase>
