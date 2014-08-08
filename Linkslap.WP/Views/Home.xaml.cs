@@ -10,6 +10,7 @@
     using Windows.Data.Xml.Dom;
     using Windows.Networking.PushNotifications;
     using Windows.UI.Notifications;
+    using Windows.UI.Popups;
 
     using AutoMapper;
 
@@ -115,9 +116,12 @@
         {
             this.MapNewLinks();
 
+            SubscriptionStore.NoSubscriptionsDetected += SubscriptionStoreOnNoSubscriptionsDetected;
+
             NewSlapsStore.NewSlapsChanged += this.NewSlapsStoreOnNewSlapsChanged;
 
             var subscriptions = this.subscriptionStore.GetSubsriptions();
+
 
             var mappedSubscriptions = new List<SubscriptionViewModel>();
             mappedSubscriptions = Mapper.Map(subscriptions, mappedSubscriptions);
@@ -148,6 +152,15 @@
             {
                 this.Pivot.SelectedIndex = 1;
             }
+        }
+
+        private async void SubscriptionStoreOnNoSubscriptionsDetected(object sender, EventArgs eventArgs)
+        {
+            var dialog =
+                    new MessageDialog(
+                        "Welcome to Linkslap.\r\n\r\nIt looks like you haven't subscribed to any streams yet.\r\n\r\nYou need to either create a new stream by clicking the '+' button or add a stream that was shared with you by visiting the stream page with your mobile browser.");
+
+            await dialog.ShowAsync();
         }
 
         /// <summary>
@@ -203,6 +216,7 @@
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs eventArgs)
         {
             NewSlapsStore.NewSlapsChanged -= this.NewSlapsStoreOnNewSlapsChanged;
+            SubscriptionStore.NoSubscriptionsDetected -= SubscriptionStoreOnNoSubscriptionsDetected;
 
             base.OnNavigatingFrom(eventArgs);
         }

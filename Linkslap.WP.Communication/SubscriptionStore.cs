@@ -40,6 +40,11 @@
         public static event EventHandler<Subscription> SubscriptionsChanged;
 
         /// <summary>
+        /// The no subscriptions detected.
+        /// </summary>
+        public static event EventHandler NoSubscriptionsDetected;
+
+        /// <summary>
         /// The get subscriptions.
         /// </summary>
         /// <returns>
@@ -69,6 +74,11 @@
                         if (values == null || !values.Any())
                         {
                             subs.Clear();
+
+                            if (NoSubscriptionsDetected != null)
+                            {
+                                NoSubscriptionsDetected(null, null);
+                            }
                         }
                         else
                         {

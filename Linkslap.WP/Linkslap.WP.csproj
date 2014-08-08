@@ -16,6 +16,8 @@
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -172,9 +174,6 @@
     <Content Include="Assets\badge-58x58.png" />
     <Content Include="Assets\BadgeLogo.scale-240.png" />
     <Content Include="Assets\Images\background.png" />
-    <Content Include="Assets\Images\dog-slap.gif" />
-    <Content Include="Assets\Images\dog-slap.png" />
-    <Content Include="Assets\Images\dog-slap2.png" />
     <Content Include="Assets\Images\logo-partial.png" />
     <Content Include="Assets\Images\logo-text.png" />
     <Content Include="Assets\Images\logo.png" />
@@ -274,33 +273,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.2.1\lib\wpa81\AutoMapper.WPA81.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.Filtering">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.Filtering.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.IO.Bmp">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Bmp.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.IO.Gif">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Gif.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.IO.Jpeg">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Jpeg.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.IO.Png">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.IO.Png.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.PCL">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\ImageTools.PCL.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PhoneCodeContractsAssemblies">
-      <HintPath>..\packages\ImageTools-PCL.0.3.1\lib\PhoneCodeContractsAssemblies.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

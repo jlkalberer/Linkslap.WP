@@ -44,10 +44,10 @@
                     <TextBlock Text="{Binding}" Style="{Binding PanelHeaderStyles[Pivot.SelectedIndex]}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem Header="New Slaps">
+            <PivotItem Header="New Links">
                 <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible" RemoveItemClicked="RemoveNewSlap"></controls:LinkLongList>
             </PivotItem>
-            <PivotItem Header="Stream">
+            <PivotItem Header="Streams">
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
                         <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}" />
