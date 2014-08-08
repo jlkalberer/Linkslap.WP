@@ -48,14 +48,15 @@
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" Text="{Binding Path=Comment, Mode=TwoWay}" />
                     <HyperlinkButton Command="{Binding RemoveCommentCommand}" Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="8,6,12,6" Background="{ThemeResource ButtonGradientBrush}">
-                        <SymbolIcon Symbol="Cancel" />
+                        <SymbolIcon Symbol="Cancel" Foreground="White" />
                     </HyperlinkButton>
                 </Grid>
-                <SemanticZoom>
+                <SemanticZoom Name="StreamSelector">
                     <SemanticZoom.ZoomedInView>
                         <ListView SelectionChanged="StreamSelectionChanged" IsEnabled="{Binding CanSubmit}" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
                     </SemanticZoom.ZoomedInView>
                 </SemanticZoom>
+                <Button Name="ShareButton" Click="ShareButtonClicked" IsEnabled="{Binding CanSubmit}" Visibility="Collapsed" Margin="0, 20, 0, 0" HorizontalAlignment="Right">Share</Button>
             </StackPanel>
         </Grid>
     </Grid>

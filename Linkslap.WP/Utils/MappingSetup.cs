@@ -29,7 +29,8 @@
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.Stream.Name))
                 .ForMember(d => d.Links, m => m.Ignore());
 
-            Mapper.CreateMap<Link, LinkViewModel>();
+            Mapper.CreateMap<Link, LinkViewModel>()
+                .ForMember(d => d.Uri, m => m.Ignore());
             Mapper.CreateMap<RegisterViewModel, RegisterModel>();
 
             Mapper.AssertConfigurationIsValid();

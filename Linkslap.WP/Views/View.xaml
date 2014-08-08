@@ -38,7 +38,7 @@
                         </Grid>
                         <Rectangle Height="20" Fill="#323232"/>
                     </StackPanel>
-                    <WebView Grid.Row="1" Source="{Binding Uri}" DOMContentLoaded="ViewLoaded"></WebView>
+                    <WebView Grid.Row="1" Source="{Binding Uri}" DOMContentLoaded="ViewLoaded" />
                     <Rectangle Grid.Row="1" Canvas.ZIndex="2" Fill="Transparent" Tapped="RectangleTapped" Visibility="{Binding DataContext.UiVisibility, ElementName=PageControl}"></Rectangle>
                 </Grid>
             </DataTemplate>
@@ -56,7 +56,9 @@
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Settings" Icon="Switch" Click="SettingsClick"/>
+                <AppBarButton Label="Reload Browser" Icon="Refresh" Click="ReloadBrowser"/>
+                <AppBarButton Label="Open in IE" Icon="Go" Click="OpenInIe"/>
+                <AppBarButton Label="Settings" Icon="Setting" Click="SettingsClick"/>
                 <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>

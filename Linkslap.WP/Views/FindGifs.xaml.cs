@@ -115,7 +115,15 @@ namespace Linkslap.WP.Views
         /// </param>
         private void ItemHeld(object sender, HoldingRoutedEventArgs e)
         {
-            this.Navigate<ShareLink>(((Image)e.OriginalSource).DataContext);
+            if (!(e.OriginalSource is Image))
+            {
+                return;
+            }
+
+            var gifViewModel = (GifViewModel)((Image)e.OriginalSource).DataContext;
+            gifViewModel.StreamKey = this.streamKey;
+
+            this.Navigate<ShareLink>(gifViewModel);
         }
 
         /// <summary>

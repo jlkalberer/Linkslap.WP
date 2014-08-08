@@ -69,11 +69,11 @@
                     {
                         if (t.Status == TaskStatus.Faulted || !t.IsCompleted || t.Result == null)
                         {
-                            this.Navigate<Login>();
+                            this.NavigateRoot<Login>();
                             return;
                         }
 
-                        this.Navigate<Home>();
+                        this.NavigateRoot<Home>();
                     });
         }
     }

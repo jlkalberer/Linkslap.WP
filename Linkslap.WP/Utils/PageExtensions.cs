@@ -26,17 +26,61 @@
             CrossThread(
                 page,
                 () =>
+                {
+                    var type = typeof(TType);
+                    if (parameters == null)
                     {
-                        var type = typeof(TType);
-                        if (parameters == null)
+                        page.Frame.Navigate(type);
+                    }
+                    else
+                    {
+                        page.Frame.Navigate(type, parameters);
+                    }
+
+                    var stack = page.Frame.BackStack;
+
+                    if (stack.Any(s => s.SourcePageType == type))
+                    {
+                        while (stack.Any() && stack.Last().SourcePageType != type)
                         {
-                            page.Frame.Navigate(type);
+                            stack.RemoveAt(stack.Count - 1);
                         }
-                        else
+
+                        stack.RemoveAt(stack.Count - 1);
+                    }
+                });
+        }
+
+        public static void NavigateRemoveFrames<TType, TRemoveType>(this Page page, object parameters = null)
+        {
+            CrossThread(
+                page,
+                () =>
+                {
+                    var type = typeof(TType);
+                    if (parameters == null)
+                    {
+                        page.Frame.Navigate(type);
+                    }
+                    else
+                    {
+                        page.Frame.Navigate(type, parameters);
+                    }
+
+                    var stack = page.Frame.BackStack;
+
+                    var removeType = typeof(TRemoveType);
+
+                    if (stack.Any(s => s.SourcePageType == removeType))
+                    {
+                        while (stack.Any() && stack.Last().SourcePageType != removeType)
                         {
-                            page.Frame.Navigate(type, parameters);
+                            stack.RemoveAt(stack.Count - 1);
                         }
-                    });
+
+                        stack.RemoveAt(stack.Count - 1);
+                    }
+                });
         }
 
         public static void NavigateRoot<TType>(this Page page, object parameters = null)
@@ -55,27 +99,11 @@
                         page.Frame.Navigate(type, parameters);
                     }
 
-                    page.Frame.BackStack.Clear();
-                });
-        }
-
-        public static void NavigateReplace<TType>(this Page page, object parameters = null)
-        {
-            CrossThread(
-                page,
-                () =>
-                {
-                    var type = typeof(TType);
-                    if (parameters == null)
+                    var stack = page.Frame.BackStack;
+                    while (stack.Count > 1)
                     {
-                        page.Frame.Navigate(type);
+                        stack.RemoveAt(stack.Count - 1);
                     }
-                    else
-                    {
-                        page.Frame.Navigate(type, parameters);
-                    }
-
-                    page.Frame.BackStack.RemoveAt(0);
                 });
         }
 

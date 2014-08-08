@@ -23,6 +23,10 @@ namespace Linkslap.WP.ViewModels
         /// </summary>
         private readonly IGifStore gifStore;
 
+        private bool isSearching;
+
+        private bool executeButtonEnabled;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindGifViewModel"/> class.
         /// </summary>
@@ -51,14 +55,41 @@ namespace Linkslap.WP.ViewModels
         public string Query { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether nsfw.
+        /// Gets or sets a value indicating whether NSFW.
         /// </summary>
-        public bool NSFW { get; set; }
+        public bool Nsfw { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether execute button enabled.
         /// </summary>
-        public bool ExecuteButtonEnabled { get; set; }
+        public bool ExecuteButtonEnabled
+        {
+            get
+            {
+                return this.executeButtonEnabled;
+            }
+            set
+            {
+                this.executeButtonEnabled = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is searching.
+        /// </summary>
+        public bool IsSearching
+        {
+            get
+            {
+                return this.isSearching;
+            }
+            set
+            {
+                this.isSearching = value;
+                this.OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets the results.
@@ -87,6 +118,7 @@ namespace Linkslap.WP.ViewModels
         /// </param>
         public async override void Execute(object parameter)
         {
+            this.IsSearching = true;
             this.ExecuteButtonEnabled = false;
             base.Execute(parameter);
 
@@ -97,10 +129,12 @@ namespace Linkslap.WP.ViewModels
                 return;
             }
 
-            this.Results.Search(this.Query);
+            this.Results.Clear();
+            await this.Results.Search(this.Query);
 
             this.ExecuteButtonEnabled = true;
             this.OnPropertyChanged(string.Empty);
+            this.IsSearching = false;
         }
 
         /// <summary>
@@ -141,7 +175,7 @@ namespace Linkslap.WP.ViewModels
             {
                 this.page = 0;
                 this.HasMoreItems = false;
-                var result = this.gifViewModel.gifStore.Search(query, this.gifViewModel.NSFW, page);
+                var result = this.gifViewModel.gifStore.Search(query, this.gifViewModel.Nsfw, page);
                 await result.ContinueWith(this.gifViewModel.ValidateResponse);
 
                 if (result.Result.Status != 200)
@@ -167,7 +201,7 @@ namespace Linkslap.WP.ViewModels
             private async Task<LoadMoreItemsResult> LoadMore()
             {
                 this.page += 1;
-                var result = this.gifViewModel.gifStore.Search(this.gifViewModel.Query, this.gifViewModel.NSFW, this.page);
+                var result = this.gifViewModel.gifStore.Search(this.gifViewModel.Query, this.gifViewModel.Nsfw, this.page);
                 await result.ContinueWith(this.gifViewModel.ValidateResponse);
 
                 if (result.Result.Status != 200)

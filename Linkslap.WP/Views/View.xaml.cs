@@ -2,9 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Net;
+    using System.Threading.Tasks;
 
     using Windows.ApplicationModel.DataTransfer;
     using Windows.Phone.UI.Input;
+    using Windows.System;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
@@ -35,7 +40,7 @@
                     style = document.createElement('style');
 
                 if (document.body.children.length > 1) {
-                    return;
+                    css = 'video { position: relative !important; z-index: 9999999; }';
                 }
 
                 style.type = 'text/css';
@@ -113,7 +118,21 @@
 
         private async void ViewLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
+            //if (!this.IsImageUrl(this.viewModel.SelectedItem.Url))
+            //{
+            //    return;
+            //}
+
             await sender.InvokeScriptAsync("eval", new[] { CssStyle });
+        }
+
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
+
+        private bool IsImageUrl(string URL)
+        {
+            var url = URL.ToUpper();
+
+            return ImageExtensions.Any(url.Contains);
         }
 
         /// <summary>
@@ -179,7 +198,7 @@
         /// </param>
         private void ReplyClick(object sender, RoutedEventArgs e)
         {
-            this.NavigateReplace<FindGifs>(this.viewModel.SelectedItem.StreamKey);
+            this.Navigate<FindGifs>(this.viewModel.SelectedItem.StreamKey);
         }
 
         /// <summary>
@@ -236,6 +255,34 @@
         }
 
         /// <summary>
+        /// The reload browser.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ReloadBrowser(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.SelectedItem.Uri = new Uri(this.viewModel.SelectedItem.Url, UriKind.RelativeOrAbsolute);
+        }
+
+        /// <summary>
+        /// The open in ie.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void OpenInIe(object sender, RoutedEventArgs e)
+        {
+            Launcher.LaunchUriAsync(this.viewModel.SelectedItem.Uri);
+        }
+
+        /// <summary>
         /// The settings click.
         /// </summary>
         /// <param name="sender">
@@ -265,5 +312,6 @@
 
             this.NavigateRoot<Login>();
         }
+
     }
 }

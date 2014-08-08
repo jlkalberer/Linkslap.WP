@@ -3,8 +3,14 @@
     using System;
     using System.Collections.ObjectModel;
 
+    using Windows.UI.Xaml;
+
+    using AutoMapper;
+
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Models;
+    using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
 
     using Windows.ApplicationModel.DataTransfer.ShareTarget;
@@ -21,6 +27,8 @@
         /// </summary>
         private readonly IStreamStore streamStore;
 
+        private readonly SubscriptionStore subscriptionStore;
+
         /// <summary>
         /// The view model.
         /// </summary>
@@ -31,11 +39,13 @@
         /// </summary>
         private ShareOperation shareOperation;
 
+        private string streamKey;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareLink"/> class.
         /// </summary>
         public ShareLink()
-            : this(new StreamStore())
+            : this(new StreamStore(), new SubscriptionStore())
         {
         }
 
@@ -43,11 +53,13 @@
         /// Initializes a new instance of the <see cref="ShareLink"/> class.
         /// </summary>
         /// <param name="streamStore">
-        /// The stream store.
+        ///     The stream store.
         /// </param>
-        public ShareLink(IStreamStore streamStore)
+        /// <param name="subscriptionStore"></param>
+        public ShareLink(IStreamStore streamStore, SubscriptionStore subscriptionStore)
         {
             this.streamStore = streamStore;
+            this.subscriptionStore = subscriptionStore;
             this.InitializeComponent();
             this.viewModel = this.DataContext as ShareLinkViewModel;
         }
@@ -79,9 +91,14 @@
             else if (e.Parameter is GifViewModel)
             {
                 var model = e.Parameter as GifViewModel;
-
+                this.streamKey = model.StreamKey;
                 this.viewModel.Uri = new Uri(model.Gif, UriKind.RelativeOrAbsolute);
-                // this.viewModel.Comment = model.Gif;
+
+                if (this.streamKey != null)
+                {
+                    this.StreamSelector.Visibility = Visibility.Collapsed;
+                    this.ShareButton.Visibility = Visibility.Visible;
+                }
             }
 
             base.OnNavigatedTo(e);
@@ -114,7 +131,33 @@
             }
             else
             {
-                this.NavigationHelper.GoBack();
+                this.NavigateRemoveFrames<ViewStream, FindGifs>(subscription);
+            }
+        }
+
+        /// <summary>
+        /// The share button clicked.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ShareButtonClicked(object sender, RoutedEventArgs e)
+        {
+            this.streamStore.SlapLink(this.streamKey, this.viewModel.Comment, this.viewModel.Uri.ToString());
+
+            var subscription = this.subscriptionStore.GetSubscription(this.streamKey);
+
+            if (subscription == null)
+            {
+                this.Navigate<Home>();
+            }
+            else
+            {
+                var subscriptionViewModel = Mapper.Map<Subscription, SubscriptionViewModel>(subscription);
+                this.Navigate<ViewStream>(subscriptionViewModel);    
             }
         }
     }

@@ -11,6 +11,8 @@
 
         public string Thumbnail { get; set; }
 
+        public string StreamKey { get; set; }
+
         public string Gif { get; set; }
 
         /// <summary>

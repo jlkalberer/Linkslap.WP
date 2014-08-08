@@ -42,10 +42,10 @@
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" Text="{Binding Path=Query, Mode=TwoWay}" />
                     <HyperlinkButton Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled, Mode=TwoWay}" Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="8,6,12,6" Background="{ThemeResource ButtonGradientBrush}">
-                        <SymbolIcon Symbol="Find" />
+                        <SymbolIcon Symbol="Find" Foreground="White" />
                     </HyperlinkButton>
                 </Grid>
-                <CheckBox FontSize="9" IsChecked="{Binding NSFW}">
+                <CheckBox FontSize="9" IsChecked="{Binding Nsfw}">
                     <CheckBox.RenderTransform>
                         <ScaleTransform ScaleX=".7" ScaleY=".7" />
                     </CheckBox.RenderTransform>
@@ -66,6 +66,7 @@
                     </ListView>
                 </SemanticZoom.ZoomedInView>
             </SemanticZoom>
+            <ProgressRing Grid.Row="2" IsActive="{Binding IsSearching, Mode=TwoWay}" Canvas.ZIndex="2" Background="Transparent"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>

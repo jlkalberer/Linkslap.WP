@@ -5,8 +5,10 @@
     /// <summary>
     /// The link view model.
     /// </summary>
-    public class LinkViewModel
+    public class LinkViewModel : ViewModelBase
     {
+        private Uri uri;
+
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
@@ -69,7 +71,18 @@
         {
             get
             {
-                return new Uri(this.Url, UriKind.RelativeOrAbsolute);
+                if (this.uri == null)
+                {
+                    this.uri = new Uri(this.Url, UriKind.RelativeOrAbsolute);
+                }
+
+                return this.uri;
+            }
+
+            set
+            {
+                this.uri = value;
+                this.OnPropertyChanged();
             }
         }
     }

@@ -159,7 +159,7 @@
         /// </param>
         private void ReplyClick(object sender, RoutedEventArgs e)
         {
-            this.NavigateReplace<FindGifs>(this.viewModel.StreamKey);
+            this.Navigate<FindGifs>(this.viewModel.StreamKey);
         }
 
         /// <summary>
