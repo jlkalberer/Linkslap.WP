@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="52817Linkslap.Linkslap" Publisher="CN=A642F242-2F5B-4D0D-BB5A-10BFFAA9C33C" Version="1.1.0.4" />
+  <Identity Name="52817Linkslap.Linkslap" Publisher="CN=A642F242-2F5B-4D0D-BB5A-10BFFAA9C33C" Version="1.1.0.6" />
   <mp:PhoneIdentity PhoneProductId="befe311e-c3d1-4b15-b739-498af29d9b8d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Linkslap</DisplayName>
