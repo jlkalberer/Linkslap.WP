@@ -199,7 +199,7 @@
             }
 
             data.Properties.Description = string.Format("Instantly share pics or pages with your friends!");
-            data.SetUri(new Uri(string.Format("http://linkslap.me/s/{0}", this.viewModel.StreamKey), UriKind.Absolute));
+            data.SetUri(new Uri(string.Format("https://linkslap.me/s/{0}", this.viewModel.StreamKey), UriKind.Absolute));
         }
 
         /// <summary>

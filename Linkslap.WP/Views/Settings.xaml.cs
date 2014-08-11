@@ -31,7 +31,7 @@
 
         private void OpenUrl(object sender, RoutedEventArgs e)
         {
-            Launcher.LaunchUriAsync(new Uri("http://linkslap.me/privacy"));
+            Launcher.LaunchUriAsync(new Uri("https://linkslap.me/privacy"));
         }
     }
 }

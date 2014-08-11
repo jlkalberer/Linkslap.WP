@@ -12,7 +12,7 @@
         {
             get
             {
-                return "http://linkslap.me/";
+                return "https://linkslap.me/";
             }
         }
 

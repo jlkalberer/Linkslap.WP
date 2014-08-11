@@ -228,7 +228,7 @@
         {
             var data = args.Request.Data;
 
-            var streamUrl = string.Format("http://linkslap.me/s/{0}", this.viewModel.SelectedItem.StreamKey);
+            var streamUrl = string.Format("https://linkslap.me/s/{0}", this.viewModel.SelectedItem.StreamKey);
 
             data.Properties.Title = string.Format(
                 "{0} shared from {1} on Linkslap - {2}",
