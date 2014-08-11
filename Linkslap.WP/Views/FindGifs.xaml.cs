@@ -9,10 +9,14 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Linkslap.WP.Views
 {
+    using System;
+
     using Windows.UI.Notifications;
+    using Windows.UI.Popups;
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
@@ -28,6 +32,18 @@ namespace Linkslap.WP.Views
         private readonly IAccountStore accountStore;
 
         private string streamKey;
+
+        public static bool HasViewedSearchHowTo
+        {
+            get
+            {
+                return Storage.Load<bool>("NewUser.GifSearch");
+            }
+            set
+            {
+                Storage.Save("NewUser.GifSearch", value);
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FindGifs"/> class.
@@ -54,10 +70,21 @@ namespace Linkslap.WP.Views
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             this.streamKey = (string)e.Parameter;
             base.OnNavigatedTo(e);
+
+            HasViewedSearchHowTo = false;
+
+            if (!HasViewedSearchHowTo)
+            {
+                var mess =
+                    new MessageDialog(
+                        "This is the gif search.\r\n\r\nUse the search box to search.\r\n\r\nTap an image once to preview.\r\n\r\nDouble tap to share.");
+                await mess.ShowAsync();
+                HasViewedSearchHowTo = true;
+            }
         }
 
         /// <summary>
@@ -126,6 +153,19 @@ namespace Linkslap.WP.Views
             this.Navigate<ShareLink>(gifViewModel);
         }
 
+        private void ItemTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            if (!(e.OriginalSource is Image))
+            {
+                return;
+            }
+
+            var gifViewModel = (GifViewModel)((Image)e.OriginalSource).DataContext;
+            gifViewModel.StreamKey = this.streamKey;
+
+            this.Navigate<ShareLink>(gifViewModel);
+        }
+
         /// <summary>
         /// The go home.
         /// </summary>
@@ -152,5 +192,6 @@ namespace Linkslap.WP.Views
 
             this.NavigateRoot<Login>();
         }
+
     }
 }

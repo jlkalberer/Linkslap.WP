@@ -34,7 +34,15 @@
         public static void ClearAll()
         {
             var store = ApplicationData.Current.LocalSettings.Values;
-            store.Clear();
+            foreach (var key in store.Keys)
+            {
+                if (key.StartsWith("NewUser"))
+                {
+                    continue;
+                }
+
+                Clear(key);
+            }
         }
 
         /// <summary>

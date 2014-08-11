@@ -54,7 +54,7 @@
             </StackPanel>
             <SemanticZoom Grid.Row="2">
                 <SemanticZoom.ZoomedInView>
-                    <ListView ItemsSource="{Binding Results}" SelectionChanged="ImageClicked" Holding="ItemHeld">
+                    <ListView ItemsSource="{Binding Results}" SelectionChanged="ImageClicked" Holding="ItemHeld" DoubleTapped="ItemTapped">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>

@@ -315,11 +315,13 @@
                     }
                 }
 
+                var speedToSet = speeds[0] != TimeSpan.Zero ? speeds[0] : TimeSpan.FromMilliseconds(100);
+
                 for (var i = 0; i < speeds.Count; i += 1)
                 {
                     if (speeds[i] == TimeSpan.Zero)
                     {
-                        speeds[i] = speeds[0];
+                        speeds[i] = speedToSet;
                     }
                 }
 

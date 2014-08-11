@@ -52,13 +52,13 @@
         /// </returns>
         public ObservableCollection<Subscription> GetSubsriptions()
         {
+            subscriptions = Storage.Load<ObservableCollection<Subscription>>("subscriptions");
+
             // If the channel is null then push notifications are probably turned off...
             if (subscriptions != null)
             {
                 return subscriptions;
             }
-
-            subscriptions = Storage.Load<ObservableCollection<Subscription>>("subscriptions");
 
             if (subscriptions == null)
             {
