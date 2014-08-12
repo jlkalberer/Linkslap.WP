@@ -1,18 +1,7 @@
-﻿using System.Linq;
-
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
-
-namespace Linkslap.WP.Views
+﻿namespace Linkslap.WP.Views
 {
     using System;
-
-    using Windows.UI.Notifications;
-    using Windows.UI.Popups;
+    using System.Linq;
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
@@ -20,6 +9,13 @@ namespace Linkslap.WP.Views
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
+
+    using Windows.UI.Notifications;
+    using Windows.UI.Popups;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -31,20 +27,11 @@ namespace Linkslap.WP.Views
         /// </summary>
         private readonly IAccountStore accountStore;
 
+        /// <summary>
+        /// The stream key.
+        /// </summary>
         private string streamKey;
-
-        public static bool HasViewedSearchHowTo
-        {
-            get
-            {
-                return Storage.Load<bool>("NewUser.GifSearch");
-            }
-            set
-            {
-                Storage.Save("NewUser.GifSearch", value);
-            }
-        }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="FindGifs"/> class.
         /// </summary>
@@ -63,6 +50,22 @@ namespace Linkslap.WP.Views
         {
             this.accountStore = accountStore;
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether has viewed search how to.
+        /// </summary>
+        public static bool HasViewedSearchHowTo
+        {
+            get
+            {
+                return Storage.Load<bool>("NewUser.GifSearch");
+            }
+
+            set
+            {
+                Storage.Save("NewUser.GifSearch", value);
+            }
         }
 
         /// <summary>
