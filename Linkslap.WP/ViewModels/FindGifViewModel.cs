@@ -12,6 +12,7 @@ namespace Linkslap.WP.ViewModels
     using Linkslap.WP.Common.Validation;
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Models;
 
     /// <summary>
     /// The find gif view model.

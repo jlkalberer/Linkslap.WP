@@ -80,21 +80,22 @@
                 return account;
             }
 
-            var task = new TaskCompletionSource<UserInfo>();
-            this.rest.Execute<UserInfo>(HttpMethod.Get, "/api/account/userinfo", null, task.SetResult, task.SetException);
+            // TODO - Check if we actually need to call this... we shouldn't since login should give us the user name.
+            //var task = new TaskCompletionSource<UserInfo>();
+            //this.rest.Execute<UserInfo>(HttpMethod.Get, "/api/account/userinfo", null, task.SetResult, task.SetException);
 
-            var userInfo = await task.Task;
+            //var userInfo = await task.Task;
 
-            if (userInfo == null)
-            {
-                return account;
-            }
+            //if (userInfo == null)
+            //{
+            //    return account;
+            //}
 
-            if (string.CompareOrdinal(account.UserName, userInfo.UserName) != 0)
-            {
-                account.UserName = userInfo.UserName;
-                Storage.Save("account", account);
-            }
+            //if (string.CompareOrdinal(account.UserName, userInfo.UserName) != 0)
+            //{
+            //    account.UserName = userInfo.UserName;
+            //    Storage.Save("account", account);
+            //}
 
             return account;
         }

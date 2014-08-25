@@ -36,7 +36,7 @@
             var store = ApplicationData.Current.LocalSettings.Values;
             foreach (var key in store.Keys)
             {
-                if (key.StartsWith("NewUser"))
+                if (key.StartsWith("NewUser") || key.StartsWith("InstallationId"))
                 {
                     continue;
                 }

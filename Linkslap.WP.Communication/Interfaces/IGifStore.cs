@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
 
-    using Linkslap.WP.ViewModels;
+    using Linkslap.WP.Communication.Models;
 
     /// <summary>
     /// The GifStore interface.

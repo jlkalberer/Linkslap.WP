@@ -17,37 +17,32 @@
     public class NewSlapsStore : INewSlapsStore
     {
         /// <summary>
-        /// The subscription store.
-        /// </summary>
-        private readonly ISubscriptionStore subscriptionStore;
-
-        private readonly ISettingsStore settingsStore;
-
-        /// <summary>
         /// The key.
         /// </summary>
         private const string Key = "new-slaps";
 
         /// <summary>
+        /// The settings store.
+        /// </summary>
+        private readonly ISettingsStore settingsStore;
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NewSlapsStore"/> class.
         /// </summary>
         public NewSlapsStore()
-            : this(new SubscriptionStore(), new SettingsStore())
+            : this(new SettingsStore())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewSlapsStore"/> class.
         /// </summary>
-        /// <param name="subscriptionStore">
-        /// The subscription Store.
-        /// </param>
         /// <param name="settingsStore">
         /// The settings Store.
         /// </param>
-        public NewSlapsStore(ISubscriptionStore subscriptionStore, ISettingsStore settingsStore)
+        public NewSlapsStore(ISettingsStore settingsStore)
         {
-            this.subscriptionStore = subscriptionStore;
             this.settingsStore = settingsStore;
         }
 
@@ -87,6 +82,7 @@
 
             var links = this.GetLinks();
 
+            // Link already exists but trigger a refresh
             if (links.Any(l => l.Id == link.Id))
             {
                 if (NewSlapsChanged != null)

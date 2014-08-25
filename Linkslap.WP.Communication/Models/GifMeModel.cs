@@ -1,4 +1,4 @@
-﻿namespace Linkslap.WP.ViewModels
+﻿namespace Linkslap.WP.Communication.Models
 {
     using System;
     using System.Collections.Generic;

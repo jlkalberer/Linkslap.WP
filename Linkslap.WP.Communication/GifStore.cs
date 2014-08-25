@@ -5,7 +5,7 @@ namespace Linkslap.WP.Communication
     using Windows.Web.Http;
 
     using Linkslap.WP.Communication.Interfaces;
-    using Linkslap.WP.ViewModels;
+    using Linkslap.WP.Communication.Models;
 
     public class GifStore : IGifStore
     {
@@ -44,7 +44,7 @@ namespace Linkslap.WP.Communication
             this.rest.Execute<GifMeModel>(
                 HttpMethod.Get,
                 "/v1/search",
-                new { key = "MNfCaCC9tRAr3yzf", query, sfw = nsfw, limit = 20, page },
+                new { key = "MNfCaCC9tRAr3yzf", query, sfw = !nsfw, limit = 20, page },
                 task.SetResult,
                 task.SetException);
 

@@ -33,9 +33,31 @@ namespace Linkslap.WP.Communication.Interfaces
         /// <summary>
         /// The delete.
         /// </summary>
+        /// <param name="streamKey">
+        /// The stream Key.
+        /// </param>
         void Delete(string streamKey);
 
+        /// <summary>
+        /// The get subscription.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Subscription"/>.
+        /// </returns>
         Subscription GetSubscription(int id);
+
+        /// <summary>
+        /// The get subscription.
+        /// </summary>
+        /// <param name="streamKey">
+        /// The stream key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Subscription"/>.
+        /// </returns>
         Subscription GetSubscription(string streamKey);
     }
 }

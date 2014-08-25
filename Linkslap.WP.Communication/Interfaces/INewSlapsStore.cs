@@ -27,6 +27,9 @@
         /// </param>
         void RemoveLink(int id);
 
+        /// <summary>
+        /// The clear.
+        /// </summary>
         void Clear();
     }
 }
