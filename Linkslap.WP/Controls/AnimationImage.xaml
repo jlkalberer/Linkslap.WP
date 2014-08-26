@@ -14,8 +14,7 @@
             <Storyboard x:Name="storyboard" RepeatBehavior="Forever"/>
         </Grid.Resources>
         <Image x:Name="image"/>
-        <SymbolIcon Symbol="Cancel"/>
-        <ProgressRing Name="ProgressRing" Canvas.ZIndex="2" IsActive="True"/>
+        <ProgressRing Name="ProgressRing" Canvas.ZIndex="2" IsActive="True" Background="Transparent"/>
         <TextBlock FontSize="40" x:Name="ErrorIcon" Text="&#xE106;" FontFamily="Segoe UI Symbol" Visibility="Collapsed" Foreground="Red" Canvas.ZIndex="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
     </Grid>
 </UserControl>

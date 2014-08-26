@@ -3,6 +3,8 @@
     using System;
     using System.Linq;
 
+    using Windows.System;
+
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Util;
@@ -31,7 +33,9 @@
         /// The stream key.
         /// </summary>
         private string streamKey;
-        
+
+        private readonly FindGifViewModel viewModel;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindGifs"/> class.
         /// </summary>
@@ -50,6 +54,8 @@
         {
             this.accountStore = accountStore;
             this.InitializeComponent();
+
+            this.viewModel = this.DataContext as FindGifViewModel;
         }
 
         /// <summary>
@@ -167,6 +173,14 @@
             this.Navigate<ShareLink>(gifViewModel);
         }
 
+        private void ShareButtonClicked(object sender, RoutedEventArgs e)
+        {
+            var gifViewModel = (GifViewModel)((HyperlinkButton)e.OriginalSource).DataContext;
+            gifViewModel.StreamKey = this.streamKey;
+
+            this.Navigate<ShareLink>(gifViewModel);
+        }
+
         /// <summary>
         /// The go home.
         /// </summary>
@@ -194,5 +208,29 @@
             this.NavigateRoot<Login>();
         }
 
+        private void SearchTextKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter)
+            {
+                return;
+            }
+
+            var textBox = sender as TextBox;
+
+            if (textBox == null)
+            {
+                return;
+            }
+
+            this.viewModel.Query = textBox.Text;
+            if (!this.viewModel.CanExecute(null))
+            {
+                return;
+            }
+
+            textBox.IsEnabled = false;
+            textBox.IsEnabled = true;
+            this.viewModel.Execute(null);
+        }
     }
 }

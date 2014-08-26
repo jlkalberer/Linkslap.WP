@@ -231,6 +231,7 @@
                             using (var randomAccessStream = new InMemoryRandomAccessStream())
                             {
                                 await imageStream.CopyToAsync(randomAccessStream.AsStreamForWrite());
+
                                 imageDecoder =
                                     await BitmapDecoder.CreateAsync(BitmapDecoder.GifDecoderId, randomAccessStream);
 

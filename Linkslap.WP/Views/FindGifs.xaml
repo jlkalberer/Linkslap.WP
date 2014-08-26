@@ -40,7 +40,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Text="{Binding Path=Query, Mode=TwoWay}" />
+                    <TextBox Grid.Column="0" Text="{Binding Path=Query, Mode=TwoWay}" KeyDown="SearchTextKeyDown" />
                     <HyperlinkButton Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled, Mode=TwoWay}" Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="8,6,12,6" Background="{ThemeResource ButtonGradientBrush}">
                         <SymbolIcon Symbol="Find" Foreground="White" />
                     </HyperlinkButton>
@@ -57,9 +57,17 @@
                     <ListView ItemsSource="{Binding Results}" SelectionChanged="ImageClicked" Holding="ItemHeld" DoubleTapped="ItemTapped">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <controls:AnimationImage ImageUrl="{Binding Gif}" IsEnabled="{Binding ShowGif}" Visibility="{Binding GifVisibility}" Margin="0,0,15,0" Height="{Binding Height, ElementName=Image}" />
-                                    <Image Name="Image"  DataContext="{Binding}" Source="{Binding Thumbnail}" Margin="0,0,15,0" ImageOpened="ImageOpened"  Visibility="{Binding ThumbnailVisibility}"/>
+                                    <Image Name="Image" DataContext="{Binding}" Source="{Binding Thumbnail}" ImageOpened="ImageOpened" Margin="0,0,15,0" Visibility="{Binding ThumbnailVisibility}"/>
+                                    <Viewbox Canvas.ZIndex="2" MaxWidth="150" MaxHeight="150" Visibility="{Binding ThumbnailVisibility}">
+                                        <SymbolIcon Symbol="Play" Foreground="#99ffffff"/>
+                                    </Viewbox>
+                                    <HyperlinkButton DataContext="{Binding}" Click="ShareButtonClicked" Canvas.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,0" Padding="-10" Background="#55000000" HorizontalContentAlignment="Center" >
+                                        <Viewbox Height="60">
+                                            <BitmapIcon UriSource="ms-appx:///Assets/Images/share-icon.png" Foreground="#aaffffff" />
+                                        </Viewbox>
+                                    </HyperlinkButton>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

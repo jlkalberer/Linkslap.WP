@@ -3,7 +3,9 @@
     using System;
     using System.Collections.ObjectModel;
 
+    using Windows.System;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Input;
 
     using AutoMapper;
 
@@ -159,6 +161,23 @@
                 var subscriptionViewModel = Mapper.Map<Subscription, SubscriptionViewModel>(subscription);
                 this.Navigate<ViewStream>(subscriptionViewModel);    
             }
+        }
+
+        private void CommentKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter)
+            {
+                return;
+            }
+
+            var textBox = sender as TextBox;
+            if (textBox == null)
+            {
+                return;
+            }
+
+            textBox.IsEnabled = false;
+            textBox.IsEnabled = true;
         }
     }
 }

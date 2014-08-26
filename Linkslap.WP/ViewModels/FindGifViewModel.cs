@@ -108,7 +108,7 @@ namespace Linkslap.WP.ViewModels
         /// </returns>
         public override bool CanExecute(object parameter)
         {
-            return this.ExecuteButtonEnabled;
+            return this.ExecuteButtonEnabled && !string.IsNullOrEmpty(this.Query);
         }
 
         /// <summary>

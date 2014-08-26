@@ -2,8 +2,6 @@
 {
     using System;
 
-    using Windows.UI.Popups;
-
     using AutoMapper;
 
     using Linkslap.WP.Common.Validation;
@@ -11,6 +9,8 @@
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Utils;
+
+    using Windows.UI.Popups;
 
     /// <summary>
     /// The register view model.
@@ -72,9 +72,15 @@
         public string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets ConfirmPassword.
+        /// Gets the confirm password.
         /// </summary>
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword
+        {
+            get
+            {
+                return this.Password;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether execute button enabled.
@@ -110,10 +116,6 @@
             this.ValidateProperty("Password", "password", this.Password)
                     .MinLength(6)
                     .Required();
-
-            this.ValidateProperty("ConfirmPassword", "confirmation password", this.ConfirmPassword)
-                    .Required()
-                    .Compare(this.Password, "The password and {0} do not match");
 
             base.Validate();
         }

@@ -2,6 +2,9 @@
 {
     using System.Threading.Tasks;
 
+    using Windows.System;
+    using Windows.UI.Xaml.Input;
+
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Communication.Notifications;
@@ -73,6 +76,33 @@
         private void ForgotPasswordClick(object sender, RoutedEventArgs e)
         {
             this.Navigate<PasswordReset>();
+        }
+
+        private void UserNameKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter)
+            {
+                return;
+            }
+
+            this.Password.Focus(FocusState.Programmatic);
+        }
+
+        private void PasswordKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter)
+            {
+                return;
+            }
+
+            if (!this.viewModel.CanExecute(null))
+            {
+                return;
+            }
+
+            this.Password.IsEnabled = false;
+            this.Password.IsEnabled = true;
+            this.viewModel.Execute(null);
         }
     }
 }

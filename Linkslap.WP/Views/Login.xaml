@@ -42,12 +42,12 @@
                 <controls:ErrorCollection DataContext="{Binding Path=ValidationMessages[GenericError], Mode=OneWay}" />
                 
                 <TextBlock Text="Username" />
-                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" />
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" KeyDown="UserNameKeyDown" />
                 <!--<TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />-->
                 <controls:ErrorText DataContext="{Binding ValidationMessages[UserName], Mode=OneWay}" />
                 
                 <TextBlock Text="Password"/>
-                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <PasswordBox Name="Password" Password="{Binding Path=Password, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" KeyDown="PasswordKeyDown" />
                 <controls:ErrorText DataContext="{Binding ValidationMessages[Password], Mode=OneWay}" />
 
                 <Button Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled}">Login</Button>

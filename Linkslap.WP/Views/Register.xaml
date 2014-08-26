@@ -38,21 +38,17 @@
             <StackPanel Grid.Row="1">
                 <controls:ErrorCollection DataContext="{Binding Path=ValidationMessages[GenericError], Mode=OneWay}" />
 
-                <TextBlock Text="Email"/>
-                <TextBox Text="{Binding Path=Email, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" />
-                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[Email], Mode=OneWay}" />
-
                 <TextBlock Text="Username"/>
-                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" />
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" KeyDown="UsernameKeyDown" />
                 <controls:ErrorText DataContext="{Binding Path=ValidationMessages[UserName], Mode=OneWay}" />
 
                 <TextBlock Text="Password"/>
-                <PasswordBox Password="{Binding Path=Password, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <PasswordBox Name="Password" Password="{Binding Path=Password, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" KeyDown="PasswordKeyDown" />
                 <controls:ErrorText DataContext="{Binding Path=ValidationMessages[Password], Mode=OneWay}" />
-
-                <TextBlock Text="Confirm Password"/>
-                <PasswordBox Password="{Binding Path=ConfirmPassword, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
-                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[ConfirmPassword], Mode=OneWay}" />
+               
+                <TextBlock Text="Email"/>
+                <TextBox Name="Email" Text="{Binding Path=Email, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" KeyDown="EmailKeyDown" />
+                <controls:ErrorText DataContext="{Binding Path=ValidationMessages[Email], Mode=OneWay}" />
 
                 <Button Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled}">Register</Button>
             </StackPanel>
