@@ -8,10 +8,7 @@
 
     <ImageBrush x:Key="BodyBrush" ImageSource="../Assets/Images/background.png"></ImageBrush>
     <SolidColorBrush x:Key="BackgroundBrush" Color="#99cfd9"></SolidColorBrush>
-    <LinearGradientBrush x:Key="ButtonGradientBrush" StartPoint="0,0" EndPoint="0, 1">
-        <GradientStop Color="#00869F" Offset="0"/>
-        <GradientStop Color="#007A8F" Offset="1"/>
-    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ButtonGradientBrush" Color="#02778C"></SolidColorBrush>
     <Style x:Key="HeaderStyle" TargetType="StackPanel">
         <Setter Property="Background" Value="#99cfd9"/>
     </Style>
@@ -51,6 +48,7 @@
         <Setter Property="Foreground" Value="#555555" />
         <Setter Property="BorderBrush" Value="#cccccc" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="InputScope" Value="Search"/>
     </Style>
     <Style TargetType="PasswordBox">
         <Setter Property="Foreground" Value="#555555" />
@@ -66,7 +64,8 @@
         <Setter Property="FontSize" Value="28"></Setter>
     </Style>
     <Style TargetType="Button">
-        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="BorderBrush" Value="White"></Setter>
         <Setter Property="Foreground" Value="White"></Setter>
         <Setter Property="Template">
             <Setter.Value>
@@ -93,17 +92,8 @@
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border" Duration="0:0:1">
-                                            <DiscreteObjectKeyFrame KeyTime="0:0:1">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0, 1">
-                                                        <LinearGradientBrush.GradientStops>
-                                                            <GradientStop Color="#00869F" Offset="0"/>
-                                                            <GradientStop Color="#007A8F" Offset="1"/>
-                                                        </LinearGradientBrush.GradientStops>
-                                                    </LinearGradientBrush>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonGradientBrush}"/>
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -154,6 +144,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Background" Value="{ThemeResource ButtonGradientBrush}"/>
         <Setter Property="Padding" Value="15,8,0,10"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
     </Style>
     <Style x:Key="ListItemTextStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="16"/>

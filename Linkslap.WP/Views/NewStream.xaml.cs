@@ -7,6 +7,7 @@
     using Linkslap.WP.Communication.Interfaces;
     using Linkslap.WP.Controls;
     using Linkslap.WP.Utils;
+    using Linkslap.WP.ViewModels;
 
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -19,6 +20,8 @@
         private readonly IStreamStore streamStore;
 
         private int errorCount = 0;
+
+        private NewSlapStreamViewModel viewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewStream"/> class.
@@ -35,6 +38,8 @@
         {
             this.streamStore = streamStore;
             this.InitializeComponent();
+
+            this.viewModel = this.DataContext as NewSlapStreamViewModel;
         }
 
         /// <summary>
@@ -58,14 +63,8 @@
         /// </param>
         private void CreateButtonClick(object sender, RoutedEventArgs eventArgs)
         {
-            if (string.IsNullOrWhiteSpace(this.StreamName.Text))
-            {
-                return;
-            }
-
-            this.CreateButton.IsEnabled = false;
-
-            this.streamStore.NewStream(this.StreamName.Text).ContinueWith(
+            this.viewModel.CanSubmit = false;
+            this.streamStore.NewStream(this.viewModel.StreamName).ContinueWith(
                 task =>
                     {
                         if (!task.IsCompleted)

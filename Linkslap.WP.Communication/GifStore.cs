@@ -44,7 +44,7 @@ namespace Linkslap.WP.Communication
             this.rest.Execute<GifMeModel>(
                 HttpMethod.Get,
                 "/v1/search",
-                new { key = "MNfCaCC9tRAr3yzf", query, sfw = !nsfw, limit = 20, page },
+                new { key = "MNfCaCC9tRAr3yzf", query, sfw = (!nsfw).ToString().ToLower(), limit = 20, page },
                 task.SetResult,
                 task.SetException);
 

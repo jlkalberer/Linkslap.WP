@@ -39,11 +39,11 @@
                 <controls:ErrorCollection DataContext="{Binding Path=ValidationMessages[GenericError], Mode=OneWay}" />
 
                 <TextBlock Text="Email"/>
-                <TextBox Text="{Binding Path=Email, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus"></TextBox>
+                <TextBox Text="{Binding Path=Email, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" />
                 <controls:ErrorText DataContext="{Binding Path=ValidationMessages[Email], Mode=OneWay}" />
 
                 <TextBlock Text="Username"/>
-                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" />
                 <controls:ErrorText DataContext="{Binding Path=ValidationMessages[UserName], Mode=OneWay}" />
 
                 <TextBlock Text="Password"/>

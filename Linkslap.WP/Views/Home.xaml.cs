@@ -116,8 +116,6 @@
         {
             this.MapNewLinks();
 
-            SubscriptionStore.NoSubscriptionsDetected += SubscriptionStoreOnNoSubscriptionsDetected;
-
             NewSlapsStore.NewSlapsChanged += this.NewSlapsStoreOnNewSlapsChanged;
 
             var subscriptions = this.subscriptionStore.GetSubsriptions();
@@ -141,7 +139,7 @@
                                 .Each(s => this.viewModel.Subscriptions.Remove(svm => svm.Id == s.Id));
                         }
                     });
-
+            
             this.DataContext = this.viewModel; // this.Subscriptions;
 
             this.Pivot.SelectionChanged += this.PivotOnSelectionChanged;
@@ -152,15 +150,6 @@
             {
                 this.Pivot.SelectedIndex = 1;
             }
-        }
-
-        private async void SubscriptionStoreOnNoSubscriptionsDetected(object sender, EventArgs eventArgs)
-        {
-            var dialog =
-                    new MessageDialog(
-                        "Welcome to Linkslap.\r\n\r\nIt looks like you haven't subscribed to any streams yet.\r\n\r\nYou need to either create a new stream by clicking the '+' button or add a stream that was shared with you by visiting the stream page with your mobile browser.");
-
-            await dialog.ShowAsync();
         }
 
         /// <summary>
@@ -193,18 +182,18 @@
             var linkId = link.Id;
             this.CrossThread(
                 () =>
-                    {
-                        var oldLinks = this.viewModel.NewLinks.Where(l => l.Id == linkId).ToList();
+                {
+                    var oldLinks = this.viewModel.NewLinks.Where(l => l.Id == linkId).ToList();
 
-                        if (oldLinks.Any())
-                        {
-                            this.viewModel.NewLinks.RemoveRange(oldLinks);
-                        }
-                        else if (this.settingsStore.ShowInNewLinks(link.StreamKey))
-                        {
-                            this.viewModel.NewLinks.Insert(0, Mapper.Map<Link, LinkViewModel>(link));
-                        }
-                    });
+                    if (oldLinks.Any())
+                    {
+                        this.viewModel.NewLinks.RemoveRange(oldLinks);
+                    }
+                    else if (this.settingsStore.ShowInNewLinks(link.StreamKey))
+                    {
+                        this.viewModel.NewLinks.Insert(0, Mapper.Map<Link, LinkViewModel>(link));
+                    }
+                });
         }
 
         /// <summary>
@@ -216,7 +205,6 @@
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs eventArgs)
         {
             NewSlapsStore.NewSlapsChanged -= this.NewSlapsStoreOnNewSlapsChanged;
-            SubscriptionStore.NoSubscriptionsDetected -= SubscriptionStoreOnNoSubscriptionsDetected;
 
             base.OnNavigatingFrom(eventArgs);
         }
@@ -244,7 +232,7 @@
 
             this.viewModel.PanelHeaderStyles[pivot.SelectedIndex] = (Style)Application.Current.Resources["PivotSelectedStyle"];
 
-            this.ClearAppBarButton.Visibility = pivot.SelectedIndex == 1 || !this.viewModel.NewLinks.Any() ? Visibility.Collapsed : Visibility.Visible;
+            // this.ClearAppBarButton.Visibility = pivot.SelectedIndex == 1 || !this.viewModel.NewLinks.Any() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void StreamSelectionChanaged(object sender, SelectionChangedEventArgs eventArgs)
@@ -288,7 +276,8 @@
                 return;
             }
 
-            this.newSlapStore.RemoveLink(link.Id);
+            ToastNotificationManager.History.Remove(link.Id.ToString());
+            // this.newSlapStore.RemoveLink(link.Id);
             this.Navigate<View>(new ViewLinksViewModel(link, new ObservableCollection<LinkViewModel>(this.viewModel.NewLinks)));
         }
 
@@ -306,13 +295,14 @@
                 return;
             }
 
-            this.newSlapStore.RemoveLink(id);
+            ToastNotificationManager.History.Remove(id.ToString());
+            // this.newSlapStore.RemoveLink(id);
         }
 
         private void ClearNewSlapsClick(object sender, RoutedEventArgs e)
         {
             this.viewModel.NewLinks.Clear();
-            this.newSlapStore.Clear();
+            // this.newSlapStore.Clear();
             ToastNotificationManager.History.Clear();
         }
 

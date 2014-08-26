@@ -45,7 +45,7 @@
                         <SymbolIcon Symbol="Find" Foreground="White" />
                     </HyperlinkButton>
                 </Grid>
-                <CheckBox FontSize="9" IsChecked="{Binding Nsfw}">
+                <CheckBox FontSize="9" IsChecked="{Binding Nsfw, Mode=TwoWay}">
                     <CheckBox.RenderTransform>
                         <ScaleTransform ScaleX=".7" ScaleY=".7" />
                     </CheckBox.RenderTransform>

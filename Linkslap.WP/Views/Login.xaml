@@ -42,7 +42,7 @@
                 <controls:ErrorCollection DataContext="{Binding Path=ValidationMessages[GenericError], Mode=OneWay}" />
                 
                 <TextBlock Text="Username" />
-                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" />
+                <TextBox Text="{Binding Path=UserName, Mode=TwoWay}" GotFocus="TextboxFocused" LostFocus="TextBoxLostFocus" InputScope="EmailSmtpAddress" />
                 <!--<TextBlock Text="{Binding Path=ValidationMessages[UserName], Converter={StaticResource ValidationCollectionToSingleStringConverter}}" Style="{ThemeResource ErrorTextBlockStyle}" />-->
                 <controls:ErrorText DataContext="{Binding ValidationMessages[UserName], Mode=OneWay}" />
                 

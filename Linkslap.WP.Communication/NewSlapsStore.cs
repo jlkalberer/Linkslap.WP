@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     using Linkslap.WP.Communication.Interfaces;
@@ -22,10 +23,21 @@
         private const string Key = "new-slaps";
 
         /// <summary>
+        /// The is running.
+        /// </summary>
+        private static volatile bool isRunning;
+
+        /// <summary>
         /// The settings store.
         /// </summary>
         private readonly ISettingsStore settingsStore;
 
+        /// <summary>
+        /// The rest.
+        /// </summary>
+        private readonly Rest rest;
+
+        private List<Link> links;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewSlapsStore"/> class.
@@ -44,6 +56,7 @@
         public NewSlapsStore(ISettingsStore settingsStore)
         {
             this.settingsStore = settingsStore;
+            this.rest = new Rest();
         }
 
         /// <summary>
@@ -58,7 +71,7 @@
         {
             get
             {
-                return this.GetLinks();
+                return this.links = this.GetLinks();
             }
         }
 
@@ -80,7 +93,7 @@
                 return;
             }
 
-            var links = this.GetLinks();
+            var links = this.Links;
 
             // Link already exists but trigger a refresh
             if (links.Any(l => l.Id == link.Id))
@@ -93,10 +106,10 @@
                 return;
             }
 
-            links.Add(link);
-            Storage.Save(Key, links);
+            this.links.Insert(0, link);
+            Storage.Save(Key, this.links.Take(10).ToList());
 
-            this.UpdateBadge(links);
+            // this.UpdateBadge(links);
 
             if (NewSlapsChanged != null)
             {
@@ -115,7 +128,7 @@
             var links = this.GetLinks();
             var link = links.FirstOrDefault(l => l.Id == id);
             links.Remove(link);
-            Storage.Save(Key, links);
+            Storage.Save(Key, links.Take(10).ToList());
 
             this.UpdateBadge(links);
 
@@ -128,7 +141,7 @@
         public void Clear()
         {
             var links = new List<Link>();
-            Storage.Save(Key, links);
+            Storage.Save(Key, links.Take(10).ToList());
 
             this.UpdateBadge(links);
 
@@ -146,7 +159,36 @@
         /// </returns>
         private List<Link> GetLinks()
         {
-            return Storage.Load<List<Link>>(Key) ?? new List<Link>();
+            this.links = Storage.Load<List<Link>>(Key) ?? new List<Link>();
+            if (this.links != null && (this.links.Any() || isRunning))
+            {
+                return this.links;
+            }
+
+            isRunning = true;
+            this.links = new List<Link>();
+
+            // return Storage.Load<List<Link>>(Key) ?? new List<Link>();
+
+            this.rest.Get<List<Link>>(
+                "api/link/user-latest",
+                links =>
+                    {
+                        this.links.AddRange(links);
+                        links.Reverse();
+                        Storage.Save(Key, this.links.Take(10).ToList());
+
+                        if (NewSlapsChanged != null)
+                        {
+                            foreach (var link in links)
+                            {
+                               NewSlapsChanged(this, link);
+                            }
+                        }
+                        isRunning = false;
+                    });
+
+            return this.links;
         }
 
         /// <summary>

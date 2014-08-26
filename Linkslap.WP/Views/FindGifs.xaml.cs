@@ -78,8 +78,6 @@
             this.streamKey = (string)e.Parameter;
             base.OnNavigatedTo(e);
 
-            HasViewedSearchHowTo = false;
-
             if (!HasViewedSearchHowTo)
             {
                 var mess =

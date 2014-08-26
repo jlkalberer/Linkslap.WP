@@ -44,8 +44,8 @@
                     <TextBlock Text="{Binding}" Style="{Binding PanelHeaderStyles[Pivot.SelectedIndex]}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem Header="New Links">
-                <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged" RemovableLinks="Visible" RemoveItemClicked="RemoveNewSlap"></controls:LinkLongList>
+            <PivotItem Header="Recent Links">
+                <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged"/>
             </PivotItem>
             <PivotItem Header="Streams">
                 <SemanticZoom>
@@ -61,7 +61,7 @@
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="Search Gif" Click="SearchGifClick" Icon="Find" />
                 <AppBarButton Label="New Stream" Icon="Add" Click="NewStreamClick"/>
-                <AppBarButton Name="ClearAppBarButton" Label="Clear" Icon="Cancel" Click="ClearNewSlapsClick"/>
+                <!--<AppBarButton Name="ClearAppBarButton" Label="Clear" Icon="Cancel" Click="ClearNewSlapsClick"/>-->
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Settings" Icon="Setting" Click="GoToSettings"/>

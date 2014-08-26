@@ -148,7 +148,7 @@
         {
             var link = this.viewModel.SelectedItem;
             ToastNotificationManager.History.Remove(link.Id.ToString());
-            this.newSlapsStore.RemoveLink(link.Id);
+            // this.newSlapsStore.RemoveLink(link.Id);
         }
 
         /// <summary>

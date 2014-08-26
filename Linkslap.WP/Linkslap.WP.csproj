@@ -111,6 +111,7 @@
       <DependentUpon>LinkLongList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PageBase.cs" />
+    <Compile Include="ViewModels\NewSlapStreamViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\FindGifViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -126,7 +127,6 @@
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\NewStreamViewModel.cs" />
     <Compile Include="ViewModels\PasswordResetViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\ShareLinkViewModel.cs" />

@@ -225,93 +225,112 @@
                             return;
                         }
 
-                        var imageStream = await response.Content.ReadAsStreamAsync();
-
-                        BitmapDecoder imageDecoder;
-                        using (var randomAccessStream = new InMemoryRandomAccessStream())
+                        using (var imageStream = await response.Content.ReadAsStreamAsync())
                         {
-                            await imageStream.CopyToAsync(randomAccessStream.AsStreamForWrite());
-                            imageDecoder =
-                                await BitmapDecoder.CreateAsync(BitmapDecoder.GifDecoderId, randomAccessStream);
-
-                            FrameCount = imageDecoder.FrameCount;
-                            // Clear old bitmaps in case the control is being reused
-                            bitmapFrames.Clear();
-
-                            byte[] lastFrame = null;
-                            var totalWidth = 0;
-
-                            // Extract each frame and create a WriteableBitmap for each of these (store them in an internal list)
-                            for (uint frameIndex = 0; frameIndex < FrameCount; frameIndex++)
+                            BitmapDecoder imageDecoder;
+                            using (var randomAccessStream = new InMemoryRandomAccessStream())
                             {
-                                var frame = await imageDecoder.GetFrameAsync(frameIndex);
-                                var propertyDictionary = await frame.BitmapProperties.GetPropertiesAsync(new List<string> { "/imgdesc/Width", "/imgdesc/Height", "/imgdesc/Left", "/imgdesc/Top", "/grctlext/Delay" });
-                                var test = await frame.BitmapProperties.GetPropertiesAsync(new List<string> { "/grctlext" });
-                                var test2 = await (test["/grctlext"].Value as BitmapPropertiesView).GetPropertiesAsync(new List<string>());
-                                var list = test2.ToList();
+                                await imageStream.CopyToAsync(randomAccessStream.AsStreamForWrite());
+                                imageDecoder =
+                                    await BitmapDecoder.CreateAsync(BitmapDecoder.GifDecoderId, randomAccessStream);
 
-                                speeds.Add(TimeSpan.FromMilliseconds(double.Parse(propertyDictionary["/grctlext/Delay"].Value.ToString()) * 10));
+                                FrameCount = imageDecoder.FrameCount;
+                                // Clear old bitmaps in case the control is being reused
+                                bitmapFrames.Clear();
 
-                                var top = int.Parse(propertyDictionary["/imgdesc/Top"].Value.ToString());
-                                var left = int.Parse(propertyDictionary["/imgdesc/Left"].Value.ToString());
-                                var width = int.Parse(propertyDictionary["/imgdesc/Width"].Value.ToString());
-                                var height = int.Parse(propertyDictionary["/imgdesc/Height"].Value.ToString());
+                                byte[] lastFrame = null;
+                                var totalWidth = 0;
 
-                                var writeableBitmap = new WriteableBitmap(
-                                    (int)imageDecoder.OrientedPixelWidth,
-                                    (int)imageDecoder.OrientedPixelHeight);
-                                
-                                // Extract the pixel data and fill the WriteableBitmap with them
-                                var bitmapTransform = new BitmapTransform();
-
-                                var pixelDataProvider =
-                                    await
-                                    frame.GetPixelDataAsync(
-                                        BitmapPixelFormat.Bgra8,
-                                        imageDecoder.BitmapAlphaMode,
-                                        bitmapTransform,
-                                        ExifOrientationMode.IgnoreExifOrientation,
-                                        ColorManagementMode.DoNotColorManage);
-
-                                var pixels = pixelDataProvider.DetachPixelData();
-
-                                if (lastFrame != null)
+                                // Extract each frame and create a WriteableBitmap for each of these (store them in an internal list)
+                                for (uint frameIndex = 0; frameIndex < FrameCount; frameIndex++)
                                 {
-                                    for (var j = 0; j < height; j++)
+                                    var frame = await imageDecoder.GetFrameAsync(frameIndex);
+                                    var propertyDictionary =
+                                        await
+                                        frame.BitmapProperties.GetPropertiesAsync(
+                                            new List<string>
+                                                {
+                                                    "/imgdesc/Width",
+                                                    "/imgdesc/Height",
+                                                    "/imgdesc/Left",
+                                                    "/imgdesc/Top",
+                                                    "/grctlext/Delay"
+                                                });
+                                    var test =
+                                        await
+                                        frame.BitmapProperties.GetPropertiesAsync(new List<string> { "/grctlext" });
+                                    var test2 =
+                                        await
+                                        (test["/grctlext"].Value as BitmapPropertiesView).GetPropertiesAsync(
+                                            new List<string>());
+                                    var list = test2.ToList();
+
+                                    speeds.Add(
+                                        TimeSpan.FromMilliseconds(
+                                            double.Parse(propertyDictionary["/grctlext/Delay"].Value.ToString()) * 10));
+
+                                    var top = int.Parse(propertyDictionary["/imgdesc/Top"].Value.ToString());
+                                    var left = int.Parse(propertyDictionary["/imgdesc/Left"].Value.ToString());
+                                    var width = int.Parse(propertyDictionary["/imgdesc/Width"].Value.ToString());
+                                    var height = int.Parse(propertyDictionary["/imgdesc/Height"].Value.ToString());
+
+                                    var writeableBitmap = new WriteableBitmap(
+                                        (int)imageDecoder.OrientedPixelWidth,
+                                        (int)imageDecoder.OrientedPixelHeight);
+
+                                    // Extract the pixel data and fill the WriteableBitmap with them
+                                    var bitmapTransform = new BitmapTransform();
+
+                                    var pixelDataProvider =
+                                        await
+                                        frame.GetPixelDataAsync(
+                                            BitmapPixelFormat.Bgra8,
+                                            imageDecoder.BitmapAlphaMode,
+                                            bitmapTransform,
+                                            ExifOrientationMode.IgnoreExifOrientation,
+                                            ColorManagementMode.DoNotColorManage);
+
+                                    var pixels = pixelDataProvider.DetachPixelData();
+
+                                    if (lastFrame != null)
                                     {
-                                        for (var i = 0; i < width; i++)
+                                        for (var j = 0; j < height; j++)
                                         {
-                                            var offset = (i + (j * width)) * 4;
-                                            if (pixels[offset + 3] == 0)
+                                            for (var i = 0; i < width; i++)
                                             {
-                                                continue;
+                                                var offset = (i + (j * width)) * 4;
+                                                if (pixels[offset + 3] == 0)
+                                                {
+                                                    continue;
+                                                }
+
+                                                var overallOffset = (((top + j) * totalWidth) + i + left) * 4;
+
+                                                lastFrame[overallOffset] = pixels[offset];
+                                                lastFrame[overallOffset + 1] = pixels[offset + 1];
+                                                lastFrame[overallOffset + 2] = pixels[offset + 2];
+                                                lastFrame[overallOffset + 3] = pixels[offset + 3];
                                             }
-
-                                            var overallOffset = (((top + j) * totalWidth) + i + left) * 4;
-
-                                            lastFrame[overallOffset] = pixels[offset];
-                                            lastFrame[overallOffset + 1] = pixels[offset + 1];
-                                            lastFrame[overallOffset + 2] = pixels[offset + 2];
-                                            lastFrame[overallOffset + 3] = pixels[offset + 3];
                                         }
                                     }
-                                }
 
-                                if (lastFrame == null)
-                                {
-                                    lastFrame = pixels;
-                                    totalWidth = int.Parse(propertyDictionary["/imgdesc/Width"].Value.ToString());
-                                }
+                                    if (lastFrame == null)
+                                    {
+                                        lastFrame = pixels;
+                                        totalWidth = int.Parse(propertyDictionary["/imgdesc/Width"].Value.ToString());
+                                    }
 
-                                using (var bitmapStream = writeableBitmap.PixelBuffer.AsStream())
-                                {
-                                    bitmapStream.Write(lastFrame, 0, lastFrame.Length);
-                                }
+                                    using (var bitmapStream = writeableBitmap.PixelBuffer.AsStream())
+                                    {
+                                        bitmapStream.Write(lastFrame, 0, lastFrame.Length);
+                                    }
 
-                                // Finally we have a frame (WriteableBitmap) that can internally be stored.
-                                bitmapFrames.Add(writeableBitmap);
+                                    // Finally we have a frame (WriteableBitmap) that can internally be stored.
+                                    this.bitmapFrames.Add(writeableBitmap);
+                                }
                             }
                         }
+
                     }
                 }
 
@@ -408,5 +427,13 @@
         public EventHandler ImageLoaded;
 
         #endregion
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="AnimationImage"/> class. 
+        /// </summary>
+        ~AnimationImage()
+        {
+            this.bitmapFrames.Clear();
+        }
     }
 }

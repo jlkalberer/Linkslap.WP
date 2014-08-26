@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     using AutoMapper;
@@ -172,9 +173,10 @@
                 var page = rootFrame.Content as Page;
                 if (link != null && page != null)
                 {
-                    var linkViewModel = Mapper.Map<Link, LinkViewModel>(link);
+                    var lvms = Mapper.Map<IEnumerable<Link>, ObservableCollection<LinkViewModel>>(linkRepo.Links);
+                    var linkViewModel = lvms.FirstOrDefault(l => l.Id == link.Id);
 
-                    var viewLinksViewModel = new ViewLinksViewModel(linkViewModel);
+                    var viewLinksViewModel = new ViewLinksViewModel(linkViewModel, lvms);
                     page.Frame.Navigate(typeof(View), viewLinksViewModel);
                 }
             }
