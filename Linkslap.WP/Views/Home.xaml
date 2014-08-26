@@ -44,15 +44,15 @@
                     <TextBlock Text="{Binding}" Style="{Binding PanelHeaderStyles[Pivot.SelectedIndex]}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem Header="Recent Links">
-                <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged"/>
-            </PivotItem>
             <PivotItem Header="Streams">
                 <SemanticZoom>
                     <SemanticZoom.ZoomedInView>
                         <ListView SelectionChanged="StreamSelectionChanaged" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}" />
                     </SemanticZoom.ZoomedInView>
                 </SemanticZoom>
+            </PivotItem>
+            <PivotItem Header="Recent Links">
+                <controls:LinkLongList Links="{Binding NewLinks}" SelectionChanged="LinkLongList_OnSelectionChanged"/>
             </PivotItem>
         </Pivot>
     </Grid>

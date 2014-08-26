@@ -8,6 +8,7 @@
     xmlns:viewModels="using:Linkslap.WP.ViewModels"
     xmlns:controls="using:Linkslap.WP.Controls"
     mc:Ignorable="d"
+    Name="FindPage"
     Background="{ThemeResource BackgroundBrush}">
 
     <Page.DataContext>
@@ -40,7 +41,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Text="{Binding Path=Query, Mode=TwoWay}" KeyDown="SearchTextKeyDown" />
+                    <TextBox Grid.Column="0" Text="{Binding Path=Query, Mode=TwoWay}" KeyDown="SearchTextKeyDown" InputScope="Search" />
                     <HyperlinkButton Command="{Binding}" IsEnabled="{Binding ExecuteButtonEnabled, Mode=TwoWay}" Grid.Column="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="8,6,12,6" Background="{ThemeResource ButtonGradientBrush}">
                         <SymbolIcon Symbol="Find" Foreground="White" />
                     </HyperlinkButton>
@@ -58,7 +59,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <controls:AnimationImage ImageUrl="{Binding Gif}" IsEnabled="{Binding ShowGif}" Visibility="{Binding GifVisibility}" Margin="0,0,15,0" Height="{Binding Height, ElementName=Image}" />
+                                    <controls:AnimationImage IsEnabled="{Binding ShowGif}" ImageUrl="{Binding Gif}" Visibility="{Binding GifVisibility}" Margin="0,0,15,0" Height="{Binding Height, ElementName=Image}" />
                                     <Image Name="Image" DataContext="{Binding}" Source="{Binding Thumbnail}" ImageOpened="ImageOpened" Margin="0,0,15,0" Visibility="{Binding ThumbnailVisibility}"/>
                                     <Viewbox Canvas.ZIndex="2" MaxWidth="150" MaxHeight="150" Visibility="{Binding ThumbnailVisibility}">
                                         <SymbolIcon Symbol="Play" Foreground="#99ffffff"/>

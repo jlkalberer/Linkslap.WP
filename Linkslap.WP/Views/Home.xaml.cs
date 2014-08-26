@@ -146,10 +146,10 @@
 
             base.OnNavigatedTo(e);
 
-            if (!this.newSlapStore.Links.Any())
-            {
-                this.Pivot.SelectedIndex = 1;
-            }
+            //if (!this.newSlapStore.Links.Any())
+            //{
+            //    this.Pivot.SelectedIndex = 1;
+            //}
         }
 
         /// <summary>

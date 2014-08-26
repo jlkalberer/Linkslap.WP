@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Text.RegularExpressions;
+
+    using Windows.UI.Xaml;
 
     using AutoMapper;
 
@@ -36,8 +39,7 @@
                 () =>
                     {
                         this.Comment = null;
-                    },
-                () => !string.IsNullOrEmpty(this.Comment));
+                    });
         }
 
         /// <summary>
@@ -116,5 +118,19 @@
         /// Gets the subscriptions.
         /// </summary>
         public ObservableCollection<SubscriptionViewModel> Subscriptions { get; private set; }
+
+        /// <summary>
+        /// Gets the show image.
+        /// </summary>
+        public bool ShowImage
+        {
+            get
+            {
+                var url = this.Uri.AbsolutePath;
+
+                var v = Regex.IsMatch(url, @"^.*\.(jpeg|jpg|gif|png)$", RegexOptions.IgnoreCase);
+                return v;
+            }
+        }
     }
 }

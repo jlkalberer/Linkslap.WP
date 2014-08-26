@@ -108,7 +108,7 @@ namespace Linkslap.WP.ViewModels
         /// </returns>
         public override bool CanExecute(object parameter)
         {
-            return this.ExecuteButtonEnabled && !string.IsNullOrEmpty(this.Query);
+            return this.ExecuteButtonEnabled;
         }
 
         /// <summary>
@@ -119,6 +119,11 @@ namespace Linkslap.WP.ViewModels
         /// </param>
         public async override void Execute(object parameter)
         {
+            if (string.IsNullOrEmpty(this.Query))
+            {
+                return;
+            }
+
             this.IsSearching = true;
             this.ExecuteButtonEnabled = false;
             base.Execute(parameter);

@@ -406,8 +406,6 @@
 
         private static void ImageUrlPropertyChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
-            return;
-
             var control = (AnimationImage)sender;
 
             if (!control.IsEnabled)

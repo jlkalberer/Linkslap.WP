@@ -43,11 +43,12 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
-                <TextBlock Grid.Row="0" Text="Comment" />
-                <Grid Grid.Row="1">
+                <controls:AnimationImage Grid.Row="0" MaxHeight="180" IsEnabled="{Binding ShowImage}" ImageUrl="{Binding Uri.AbsoluteUri}" />
+                <TextBlock Grid.Row="1" Text="Comment" />
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -57,12 +58,12 @@
                         <SymbolIcon Symbol="Cancel" Foreground="White" />
                     </HyperlinkButton>
                 </Grid>
-                <SemanticZoom Grid.Row="2" Name="StreamSelector">
+                <SemanticZoom Grid.Row="3" Name="StreamSelector">
                     <SemanticZoom.ZoomedInView>
                         <ListView SelectionChanged="StreamSelectionChanged" IsEnabled="{Binding CanSubmit}" ItemsSource="{Binding Subscriptions}" ItemTemplate="{StaticResource StreamTemplate}"/>
                     </SemanticZoom.ZoomedInView>
                 </SemanticZoom>
-                <Button  Grid.Row="2" Name="ShareButton" Click="ShareButtonClicked" IsEnabled="{Binding CanSubmit}" Visibility="Collapsed" Margin="0, 20, 0, 0" HorizontalAlignment="Right">Share</Button>
+                <Button  Grid.Row="3" Name="ShareButton" Click="ShareButtonClicked" IsEnabled="{Binding CanSubmit}" Visibility="Collapsed" Margin="0, 20, 0, 0" HorizontalAlignment="Right">Share</Button>
             </Grid>
         </Grid>
     </Grid>

@@ -12,6 +12,8 @@
 
     using Windows.UI.Popups;
 
+    using Linkslap.WP.Views;
+
     /// <summary>
     /// The register view model.
     /// </summary>
@@ -165,10 +167,20 @@
                 return;
             }
 
+            var task = this.accountStore.Authenticate(model.UserName, model.Password);
+
             var dialog = new MessageDialog("You have successfully registered.  You will receive a confirmation email shortly.");
             await dialog.ShowAsync();
 
-            this.navigationService.GoBack();
+            await task;
+
+            if (task.IsFaulted)
+            {
+                this.navigationService.GoBack();
+                return;
+            }
+
+            this.navigationService.Navigate<Home>();
         }
     }
 }
