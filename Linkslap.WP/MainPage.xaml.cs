@@ -4,6 +4,7 @@
 
     using Linkslap.WP.Communication;
     using Linkslap.WP.Communication.Interfaces;
+    using Linkslap.WP.Communication.Util;
     using Linkslap.WP.Utils;
     using Linkslap.WP.Views;
 
@@ -43,6 +44,23 @@
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
+
+        /// <summary>
+        /// Gets or sets a value indicating whether has viewed search how to.
+        /// </summary>
+        public static bool HasOnboarded
+        {
+            get
+            {
+                return Storage.Load<bool>("NewUser.Onboarding");
+            }
+
+            set
+            {
+                Storage.Save("NewUser.Onboarding", value);
+            }
+        }
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -63,6 +81,7 @@
                 return;
             }
 
+
             var task = this.accountStore.Get();
             task.ContinueWith(
                 t =>
@@ -74,6 +93,11 @@
                         }
 
                         this.NavigateRoot<Home>();
+
+                        if (!HasOnboarded)
+                        {
+                            this.Navigate<Onboarding>();
+                        }
                     });
         }
     }

@@ -1,16 +1,8 @@
 ﻿namespace Linkslap.WP.Views
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using System.Threading.Tasks;
-
-    using Windows.ApplicationModel.Background;
-    using Windows.Data.Xml.Dom;
-    using Windows.Networking.PushNotifications;
-    using Windows.UI.Notifications;
-    using Windows.UI.Popups;
 
     using AutoMapper;
 
@@ -24,6 +16,7 @@
     using Linkslap.WP.Utils;
     using Linkslap.WP.ViewModels;
 
+    using Windows.UI.Notifications;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
@@ -79,7 +72,7 @@
             : this(new AccountStore(), new NewSlapsStore(), new SubscriptionStore(), new SettingsStore())
         {
         }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Home"/> class.
         /// </summary>
@@ -318,20 +311,6 @@
         private void SearchGifClick(object sender, RoutedEventArgs e)
         {
             this.Navigate<FindGifs>();
-        }
-
-        /// <summary>
-        /// The go to settings.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void GoToSettings(object sender, RoutedEventArgs e)
-        {
-            this.Navigate<Settings>();
         }
 
         /// <summary>

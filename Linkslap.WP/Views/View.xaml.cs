@@ -283,20 +283,6 @@
         }
 
         /// <summary>
-        /// The settings click.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void SettingsClick(object sender, RoutedEventArgs e)
-        {
-            this.Navigate<Settings>();
-        }
-
-        /// <summary>
         /// The logout click.
         /// </summary>
         /// <param name="sender">

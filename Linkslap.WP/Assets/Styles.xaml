@@ -6,9 +6,10 @@
     <validation:ValidationMessageCollectionToStringCollectionConverter x:Key="CollectionConverter" />
     <validation:VisibilityConverter x:Key="VisibilityConverter" />
 
-    <ImageBrush x:Key="BodyBrush" ImageSource="../Assets/Images/background.png"></ImageBrush>
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#99cfd9"></SolidColorBrush>
-    <SolidColorBrush x:Key="ButtonGradientBrush" Color="#02778C"></SolidColorBrush>
+    <ImageBrush x:Key="BodyBrush" ImageSource="../Assets/Images/background.png"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#99cfd9"/>
+    <SolidColorBrush x:Key="ButtonGradientBrush" Color="#02778C"/>
+    <FontFamily x:Key="Varela">/Assets/Varela-Regular.ttf#Varela</FontFamily>
     <Style x:Key="HeaderStyle" TargetType="StackPanel">
         <Setter Property="Background" Value="#99cfd9"/>
     </Style>
@@ -31,6 +32,29 @@
         <Setter Property="FontSize" Value="40"/>
         <Setter Property="Foreground" Value="#333333" />
         <Setter Property="Margin" Value="0,0,0,10"></Setter>
+    </Style>
+    <Style x:Key="OnboardingHeaders" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#73242c"/>
+        <Setter Property="FontFamily" Value="Varela"/>
+        <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+    </Style>
+    <Style x:Key="OnboardingH1" TargetType="TextBlock" BasedOn="{StaticResource OnboardingHeaders}">
+        <Setter Property="Margin" Value="0,20,0,5"/>
+        <Setter Property="FontSize" Value="22"/>
+    </Style>
+    <Style x:Key="OnboardingH2" TargetType="TextBlock" BasedOn="{StaticResource OnboardingHeaders}">
+        <Setter Property="Margin" Value="0,3,0,0"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <Style x:Key="OnboardingH3" TargetType="TextBlock" BasedOn="{StaticResource OnboardingHeaders}">
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+    <Style x:Key="OnboardingP" TargetType="TextBlock">
+        <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+        <Setter Property="Foreground" Value="#4b91af"/>
+        <Setter Property="FontFamily" Value="Varela"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
     </Style>
     <Style x:Key="PivotSelectedStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}">
         <Setter Property="Foreground" Value="#333333" />

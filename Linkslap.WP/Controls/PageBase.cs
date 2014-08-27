@@ -3,10 +3,13 @@
 namespace Linkslap.WP.Controls
 {
     using Windows.UI.Core;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
 
     using Linkslap.WP.Common;
+    using Linkslap.WP.Utils;
+    using Linkslap.WP.Views;
 
     public abstract class PageBase : Page
     {
@@ -111,5 +114,25 @@ namespace Linkslap.WP.Controls
         }
 
         #endregion
+
+
+        /// <summary>
+        /// The go to settings.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void SettingsClick(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<Settings>();
+        }
+
+        protected void HelpClick(object sender, RoutedEventArgs e)
+        {
+            this.Navigate<Onboarding>();
+        }
     }
 }

@@ -146,6 +146,9 @@
     <Compile Include="Views\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Onboarding.xaml.cs">
+      <DependentUpon>Onboarding.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PasswordReset.xaml.cs">
       <DependentUpon>PasswordReset.xaml</DependentUpon>
     </Compile>
@@ -177,6 +180,9 @@
     <Content Include="Assets\Images\logo-partial.png" />
     <Content Include="Assets\Images\logo-text.png" />
     <Content Include="Assets\Images\logo.png" />
+    <Content Include="Assets\Images\Onboarding\logo.png" />
+    <Content Include="Assets\Images\Onboarding\people.png" />
+    <Content Include="Assets\Images\Onboarding\slap-flow.png" />
     <Content Include="Assets\Images\share-icon.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
@@ -185,6 +191,7 @@
     <Content Include="Assets\StoreLogo.scale-240.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
     <Content Include="Common\ReadMe.txt" />
+    <Content Include="Assets\Varela-Regular.ttf" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -236,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Onboarding.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

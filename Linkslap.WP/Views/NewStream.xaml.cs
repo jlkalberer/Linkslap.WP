@@ -1,5 +1,6 @@
 ﻿namespace Linkslap.WP.Views
 {
+    using Windows.UI.Notifications;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Navigation;
 
@@ -19,6 +20,8 @@
         /// </summary>
         private readonly IStreamStore streamStore;
 
+        private readonly AccountStore accountStore;
+
         private int errorCount = 0;
 
         private NewSlapStreamViewModel viewModel;
@@ -27,16 +30,23 @@
         /// Initializes a new instance of the <see cref="NewStream"/> class.
         /// </summary>
         public NewStream()
-            : this(new StreamStore())
+            : this(new StreamStore(), new AccountStore())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewStream"/> class.
         /// </summary>
-        public NewStream(IStreamStore streamStore)
+        /// <param name="streamStore">
+        /// The stream Store.
+        /// </param>
+        /// <param name="accountStore">
+        /// The account Store.
+        /// </param>
+        public NewStream(IStreamStore streamStore, AccountStore accountStore)
         {
             this.streamStore = streamStore;
+            this.accountStore = accountStore;
             this.InitializeComponent();
 
             this.viewModel = this.DataContext as NewSlapStreamViewModel;
@@ -82,6 +92,24 @@
 
                         this.NavigationHelper.GoBack();
                     });
+        }
+
+
+        /// <summary>
+        /// The logout click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void LogoutClick(object sender, RoutedEventArgs e)
+        {
+            ToastNotificationManager.History.Clear();
+            this.accountStore.Logout();
+
+            this.NavigateRoot<Login>();
         }
     }
 }

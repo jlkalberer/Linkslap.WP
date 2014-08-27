@@ -88,7 +88,7 @@
             {
                 var mess =
                     new MessageDialog(
-                        "This is the gif search.\r\n\r\nUse the search box to search.\r\n\r\nTap an image once to preview.\r\n\r\nDouble tap to share.");
+                        "This is the gif search.\r\n\r\nUse the search box to search.\r\n\r\nTap an image once to preview.\r\n\r\nClick the share icon or double tap to share.");
                 await mess.ShowAsync();
                 HasViewedSearchHowTo = true;
             }

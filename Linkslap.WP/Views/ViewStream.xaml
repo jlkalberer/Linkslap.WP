@@ -49,6 +49,7 @@
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Settings" Icon="Switch" Click="SettingsClick"/>
                 <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
+                <AppBarButton Label="How To Use LinkSlap" Icon="Help" Click="HelpClick"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

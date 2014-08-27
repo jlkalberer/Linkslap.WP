@@ -38,4 +38,13 @@
             </StackPanel>
         </Grid>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Settings" Icon="Setting" Click="SettingsClick"/>
+                <AppBarButton Label="Log out" Icon="Switch" Click="LogoutClick"/>
+                <AppBarButton Label="How To Use LinkSlap" Icon="Help" Click="HelpClick"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </controls:PageBase>

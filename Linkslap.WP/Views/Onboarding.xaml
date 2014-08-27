@@ -1,0 +1,116 @@
+﻿<controls:PageBase
+    x:Class="Linkslap.WP.Views.Onboarding"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Linkslap.WP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Linkslap.WP.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource BackgroundBrush}">
+
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource BodyBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--<StackPanel Grid.Row="1" Canvas.ZIndex="2" Background="#22000000" VerticalAlignment="Center">
+            <ProgressRing IsActive="True" Background="#22000000" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </StackPanel>-->
+
+        <!-- TitlePanel -->
+        <StackPanel Grid.Row="0" Style="{ThemeResource HeaderStyle}">
+            <Image Style="{ThemeResource HeaderImage}" />
+            <Rectangle Height="20" Fill="#323232"></Rectangle>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Style="{ThemeResource MainContent}" Margin="20">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Padding="15" Background="White">
+                        <StackPanel >
+                            <Image Source="../Assets/Images/Onboarding/people.png" />
+                            <TextBlock Text="NEXT TIME SLAP THEM!" Style="{ThemeResource OnboardingH1}" />
+                            <TextBlock Text="INTANTLY PUSH WEB CONTENT TO YOUR FRIENDS"  Style="{ThemeResource OnboardingH3}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="1" Padding="15" Background="White" Margin="0,20,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Grid.Column="0" CornerRadius="14" Width="28" Height="28" Background="#f6c500" VerticalAlignment="Top" BorderBrush="#73242c" BorderThickness="2" Margin="0,0,10,0">
+                                <TextBlock Text="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="JOIN LINKSLAP" Style="{ThemeResource OnboardingH2}" />
+                                <TextBlock Text="Join LinkSlap by registering in the app." Style="{ThemeResource OnboardingP}"  />
+                            </StackPanel>
+
+                            <Border Grid.Row="1" Grid.Column="0" CornerRadius="14" Width="28" Height="28" Background="#f6c500" VerticalAlignment="Top" BorderBrush="#73242c" BorderThickness="2" Margin="0,0,10,0">
+                                <TextBlock Text="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="CREATE A SLAPSTREAM" Style="{ThemeResource OnboardingH2}" />
+                                <TextBlock Text="Create a Slapstream around a topic and share links with friends. It will keep an archive of awesome slaps." Style="{ThemeResource OnboardingP}"  />
+                            </StackPanel>
+
+                            <Border Grid.Row="2" Grid.Column="0" CornerRadius="14" Width="28" Height="28" Background="#f6c500" VerticalAlignment="Top" BorderBrush="#73242c" BorderThickness="2" Margin="0,0,10,0">
+                                <TextBlock Text="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="2" Grid.Column="1">
+                                <TextBlock Text="INVITE FRIENDS" Style="{ThemeResource OnboardingH2}" />
+                                <TextBlock Text="Like MANY things in life you can do it alone, but it is much better with partners. Invite your friends to your Slapstream." Style="{ThemeResource OnboardingP}"  />
+                            </StackPanel>
+
+                            <Border Grid.Row="3" Grid.Column="0" CornerRadius="14" Width="28" Height="28" Background="#f6c500" VerticalAlignment="Top" BorderBrush="#73242c" BorderThickness="2" Margin="0,0,10,0">
+                                <TextBlock Text="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="3" Grid.Column="1">
+                                <TextBlock Text="SLAP THOSE LINKS" Style="{ThemeResource OnboardingH2}" />
+                                <TextBlock Text="You can slap web content you find by sharing in other apps like the web browser. It is instantly pushed to the Slapstream and appears in followers' browsers or mobile app." Style="{ThemeResource OnboardingP}"  />
+                            </StackPanel>
+
+                            <Border Grid.Row="4" Grid.Column="0" CornerRadius="14" Width="28" Height="28" Background="#f6c500" VerticalAlignment="Top" BorderBrush="#73242c" BorderThickness="2" Margin="0,0,10,0">
+                                <TextBlock Text="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="4" Grid.Column="1">
+                                <TextBlock Text="SLAP BACK WITH REACTION GIFS" Style="{ThemeResource OnboardingH2}" />
+                                <TextBlock Text="Linkslap has a built in GIF search engine. You can slap a perfect animated reaction without scouring the web." Style="{ThemeResource OnboardingP}"  />
+                                <Image Source="../Assets/Images/Onboarding/slap-flow.png" Margin="0,-15,0,15"/>
+                            </StackPanel>
+
+                            <Border Grid.Row="5" Grid.Column="0" CornerRadius="14" Width="28" Height="28" Background="#f6c500" VerticalAlignment="Top" BorderBrush="#73242c" BorderThickness="2" Margin="0,0,10,0">
+                                <TextBlock Text="6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="5" Grid.Column="1">
+                                <TextBlock Text="REMEMBER THE SLAPS THAT STARTED IT ALL" Style="{ThemeResource OnboardingH2}" />
+                                <TextBlock Text="Every slap is preserved in an archive so that you can relive the magic and find the amazing content that you and your friends shared." Style="{ThemeResource OnboardingP}"  />
+                            </StackPanel>
+                            <Rectangle Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Height="1" Fill="#abd3de" Margin="0,10,0,0"/>
+                            <Image Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Source="../Assets/Images/Onboarding/logo.png" Margin="20,30"/>
+                        </Grid>
+                    </Border>
+                    <Button Grid.Row="2" Margin="0,20,0,0" FontSize="30" HorizontalAlignment="Right" Click="OkButtonClicked">OK, Got It</Button>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</controls:PageBase>
