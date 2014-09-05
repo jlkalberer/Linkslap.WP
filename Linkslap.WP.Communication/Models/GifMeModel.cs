@@ -87,7 +87,7 @@
             /// <summary>
             /// Gets or sets a value indicating whether nsfw.
             /// </summary>
-            [JsonProperty("nswf")]
+            [JsonProperty("nsfw")]
             public bool NSFW { get; set; }
 
             /// <summary>

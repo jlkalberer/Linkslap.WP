@@ -1,25 +1,19 @@
 ﻿namespace Linkslap.WP.Communication
 {
     using System;
-    using System.IO;
-    using System.Net.Http;
-    using System.Text;
-
-    using Windows.Foundation;
-    using Windows.Web.Http.Headers;
 
     using Linkslap.WP.Communication.Models;
     using Linkslap.WP.Communication.Util;
 
-    using Windows.Web.Http;
-
     using Newtonsoft.Json;
+
+    using Windows.Foundation;
+    using Windows.Web.Http;
+    using Windows.Web.Http.Headers;
 
     using HttpClient = Windows.Web.Http.HttpClient;
     using HttpMethod = Windows.Web.Http.HttpMethod;
     using HttpRequestMessage = Windows.Web.Http.HttpRequestMessage;
-    using HttpResponseMessage = Windows.Web.Http.HttpResponseMessage;
-    using Stream = Linkslap.WP.Communication.Models.Stream;
     using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 
     /// <summary>
