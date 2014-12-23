@@ -213,8 +213,8 @@
             where TModel : new()
         {
             var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new HttpMediaTypeWithQualityHeaderValue("application/json"));
-
+            
+            message.Headers.Accept.Add(new HttpMediaTypeWithQualityHeaderValue("application/json"));
             message.RequestUri = new Uri(new Uri(this.baseUrl), restResource);
 
             if (parameters != null)
